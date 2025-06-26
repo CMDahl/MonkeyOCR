@@ -1,0 +1,22 @@
+{
+  "python_project_reorganization": {
+    "magic_pdf": "src/core",
+    "projects/web": "src/web", 
+    "projects/web_demo": "src/demo",
+    "tests": "tests",
+    "docs": "documentation"
+  },
+  "component_extraction": {
+    "magic_pdf/model": "models",
+    "magic_pdf/data": "data_processing", 
+    "magic_pdf/utils": "utilities",
+    "magic_pdf/config": "configuration"
+  },
+  "simple_copy": {
+    ".": "backup"
+  },
+  "md_and_figures_collection": {
+    "description": "This mapping is used with the --md-and-figures option to collect *.md files from subfolders and all files from 'figures' subfolders into an 'output' directory",
+    "note": "Use with: python copy_file_structure.py source_path target_path --md-and-figures"
+  }
+}
