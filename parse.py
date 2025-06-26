@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # Copyright (c) Opendatalab. All rights reserved.
 import os
+# Set backend configurations to avoid triton dependency
+os.environ['MAGIC_PDF_BACKEND'] = 'pytorch'
+os.environ['LMDEPLOY_USE_TRITON'] = '0'
+os.environ['LMDEPLOY_BACKEND'] = 'pytorch'
+os.environ['TRANSFORMERS_BACKEND'] = '1'
+# Disable FlashAttention2 if not available
+os.environ['DISABLE_FLASH_ATTN'] = '1'
 import time
 import argparse
 import sys
 from pathlib import Path
-import torch.distributed as dist
-from pdf2image import convert_from_path
-
 from magic_pdf.data.data_reader_writer import FileBasedDataWriter, FileBasedDataReader
 from magic_pdf.data.dataset import PymuDocDataset, ImageDataset
 from magic_pdf.model.doc_analyze_by_custom_model_llm import doc_analyze_llm

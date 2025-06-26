@@ -223,10 +223,14 @@ class MonkeyChat_transformers:
         try:
             self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                         model_path,
-                        torch_dtype=torch.bfloat16 if bf16_supported else torch.float16,
-                        attn_implementation="flash_attention_2" if self.device.startswith("cuda") else 'sdpa',
-                        device_map=self.device,
+                        torch_dtype=torch.bfloat16,
+                        #attn_implementation="flash_attention_2",                        
+                        attn_implementation="sdpa",
+                        device_map="cuda:0",
                     )
+            
+            if self.device != 'cuda':
+                self.model = self.model.to(self.device)
                 
             self.processor = AutoProcessor.from_pretrained(
                 model_path,

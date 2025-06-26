@@ -52,4 +52,5 @@ _build/
 # monkeyocr
 output/
 build/
-model_weight
+model_weight/
+model_weights/

@@ -1,0 +1,18 @@
+Book: digibok_2007031501007_I1
+Response:
+[
+  {
+    "image_filename": "digibok_2007031501007_I1_figure_000.png",
+    "image_page": 0,
+    "image_file": "digibok_2007031501007_I1.md",
+    "referenced_in_markdown": true,
+    "associated_person": null,
+    "person_page": null,
+    "person_file": null,
+    "confidence": 0.10,
+    "is_cross_page": true,
+    "cross_page_type": "image_first_on_next_page",
+    "reasoning": "Page starts with image and no preceding name so likely belongs to first person on next page",
+    "context_evidence": "![Figure](figures/digibok_2007031501007_I1_figure_000.png)"
+  }
+]
