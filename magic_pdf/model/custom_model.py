@@ -83,7 +83,7 @@ class MonkeyOCR:
                     'local layoutreader model not exists, use online model from huggingface'
                 )
                 model = LayoutLMv3ForTokenClassification.from_pretrained(
-                    'hantian/layoutreader'
+                    'hantian/layoutreader',
                 )
 
             if bf16_supported:
@@ -226,7 +226,7 @@ class MonkeyChat_transformers:
                         torch_dtype=torch.bfloat16,
                         #attn_implementation="flash_attention_2",                        
                         attn_implementation="sdpa",
-                        device_map="cuda:0",
+                        device_map="cuda:0"
                     )
             
             if self.device != 'cuda':
@@ -234,7 +234,8 @@ class MonkeyChat_transformers:
                 
             self.processor = AutoProcessor.from_pretrained(
                 model_path,
-                trust_remote_code=True
+                trust_remote_code=True,
+                use_fast=True,
             )
             self.processor.tokenizer.padding_side = "left"
             

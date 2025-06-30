@@ -20,15 +20,7 @@ import re
 sys.path.append(str(Path(__file__).parent.parent))
 from agents.key_vault import KeyVault
 
-# Set up logging at the top of your script
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(r'd:\data\HCNC\norway\biographies\storage\Dolphin\logs\biography_extractor_Dolphin_failed_rows.log'),  # Log to file
-        logging.StreamHandler()  # Also log to console
-    ]
-)
+# Initialize logger at module level
 logger = logging.getLogger(__name__)
 
 # TBA model structure
@@ -359,9 +351,9 @@ class BiographyExtractor:
         df = pd.read_csv(csv_file_path)
 
         # TEMPORARY: Limit to first 5 rows for testing
-        df = df.head(5)
-        print("🧪 TESTING MODE: Processing only first 5 rows")
-        logger.info("TESTING MODE: Processing only first 5 rows")
+        #df = df.head(5)
+        #print("🧪 TESTING MODE: Processing only first 5 rows")
+        #logger.info("TESTING MODE: Processing only first 5 rows")
         
         print(f"📊 Processing {len(df)} entries from {csv_file_path}")
         logger.info(f"Processing {len(df)} entries from {csv_file_path}")
@@ -464,18 +456,36 @@ def main():
     parser.add_argument("output_file", help="Path to output JSON file")
     parser.add_argument("--api-key", help="Google Gemini API key", 
                        default=os.getenv("GEMINI_API_KEY"))
+    parser.add_argument("--log-file", help="Path to log file", 
+                       default=r'd:\data\HCNC\norway\biographies\storage\Dolphin\logs\biography_extractor_Dolphin_failed_rows.log')
     parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     
     args = parser.parse_args()
     
-    # Set log level
-    logging.getLogger().setLevel(getattr(logging, args.log_level))
+    # Create log directory if it doesn't exist
+    log_dir = os.path.dirname(args.log_file)
+    if log_dir and not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    
+    # Configure logging with the specified log file
+    logging.basicConfig(
+        level=getattr(logging, args.log_level),
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(args.log_file),  # Use argument for log file
+            logging.StreamHandler()  # Also log to console
+        ],
+        force=True  # Force reconfiguration if already configured
+    )
+    
+    logger = logging.getLogger(__name__)
     
     # Initialize extractor
     try:
         extractor = BiographyExtractor(api_key=args.api_key)
         
         logger.info(f"Processing CSV: {args.csv_file}")
+        logger.info(f"Logging to: {args.log_file}")
         logger.info(f"Using Gemini model: {extractor.model}")
         
         # Process the CSV
@@ -486,6 +496,7 @@ def main():
         print(f"{'='*60}")
         print(f"Input file: {args.csv_file}")
         print(f"Output file: {args.output_file}")
+        print(f"Log file: {args.log_file}")
         print(f"Total entries: {results['extraction_info']['total_entries']}")
         print(f"Successful extractions: {results['extraction_info']['successful_extractions']}")
         print(f"Failed extractions: {results['extraction_info']['failed_extractions']}")
@@ -509,13 +520,8 @@ if __name__ == "__main__":
 
 
 # Basic usage
-#python biography_extractor_Dolphin.py "D:\data\HCNC\norway\biographies\storage\Dolphin\output\extracted_all_names_Dolphin_with_chunks.csv" "D:\data\HCNC\norway\biographies\storage\Dolphin\output\biographical_data.json"
+# python biography_extractor.py "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\output\extracted_all_names_with_chunks.csv" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\output\biographical_data.json" --log-file "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\log\biography_extraction.log" --log-level "INFO"
 
-# With API key
-#python biography_extractor_Dolphin.py input.csv output.json --api-key your_api_key
-
-# With debug logging
-#python biography_extractor_Dolphin.py input.csv output.json --log-level DEBUG        
 
 # To read the JSON back later:
 #import json
@@ -523,5 +529,3 @@ if __name__ == "__main__":
 #first_biography = json.loads(df.iloc[0]['biography_json'])
 #print(first_biography['birth_date'])
 
-#Second round of processing
-#python biography_extractor_Dolphin.py "d:\data\HCNC\norway\biographies\storage\Dolphin\logs\failed_rows.csv" "d:\data\HCNC\norway\biographies\storage\Dolphin\logs\biographical_data_failed_rows.json"

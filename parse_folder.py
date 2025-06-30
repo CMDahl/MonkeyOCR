@@ -17,6 +17,7 @@ from pathlib import Path
 import glob
 import gc
 import torch
+import torch.distributed as dist
 from magic_pdf.data.data_reader_writer import FileBasedDataWriter, FileBasedDataReader
 from magic_pdf.data.dataset import PymuDocDataset, ImageDataset
 from magic_pdf.model.doc_analyze_by_custom_model_llm import doc_analyze_llm
