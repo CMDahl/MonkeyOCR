@@ -1,0 +1,211 @@
+{
+  "patient": {
+    "journal_number": "18236",
+    "full_name": "Mette Marie Møller Jensen",
+    "alternate_name_part": "Maller",
+    "date_of_birth": "1877-04-09",
+    "place_of_birth": "Østerballe pr. Aalsø",
+    "age_at_admission": 69,
+    "marital_status": "ug.",
+    "occupation": "Aldersrentenyder",
+    "residence": {
+      "address": "Aalsø-Hoed Kommune",
+      "current_location": "Thorup Missionshotel"
+    },
+    "admission": {
+      "date": "1946-08-31",
+      "hospital": "Sindssygehospitalet ved Aarhus pr. Risskov",
+      "referring_source": "Dr. Hans Friis, Knebel",
+      "diagnoses_at_admission": [
+        "Arteriosclerosis cerebri"
+      ],
+      "additional_initial_diagnoses": [
+        "Arthroitis deformans",
+        "Dementia arteriosclerotica",
+        "Hæmorrhagiae cerebri recider. sequir."
+      ],
+      "journal_taker": "H. G. Lorentzen"
+    },
+    "medical_history": {
+      "conditions": [
+        {
+          "name": "Hjerneblødning",
+          "year": null,
+          "since_year": "1934",
+          "date": null,
+          "notes": "Fik da en hjerneblødning med h.sidig lammelse. Har siden ikke været rask.",
+          "details": "h.sidig lammelse"
+        },
+        {
+          "name": "Små hjerneblødninger",
+          "year": null,
+          "since_year": null,
+          "date": null,
+          "notes": "ialt 6 Gange været indlagt paa Sgh. for smaa Hjerneblødninger. Skiftevis paa Grenaa og Ebeltoft sygehus.",
+          "details": null
+        },
+        {
+          "name": "Gigt",
+          "year": null,
+          "since_year": null,
+          "date": null,
+          "notes": "Efterhaanden lænket til sengen paa gr. af lammelse og gigt.",
+          "details": "voldsom arthroitis deformans i begge knæled, der er ankylotiske"
+        },
+        {
+          "name": "Hypertension, anæmi og albuminuri",
+          "year": 1949,
+          "since_year": null,
+          "date": null,
+          "notes": "i 1949 begyndende opkastninger, d sud n hypertension, anæmi og albuminuri",
+          "details": null
+        },
+        {
+          "name": "Kronisk nefrit",
+          "year": 1949,
+          "since_year": null,
+          "date": null,
+          "notes": "hvorfor man stiller diagnosen kronisk nefrit.",
+          "details": null
+        },
+        {
+          "name": "Herpes Zoster",
+          "year": 1949,
+          "since_year": null,
+          "date": "1949-04",
+          "notes": "et tilfælde af herpes Zoster paa truncus.",
+          "details": null
+        },
+        {
+          "name": "Blærelammelse",
+          "year": null,
+          "since_year": null,
+          "date": null,
+          "notes": "Vandet gaar for hende til Stadighed.",
+          "details": null
+        }
+      ],
+      "psychological_profile": [
+        "ganske desorienteret",
+        "hallucineret",
+        "komplet urenlig",
+        "dement",
+        "venlig",
+        "af og til opfarende og udskældende",
+        "mistænksom overfor Omgivelserne",
+        "troede der blev blandet Gift i hendes Mad og Drikke",
+        "Periodevis meget urolig",
+        "slaar om sig",
+        "kaster Vandfade eller andre Genstande om sig",
+        "skælder voldsomt ud",
+        "højrøstet",
+        "støjende",
+        "motorisk urolig",
+        "voldsom",
+        "impulsiv",
+        "griset",
+        "sløv",
+        "hallucineret paa Hørelsen"
+      ]
+    },
+    "death": {
+      "date": "1949-07-12",
+      "diagnoses_at_death": [
+        "Arterisclerosis cerebri",
+        "nephrosclerosis",
+        "uremia"
+      ]
+    },
+    "family_history": {
+      "disposition_to_mental_illness": "Halvbroder: Karen Dodie Ladefoged inde her 1946 (Jr. 17906) under Diagnose: Confusio mentis (Ps. psychogenica? Z).",
+      "father": {
+        "name": null,
+        "place_of_birth": null,
+        "date_of_death": "død",
+        "cause_of_death": null
+      },
+      "mother": {
+        "name": null,
+        "place_of_residence": null,
+        "date_of_death": "død",
+        "cause_of_death": null
+      },
+      "closest_relative": {
+        "relationship": "datter",
+        "name": "Fru Andrea Pedersen",
+        "address": "Katholm Skov pr. Grenaa"
+      },
+      "appointed_guardian": {
+        "name": "Andrea Pedersen",
+        "details": null
+      },
+      "siblings": [
+        {
+          "name": null,
+          "occupation": "aldersrentenyder",
+          "residence": "Glatved pr. Aalsø"
+        }
+      ]
+    },
+    "special_investigations": [
+      {
+        "type": "Blodtryk",
+        "date": "1946-08-31",
+        "results": "165/100 mm."
+      },
+      {
+        "type": "Urin",
+        "date": "1946-09-02",
+        "results": "(+)A; ÷S; ÷P; ÷B"
+      },
+      {
+        "type": "Hæmoglobin",
+        "date": "1946-09-02",
+        "results": "81"
+      },
+      {
+        "type": "S.R.",
+        "date": "1946-09-02",
+        "results": "55"
+      },
+      {
+        "type": "Esbach",
+        "date": "1946-09-02",
+        "results": "1/2 ‰"
+      },
+      {
+        "type": "Urin",
+        "date": "1949-03-16",
+        "results": "Mikr.: +++ Krystaller, (+) Epithelceller, ++ lev. Vase"
+      },
+      {
+        "type": "S.R.",
+        "date": "1949-02-03",
+        "results": "45"
+      },
+      {
+        "type": "Hæmoglobin",
+        "date": "1949-02-04",
+        "results": "67 %"
+      },
+      {
+        "type": "Blodtryk",
+        "date": "1949-07-11",
+        "results": "140/80"
+      },
+      {
+        "type": "Blodurinstof",
+        "date": "1949-05-18",
+        "results": "101 mg %"
+      }
+    ],
+    "autopsy_findings": {
+      "date": "1949-10-28",
+      "brain_pathology": {
+        "diagnosis": "arteriolosclerosis cerebri, encephalopathia arteriolosclerotica m.g.",
+        "macroscopic_description": "Hjernen er velfixeret og ikke deformeret. Hemispherernes convexitet: der er udtalt cortical atrofi af noget vekslende styrke på begge sider. Navnlig de frontale lobi er stærkt medtagne. Meninges er let fortykkede, og karrene noget bugtede og sclerotiske. Basis cerebri: meget arteriosclerose i de store hjernearterier. Hemisphærerne i frontalsnit: på begge sider findes små hulrum i corpora striata, og tegningen er i det hele taget noget udvisket her. Ventrikelsystemet er diffust udvidet i let grad. Hjernestammen og cerebellum: midt i pars basilaris pontis findes en knap ærtstor cystehule.",
+        "histological_description": "Der er taget følgende præparater til undersøgelse: pons, mesencephalon, v. polus frontalis, v. corp. striatum, v. hippocampus og h. centralregion. Meninges viser intet abnormt, specielt findes ikke tegn på betændelse. Karrene er sæde for en meget stærk sclerose. Navnlig er de små arterier og arteriolerne ramt, idet de ofte er fuldstændig hyaliniserede over større strækninger. Man kan slet ikke skelne de enkelte lag i væggen. I de større arterier er der hist og her arteriosclerotiske forandringer, men i det store og hele er disse ret bekedne. Også venerne er sclerotiske og ofte meget atrofiske. De vasculære forandringer er meget stærke i corp. striatum og i hjernestammen. I corp. striatum er vævets struktur meget hullet og den normale cytoarkitektur er over store strækninger gået ganske til grunde. Der findes flere små både yngre og ældre emollitioner og de perivasculære rum er overalt meget dilaterede og fyldt med machrophager af forskellig oprindelse ofte i form af typiske gitterceller. Gliaen er noget prolifereret og mange gliaceller indeholder pigmenter af vekslende farver fra grønt til gulbrunt. Nervecellerne er fyldt med lipofuscin og der sesmange stærkt afblegede eller chromatolytiske elementer. Der findes en udtalt satellitose, men også gliaen er som helhed meget regressiv. I pons findes en enkelt større og talrige mindre emollitioner og i store områder inde for pars tegmentalis er nervecellerne skyggeagtige eller skrumpede med små mørke kærner. Også o mesencephalon ses ligenede forandringer, men her af en noget mere moderat grad. I cortex er arteriolosclerosen også meget udtalt, men som helhed er cytoarkitekturen velbevaret og man har ikke indtryk af større udfaldsfoci. Nervecellerne viser almindelige degenrationstegn og i de dybere lag er der navnlig i hippocampus og polus frontalis en udtalt satellitose. Der er ikke senile plaques, men en tydelig granulovacuolær degeneration af neurofibrillerne. Det drejer sig om et udtalt tilfælde af arteriolosclerosis cerebri med stærke henfaldsprocesser navnli i corp. striatum og hjernestammen."
+      }
+    }
+  }
+}

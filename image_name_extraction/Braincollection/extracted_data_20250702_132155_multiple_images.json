@@ -1,0 +1,38 @@
+{
+  "patient": [
+    {
+      "efternavn": "Ørnstrup",
+      "fornavn": "Ejner Jørgensen",
+      "fødselsdato": "01-02-1898",
+      "fødselssted": "Mesing pr. Skanderborg",
+      "stilling": "Landbrugskandidat",
+      "adresse": "Stentoft, Mariager",
+      "journalnummer": "16218",
+      "dødstidspunkt": "19-12-1944 16:30",
+      "autopsitidspunkt": "24-04-1945",
+      "autopsidiagnoser": [
+        "Arteriosclerosis cerebri.",
+        "Haemorrhagia cerebri dext.",
+        "Cavum cysticum posthaemorrhagicum"
+      ],
+      "kliniske diagnoser": [
+        "Dementia postapoplectica.",
+        "Diabetes mellitus.",
+        "Psykopathia",
+        "apopl. cerebri seqv.",
+        "Ps. manio-depr.",
+        "spondylitis? seqv."
+      ],
+      "øvrige oplysninger": [
+        "Kun Hjernen udtaget.",
+        "Hjernen vel gennemfixeret.",
+        "I 1941 apoplexia cerebri m. Parese af v. Side.",
+        "Central v.-sidig Facialisparese; udtalt v. sidig Hemiplegi som tidl. m. komplet Paralyse og voldsom Tonusforøgelse.",
+        "Død formentlig af coma diabeticum.",
+        "Hyperglycæmi og Glycosuri.",
+        "Spinalp. den 13/7 1942: 0/3 C., Glob. o (1?), Alb. 19; WR her ÷.",
+        "Bemærkning: De Eten en navnlig lokaliseret til det Omraade, som forsynes af Ram. prof. A. cerebri mediae og af A. chorioidea, samt til Dels i et Omraade som forsynes af Ram. superfic. A. cerebri mediae. (c. Claustrum, caps. ext., Insula)"
+      ]
+    }
+  ]
+}

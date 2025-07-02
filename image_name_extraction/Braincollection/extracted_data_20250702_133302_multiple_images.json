@@ -1,0 +1,44 @@
+{
+  "patient": [
+    {
+      "efternavn": "Ørnstrup",
+      "fornavn": "Ejner Jørgensen",
+      "fødselsdato": "01-02-1898",
+      "fødselssted": "Mesing pr. Skanderborg",
+      "stilling": "Landbrugskandidat",
+      "adresse": "Stentoft, Mariager",
+      "journalnummer": "16218",
+      "dødstidspunkt": "19-12-1944 16:30",
+      "autopsitidspunkt": null,
+      "hjerneautopsidiagnoser": [
+        "Udpræget stærk Arterioaklerose af hele A.basilaris og begge Aa. vertebralis.",
+        "Begge Aa cerebri mediae stærkt sklerotiske.",
+        "I h.A. cerebri med. er Lumen næsten fuldstændigt oblitereret.",
+        "I h. Hemisfære... findes et stort velafgrænset cystisk Hulrum, omgivet af mere eller mindre brunligt misfarvet Væv.",
+        "Dannelsen af et typisk cystisk Hulrum opstaaet ved omfattende Vævhenfald efter gammel Hæmorrhagi paa arteriosklerotisk Basis."
+      ],
+      "histologiske diagnoser": [
+        "Arteriosclerosis cerebri.",
+        "Haemorrhagia cerebri dext..",
+        "Cavum cysticum posthaemorrhagicum",
+        "Bemærkning: Defekten er navnlig lokaliseret til det Omraade, som forsynes af Ram. prof. A. cerebri mediae og af A. chorioidea, samt til Dels i et Omraade som forsynes af Ram. superfic. A. cerebri mediae. (c. Claustrum, Caps. ext., Insula)"
+      ],
+      "kliniske diagnoser": [
+        "Dementia postapoplectica.",
+        "Diabetes mellitus.",
+        "Psychopathia, apopl. cerebri seqv., Ps. manio-depr., spondylitis? seqv., diabetes mellitus."
+      ],
+      "øvrige oplysninger": [
+        "Autopsidiagnoser: Kun Hjernen udtaget.",
+        "Hjernens Tilstand v. Fixeringen: Hjernen vel gennemfixeret.",
+        "Disp. Altid uligevægtig, hidsig, opfarende, mistænksom, m. Tilløb til Depr. ved mindste ydre Foranledning.",
+        "I 1930 konst. diabetes mellitus.",
+        "I 1941 apoplexia cerebri m. Parese af v. Side.",
+        "Central v.-sidig Facialisparese; udtalt v. sidig Hemiplegi som tidl. m. komplet Paralyse og voldsom Tonusforøgelse.",
+        "Sløjer af, død formentlig af coma diabeticum.",
+        "UR.: + - Bl.S: 180/100 - 240/100. - Hyperglycæmi og Glycosuri.",
+        "Spinalp. den 13/7 1942: 0/3 O., Glob. o (1?), Alb. 19; WR der +."
+      ]
+    }
+  ]
+}

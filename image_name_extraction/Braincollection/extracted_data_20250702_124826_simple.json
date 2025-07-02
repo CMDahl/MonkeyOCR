@@ -1,0 +1,94 @@
+{
+  "Diagnoser": [
+    {
+      "diagnose": "Arteriosclerosis cerebri (cerebral arteriosclerosis)",
+      "kommentar": "Hoveddiagnose, bekræftet ved obduktion som et 'udtalt tilfælde'. Også benævnt arteriolosclerosis cerebri og dementia arteriosclerotica."
+    },
+    {
+      "diagnose": "Nephrosclerosis",
+      "kommentar": "Bidiagnose, understøttet af fund af albuminuri og forhøjet blodurinstof."
+    },
+    {
+      "diagnose": "Uraemia (uræmi / urinstofforgiftning)",
+      "kommentar": "Angivet som dødsårsag sammen med de øvrige diagnoser."
+    },
+    {
+      "diagnose": "Arthroitis deformans (deformerende leddegigt)",
+      "kommentar": "Bidiagnose. Beskrevet som 'voldsom' i begge knæled, som var ankylotiske (stive)."
+    },
+    {
+      "diagnose": "Hypertension (forhøjet blodtryk)",
+      "kommentar": "Målt til 165/100 mmHg ved indlæggelsen."
+    },
+    {
+      "diagnose": "Herpes Zoster",
+      "kommentar": "Tilfælde på truncus (kroppen) i april 1949."
+    },
+    {
+      "diagnose": "Erysipelas (rosen)",
+      "kommentar": "Mistanke om dette i februar 1948 i glutealregionen."
+    }
+  ],
+  "Symptomer inkl. ændringer i symptomatologi og QoL (quality of life)": "Patienten var rask indtil ca. 12 år før indlæggelsen i 1946, hvor hun fik en hjerneblødning med højresidig lammelse. Siden da var hun ikke rask, med gentagne små hjerneblødninger. Over tid blev hun sengeliggende pga. lammelse og gigt. De sidste måneder før indlæggelsen blev hun tiltagende uklar og urenlig. Under indlæggelsen var hun svært dement, desorienteret, komplet urenlig og hallucineret. Hun havde paranoide vrangforestillinger om, at der var gift i hendes mad og drikke, hvilket førte til, at hun kastede med maden. Hun havde også forestillinger af seksuel karakter. Humøret var svingende; oftest venlig, men med perioder med voldsom uro, hvor hun slog omkring sig, kastede med genstande og skældte ud. Der var flere besvimelsestilfælde og fra 1949 opkastninger. Tilstanden forværredes progressivt, og hun døde i koma d. 12/7-1949. Livskvaliteten var svært nedsat pga. fysisk og kognitivt forfald, smerter, inkontinens og psykotiske symptomer.",
+  "Objektive fund samt ændringer over tid": "Ved indlæggelse i 1946: BT 165/100 mmHg, Hgb 81%, SR 55. Neurologisk: Højresidig lammelse, hyperrefleksi i overekstremiteter, positiv Babinski på begge sider, patellarreflekser kunne ikke udløses. Fysisk: Voldsom deformerende og ankyloserende artrit i knæled. Let cyanose af læber og næse. Svage hjertetoner, puls 80, regelmæssig. Fugtige rallelyde på lungerne. Abdomen var meteoristisk og spændt. Over tid faldt BT til 140/80, Hgb til 67% og SR til 45. Blodurinstof målt til 101 mg% i maj 1949. Vægten faldt fra 68,5 kg til 44,5 kg i løbet af indlæggelsen. Obduktion af hjernen viste udtalt kortikal atrofi, svær arteriosklerose, små hulrum i corpora striata, diffust udvidet ventrikelsystem og en cyste i pons. Mikroskopi bekræftede svær arteriolosklerose, degenerative processer i især corpus striatum og hjernestammen, udtalt satellitose og granulovakuolær degeneration, men ingen senile plaques.",
+  "Generelt lidelsespres eller andre lignende parametre": "Meget højt lidelsestryk. Patienten led af svære fysiske gener som lammelse, smertefuld gigt og inkontinens, der gjorde hende sengeliggende. Dertil kom et svært psykisk lidelsestryk med desorientering, angst og skræmmende paranoide vrangforestillinger om forgiftning, samt perioder med voldsom agitation.",
+  "Undersøgelser og fund (skanninger, blod/vævsprøver, psykologiske tests mv)": [
+    {
+      "undersøgelse": "Blodprøver",
+      "fund": "Hæmoglobin faldende fra 81% til 67% (anæmi). Sænkningsreaktion (SR) faldende fra 55 til 45 mm. Blodurinstof forhøjet til 101 mg% (maj 1949). Wassermann Reaktion (WR) og Meinicke var negative."
+    },
+    {
+      "undersøgelse": "Urinprøver",
+      "fund": "Gentagne gange positiv for albumin (+A). Mikroskopi viste krystaller, epitelceller og stave."
+    },
+    {
+      "undersøgelse": "Blodtryksmåling",
+      "fund": "165/100 mmHg ved indlæggelse, senere målt til 140/80 mmHg."
+    },
+    {
+      "undersøgelse": "Obduktion (Hjernepatologisk Institut)",
+      "fund": "Makro- og mikroskopiske fund forenelige med svær arteriosclerosis cerebri med udtalte degenerative forandringer. Se 'Objektive fund' for detaljer."
+    }
+  ],
+  "Behandlinger inkl. diverse typer (medicin, samtale, ECT mv) inkl. psykoterapeutisk tilgang og intensitet": "Behandlingen var primært pleje og symptomatisk medicinsk behandling. Der blev givet sovemedicin (Medinal), jernpræparat (Jerneplex), et uspecificeret præparat 'Leicusit', samt 'Anesemin'. Ved mistanke om rosen (erysipelas) blev hun behandlet med Lucosil (sulfonamid). Der blev anvendt afføringsmidler (Elysma, amak. Olie). Der er ingen tegn på psykoterapi eller anden specifik psykiatrisk behandling udover medicinering for uro og søvn.",
+  "Tidligere øvrige behandlingsforløb og effekt heraf": "Har været indlagt i alt 6 gange på Grenaa og Ebeltoft sygehuse for 'små hjerneblødninger' i årene før den aktuelle indlæggelse. De sidste 3 år før indlæggelsen var hun anbragt på et hvilehjem. Hendes tilstand forværredes progressivt trods disse ophold.",
+  "Bivirkninger ved behandling": "Ikke eksplicit beskrevet.",
+  "Compliance og behandlingsalliance": "Compliance var dårlig pga. paranoide vrangforestillinger. Patienten troede, hendes mad var forgiftet og kastede den fra sig. Alliancen var svingende; hun kunne være venlig, men også afvisende, opfarende og voldsom over for personalet.",
+  "Indlæggelsesvarigheder og antal": "Aktuel indlæggelse på Statshospitalet Risskov varede fra 31. august 1946 til hendes død 12. juli 1949 (knap 3 år). Forud for dette havde hun haft 6 kortere indlæggelser på andre sygehuse.",
+  "Særlige forhold for netop denne patient sammenlignet med andre (hvis muligt?)": "Obduktionsrapporten fremhæver, at det var et 'udtalt tilfælde' af arteriosclerosis cerebri. Det noteres specifikt, at der ikke fandtes senile plaques, hvilket adskiller patologien fra typisk Alzheimers sygdom.",
+  "Alder/fødselsdato": "Født 9. april 1877. Var 69 år ved indlæggelsen i 1946.",
+  "Debutalder for lidelsen": "Ca. 57 år (omkring 1934), hvor hun fik sin første hjerneblødning.",
+  "Varighed af symptomer og sygdom": "Ca. 15 år, fra første symptom i 1934 til død i 1949.",
+  "Baggrundsinformation inkl. komorbiditeter (fysiske lidelser, psykiske/fysiske traumer, familiær baggrund)": "Fysiske komorbiditeter inkluderer svær deformerende artrit, hypertension og nefrosklerose. Hun havde en normal fødsel som 18-årig, men var ugift. Ingen traumer er beskrevet.",
+  "Sociale netværk og støttepersoner": "Nærmeste pårørende var en søster, Fru Andrea Pedersen. En diakon fra hendes tidligere opholdssted har også givet oplysninger.",
+  "Tidspunkter for relevante hændelser (fx traumer, indlæggelser)": {
+    "ca. 1934": "Første hjerneblødning med højresidig lammelse.",
+    "1943-1946": "Ophold på hvilehjem.",
+    "31-08-1946": "Indlagt på Statshospitalet Risskov.",
+    "22/23-12-1946": "Kortvarige besvimelsesanfald.",
+    "Februar 1948": "Mistanke om erysipelas (rosen).",
+    "April 1949": "Tilfælde af herpes zoster.",
+    "25-04-1949": "Sag om umyndiggørelse påbegyndt.",
+    "12-07-1949": "Dødsfald."
+  },
+  "Familiære dispositioner (andre i familien med psykiske lidelser mv.)": "En halvbror var indlagt på samme hospital i 1946 med diagnosen 'Confusio mentis'. Forældre og 9 søskende er anført som døde, uden yderligere detaljer om sygdom.",
+  "Risikovurderinger: Suicidalitet og voldsrisiko": {
+    "suicidalitet": "Ingen tegn på suicidalitet. Det anføres specifikt, at hun ikke har røbet tanker om selvmord eller forsøgt det.",
+    "voldsrisiko": "Der var en klar risiko for udadreagerende adfærd. Det beskrives, at hun periodisk var meget urolig, slog omkring sig, kastede med genstande og skældte voldsomt ud."
+  },
+  "Rehabiliteringsvurdering": "Ikke relevant. Patienten var i en terminal fase med progressivt forfald, hvor fokus var på pleje og lindring.",
+  "Retspsykiatriske data": "Ingen.",
+  "Kognitiv funktion (hukommelse, opmærksomhed, eksekutive funktioner)": "Svært dement. Ganske desorienteret i tid og sted. Hukommelsen beskrevet som dårlig med svær indprentningssvækkelse. Intellektuelle evner var meget nedsatte.",
+  "Funktionsniveau (fx GAF, WHODAS, ADL)": "Meget lavt funktionsniveau. Fuldstændig afhængig af hjælp til alle daglige gøremål (ADL). Hun var sengeliggende, ude af stand til at gå, og komplet urin- og afføringsinkontinent.",
+  "Sprog- og kommunikationsvanskeligheder (fx afasi, autisme, dysartri)": "Talen beskrives som naturlig, men med en del gentagelser. Kommunikation var præget af demens og psykotiske symptomer, men ikke af en primær sprogforstyrrelse som afasi.",
+  "Misbrugsproblematik og substansbrug": "Misbrug af alkohol eller andre nydelsesmidler benægtes.",
+  "Uddannelses- og beskæftigelseshistorik": "Normal skolegang. Arbejdsevne var tidligere god. Ingen oplysninger om specifik uddannelse eller stillinger. Ved indlæggelse var hun aldersrentenyder (folkepensionist).",
+  "Boligforhold og økonomisk situation": "Boede på hvilehjem i 3 år før indlæggelsen. Forsørget af aldersrente, og Socialministeriet betalte for hospitalsopholdet.",
+  "Fritid og interesser": "Ikke beskrevet.",
+  "Livsstil (søvn, kost, fysisk aktivitet, rygning mv.)": "Søvn blev medicineret. Kostindtag var påvirket af vrangforestillinger. Fysisk aktivitet var ikke mulig pga. lammelse og sengeleje.",
+  "Patientens egne mål, ønsker og oplevelse af sygdom (hvis omtalt)": "Patientens oplevelse var præget af hendes psykotiske symptomer. Hun udtrykte frygt for at blive forgiftet og talte om familiemedlemmer, der ikke var til stede. Hun var ude af stand til at give en sammenhængende redegørelse for sin situation.",
+  "Notater fra pårørende og andre fagpersoner": "Søsteren bekræftede sygehistorien med gradvis forværring efter hjerneblødninger. En diakon fra hendes tidligere plejehjem beskrev hende som 'lettere åndssvag' og ude af stand til at tage vare på sig selv. Den indlæggende læge beskrev de akutte psykotiske og adfærdsmæssige symptomer.",
+  "Juridiske forhold (værgemål, samtykkekompetence mv.)": "Patienten var ikke umyndiggjort ved indlæggelsen. En sag om umyndiggørelse blev påbegyndt i april 1949, få måneder før hendes død. Hun var åbenlyst inkapabel til at give samtykke til behandling.",
+  "Udviklingshistorie": "Normal skolegang. Fik et barn som 18-årig. Var rask og velfungerende indtil sygdomsdebut i 57-årsalderen.",
+  "Etiske og kulturelle hensyn (sprog, religion, holdninger til behandling)": "Tilhørte den danske folkekirke. Sprog var dansk. Ingen andre særlige hensyn er noteret."
+}
