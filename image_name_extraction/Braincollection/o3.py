@@ -5,7 +5,7 @@ from openai import AzureOpenAI
 
 endpoint = os.getenv("ENDPOINT_URL", "https://cmd4.openai.azure.com/openai/deployments/o3/chat/completions?api-version=2025-01-01-preview")
 deployment = os.getenv("DEPLOYMENT_NAME", "o3")
-subscription_key = os.getenv("AZURE_OPENAI_API_KEY", "bff3ad59c36c46f089059dca91e94344")
+subscription_key = os.getenv("AZURE_OPENAI_API_KEY", "XXX")
 
 # Initialize Azure OpenAI client with key-based authentication
 client = AzureOpenAI(
