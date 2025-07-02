@@ -328,4 +328,4 @@ if __name__ == "__main__":
 # Example with your paths
 #python extract_all_names.py "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\output\all_books_names.json" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\output\" --portrait-pattern "![](images/"
 
-    
+# python extract_all_names.py "D:\data\HCNC\norway\biographies\storage\Dolphin\output\all_books_names.json" "D:\data\HCNC\norway\biographies\storage\Dolphin\markdown\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\Dolphin\markdown\" "D:\data\HCNC\norway\biographies\storage\Dolphin\output\" --portrait-pattern "![Figure]"

@@ -73,52 +73,84 @@ class BookPortraitAssociator:
     ]
     """
     
-        try:
-            # Prepare content for Gemini
-            contents = [
-                types.Content(
-                    role="user",
-                    parts=[
-                        types.Part.from_text(text=prompt_content),
-                    ],
-                ),
-            ]
-            
-            # Configure generation
-            generate_content_config = types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(
-                    thinking_budget=500,
-                ),
-                response_mime_type="application/json"
-            )
-            
-            # Fix: Use non-streaming generate_content instead of streaming
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=contents,
-                config=generate_content_config,
-            )
+        # Temperature options for retry attempts
+        temperature_options = [0.1, 0.1, 0.2, 0.5]
         
-            # Extract text from response
-            response_text = response.text
+        # Retry up to 3 times with increasing temperature
+        for attempt in range(4):
+            temperature = temperature_options[attempt]
             
-            # Parse JSON response
             try:
-                biographical_entries = json.loads(response_text)
-            except json.JSONDecodeError as e:
-                logger.error(f"JSON decode error for {book_id}: {e}")
-                # Fallback to manual JSON extraction
-                biographical_entries = self.extract_json_from_response(response_text)
+                logger.info(f"Attempt {attempt + 1} for {book_id} with temperature {temperature}")
+                
+                # Prepare content for Gemini
+                contents = [
+                    types.Content(
+                        role="user",
+                        parts=[
+                            types.Part.from_text(text=prompt_content),
+                        ],
+                    ),
+                ]
+                
+                # Configure generation with increasing temperature
+                generate_content_config = types.GenerateContentConfig(
+                    thinking_config=types.ThinkingConfig(
+                        thinking_budget=500,
+                    ),
+                    response_mime_type="application/json",
+                    temperature=temperature
+                )
+                
+                # Generate response
+                response = self.client.models.generate_content(
+                    model=self.model,
+                    contents=contents,
+                    config=generate_content_config,
+                )
             
-            # Add book ID to each entry
-            for entry in biographical_entries:
-                entry["book_id"] = book_id
-            
-            return biographical_entries
-            
-        except Exception as e:
-            logger.error(f"Error extracting names for {book_id}: {e}")
-            return []
+                # Extract text from response
+                response_text = response.text
+                
+                # Parse JSON response
+                try:
+                    biographical_entries = json.loads(response_text)
+                    
+                    # Success - add book ID to each entry
+                    for entry in biographical_entries:
+                        entry["book_id"] = book_id
+                    
+                    logger.info(f"Successfully extracted {len(biographical_entries)} names from {book_id} on attempt {attempt + 1}")
+                    return biographical_entries
+                    
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Attempt {attempt + 1}: JSON decode error for {book_id}: {e}")
+                    
+                    # Try fallback JSON extraction
+                    try:
+                        biographical_entries = self.extract_json_from_response(response_text)
+                        if biographical_entries:
+                            for entry in biographical_entries:
+                                entry["book_id"] = book_id
+                            logger.info(f"Recovered {len(biographical_entries)} names from {book_id} using fallback method")
+                            return biographical_entries
+                    except Exception as fallback_error:
+                        logger.warning(f"Fallback JSON extraction also failed: {fallback_error}")
+                    
+                    # If this is the last attempt, log the response for debugging
+                    if attempt == 2:
+                        logger.error(f"Raw response causing JSON error: {response_text[:500]}...")
+                        
+            except Exception as e:
+                logger.warning(f"Attempt {attempt + 1}: General error for {book_id}: {e}")
+                
+                # If this is the last attempt, log the full error
+                if attempt == 2:
+                    logger.error(f"All attempts failed for {book_id}: {e}")
+        
+        # All attempts failed
+        logger.error(f"Failed to extract names for {book_id} after 3 attempts")
+        return []
     
     def process_book(self, book_id: str, page_dirs: List[Path]) -> Dict:
         """Process a single book to identify all biographical names"""

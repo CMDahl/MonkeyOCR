@@ -122,7 +122,7 @@ print(f"Filtered df_dolphin rows: {len(df_dolphin_filtered)}")
 print(f"Removed {len(df_dolphin) - len(df_dolphin_filtered)} rows")
 
 # Update df_dolphin to the filtered version
-df_dolphin = df_dolphin_filtered
+df_dolphin = df_dolphin_filtered.copy()
 
 # Verify the filtering worked
 print(f"\nVerification - remaining book_ids:")
@@ -168,26 +168,13 @@ df_monkeyocr = df_monkeyocr[df_monkeyocr['empty_biography'] == 0]
 
 
 # Merge the two DataFrames on 'name' and 'book_id'
-merged_df = pd.merge(df_dolphin, df_monkeyocr, on=['name', 'book_id'], how='inner', suffixes=('_dolphin', '_monkeyocr'))
+merged_df = pd.merge(df_dolphin, df_monkeyocr, on=['name', 'book_id'], how='outer', suffixes=('_dolphin', '_monkeyocr'))
 merged_df.head()
 merged_df.columns
 len(merged_df)
 len(df_dolphin)
 len(df_monkeyocr)
 
-
-merged_df = pd.merge(df_dolphin, df_monkeyocr, on=['name',], how='inner', suffixes=('_dolphin', '_monkeycor'))
-merged_df.head()
-merged_df.columns
-len(merged_df)
-len(df_dolphin)
-len(df_monkeyocr)
-
-# Replace this import:
-# from fuzzywuzzy import process
-
-# With this:
-# With this:
 from rapidfuzz import process, fuzz
 
 def fuzzy_merge_with_book_id_and_report_unmatched(df1, df2, name_key, book_id_key, threshold=90):
@@ -282,12 +269,30 @@ def fuzzy_merge_with_book_id_and_report_unmatched(df1, df2, name_key, book_id_ke
     
     # Combine the dataframes
     result = pd.concat([df1_matched, df2_matched], axis=1)
+    book_id_positions = [i for i, col in enumerate(result.columns) if col == 'book_id']
+
+    if len(book_id_positions) > 1:
+        print(f"Found {len(book_id_positions)} book_id columns at positions: {book_id_positions}")
+    
+        # Check if they're identical
+        col1 = result.iloc[:, book_id_positions[0]]
+        col2 = result.iloc[:, book_id_positions[1]]
+        
+        if col1.equals(col2):
+            print("Columns are identical - removing duplicate")
+            # Drop the second book_id column
+            result = result.iloc[:, [i for i in range(len(result.columns)) if i != book_id_positions[1]]]
+            print(f"Fixed! New columns: {result.columns.tolist()}")
+        else:
+            print("Columns are different - keeping both")
+    else:
+        print("Only one book_id column found - no action needed")
     
     return result, unmatched_df1, unmatched_df2
 
 # Usage
 result_df, unmatched_dolphin, unmatched_monkeyocr = fuzzy_merge_with_book_id_and_report_unmatched(
-    df_dolphin, df_monkeyocr, 'name', 'book_id', threshold=80
+    df_dolphin, df_monkeyocr, 'name', 'book_id', threshold=90
 )
 
 print(f"Fuzzy merged with book_id match: {len(result_df)} rows")
@@ -318,83 +323,464 @@ print("\nMonkeyOCR unmatched by book_id:")
 monkeycor_unmatched_by_book = unmatched_monkeyocr.groupby('book_id')['name'].count().sort_values(ascending=False)
 print(monkeycor_unmatched_by_book.head(10))
 
-def analyze_unmatched_by_book_id(unmatched_df1, unmatched_df2, name_key, book_id_key, df1_name="Dolphin", df2_name="MonkeyOCR"):
+def detailed_unmatched_by_book_dataframe(unmatched_df1, unmatched_df2, name_key, book_id_key, df1_name="Dolphin", df2_name="MonkeyOCR"):
     """
-    Analyze and display unmatched names grouped by book_id
-    """
-    # Get all book_ids that have unmatched names in either dataframe
-    all_unmatched_book_ids = set(unmatched_df1[book_id_key].unique()) | set(unmatched_df2[book_id_key].unique())
+    Create a DataFrame with unmatched names by book_id, storing actual names in dictionaries
+    instead of just counts.
     
-    print(f"\n{'='*80}")
-    print("UNMATCHED NAMES BY BOOK_ID")
-    print(f"{'='*80}")
+    Args:
+        unmatched_df1 (pd.DataFrame): First unmatched dataframe
+        unmatched_df2 (pd.DataFrame): Second unmatched dataframe
+        name_key (str): Column name containing the names
+        book_id_key (str): Column name containing the book_id
+        df1_name (str): Name for first dataframe (default: "Dolphin")
+        df2_name (str): Name for second dataframe (default: "MonkeyOCR")
     
-    for book_id in sorted(all_unmatched_book_ids):
-        print(f"\n📚 BOOK_ID: {book_id}")
-        print("-" * 70)
-        
-        # Get unmatched names for this book_id from both dataframes
-        df1_unmatched_book = unmatched_df1[unmatched_df1[book_id_key] == book_id]
-        df2_unmatched_book = unmatched_df2[unmatched_df2[book_id_key] == book_id]
-        
-        # Display side by side
-        max_rows = max(len(df1_unmatched_book), len(df2_unmatched_book))
-        
-        print(f"{'Unmatched ' + df1_name + ' names':<35} | {'Unmatched ' + df2_name + ' names':<35}")
-        print(f"{'-'*35}|{'-'*35}")
-        
-        for i in range(max_rows):
-            df1_name_display = ""
-            df2_name_display = ""
-            
-            if i < len(df1_unmatched_book):
-                df1_name_display = df1_unmatched_book.iloc[i][name_key][:32] + "..." if len(df1_unmatched_book.iloc[i][name_key]) > 32 else df1_unmatched_book.iloc[i][name_key]
-            
-            if i < len(df2_unmatched_book):
-                df2_name_display = df2_unmatched_book.iloc[i][name_key][:32] + "..." if len(df2_unmatched_book.iloc[i][name_key]) > 32 else df2_unmatched_book.iloc[i][name_key]
-            
-            print(f"{df1_name_display:<35} | {df2_name_display:<35}")
-        
-        print(f"\nSummary for {book_id}:")
-        print(f"  {df1_name} unmatched: {len(df1_unmatched_book)}")
-        print(f"  {df2_name} unmatched: {len(df2_unmatched_book)}")
-        print(f"  Total unmatched for this book: {len(df1_unmatched_book) + len(df2_unmatched_book)}")
-
-
-def quick_unmatched_by_book_dataframe(unmatched_df1, unmatched_df2, name_key, book_id_key):
+    Returns:
+        pd.DataFrame: DataFrame with book_id and dictionaries of unmatched names
     """
-    Create a DataFrame with unmatched names overview by book_id
-    (same data as quick_unmatched_by_book_overview but as DataFrame)
-    """
-    # Get counts by book_id
+    # Get counts and names by book_id for df1
+    df1_grouped = unmatched_df1.groupby(book_id_key)[name_key].apply(list)
     df1_counts = unmatched_df1.groupby(book_id_key)[name_key].count()
+    
+    # Get counts and names by book_id for df2
+    df2_grouped = unmatched_df2.groupby(book_id_key)[name_key].apply(list)
     df2_counts = unmatched_df2.groupby(book_id_key)[name_key].count()
     
-    # Combine the counts
-    all_books = set(df1_counts.index) | set(df2_counts.index)
+    # Combine all book_ids
+    all_books = set(df1_grouped.index) | set(df2_grouped.index)
     
     # Create the data for DataFrame
     data = []
     for book_id in sorted(all_books):
-        dolphin_count = df1_counts.get(book_id, 0)
-        monkeycor_count = df2_counts.get(book_id, 0)
-        total_count = dolphin_count + monkeycor_count
+        # Get lists of names (empty list if book_id not in that dataframe)
+        df1_names = df1_grouped.get(book_id, [])
+        df2_names = df2_grouped.get(book_id, [])
+        
+        # Get counts
+        df1_count = df1_counts.get(book_id, 0)
+        df2_count = df2_counts.get(book_id, 0)
+        total_count = df1_count + df2_count
+        
+        # Create dictionaries with names and counts
+        df1_dict = {
+            "count": df1_count,
+            "names": df1_names
+        }
+        
+        df2_dict = {
+            "count": df2_count,
+            "names": df2_names
+        }
         
         data.append({
             'Book_ID': book_id,
-            'Unmatched Dolphin': dolphin_count,
-            'Unmatched MonkeyOCR': monkeycor_count,
-            'Unmathed Total': total_count
+            f'Unmatched_{df1_name}': df1_dict,
+            f'Unmatched_{df2_name}': df2_dict,
+            'Unmatched_Total_Count': total_count
         })
     
     # Create DataFrame
-    overview_df = pd.DataFrame(data)
-    return overview_df
+    detailed_df = pd.DataFrame(data)
+    return detailed_df
+
+
+def display_detailed_unmatched_sample(detailed_df, df1_name="Dolphin", df2_name="MonkeyOCR", max_books=5, max_names_per_book=5):
+    """
+    Display a sample of the detailed unmatched names dataframe in a readable format.
+    
+    Args:
+        detailed_df (pd.DataFrame): DataFrame from detailed_unmatched_by_book_dataframe
+        df1_name (str): Name for first dataframe
+        df2_name (str): Name for second dataframe
+        max_books (int): Maximum number of books to display
+        max_names_per_book (int): Maximum number of names to show per book
+    """
+    print(f"\n{'='*80}")
+    print("DETAILED UNMATCHED NAMES SAMPLE")
+    print(f"{'='*80}")
+    
+    for idx, row in detailed_df.head(max_books).iterrows():
+        book_id = row['Book_ID']
+        df1_data = row[f'Unmatched_{df1_name}']
+        df2_data = row[f'Unmatched_{df2_name}']
+        
+        print(f"\n📚 BOOK_ID: {book_id}")
+        print("-" * 70)
+        
+        # Display counts
+        print(f"  {df1_name} unmatched: {df1_data['count']}")
+        print(f"  {df2_name} unmatched: {df2_data['count']}")
+        print(f"  Total unmatched: {row['Unmatched_Total_Count']}")
+        
+        # Display sample names
+        if df1_data['count'] > 0:
+            print(f"\n  Sample {df1_name} names:")
+            for name in df1_data['names'][:max_names_per_book]:
+                print(f"    • {name}")
+            if len(df1_data['names']) > max_names_per_book:
+                print(f"    ... and {len(df1_data['names']) - max_names_per_book} more")
+        
+        if df2_data['count'] > 0:
+            print(f"\n  Sample {df2_name} names:")
+            for name in df2_data['names'][:max_names_per_book]:
+                print(f"    • {name}")
+            if len(df2_data['names']) > max_names_per_book:
+                print(f"    ... and {len(df2_data['names']) - max_names_per_book} more")
+
+
+# Usage example:
+detailed_df = detailed_unmatched_by_book_dataframe(
+    unmatched_dolphin, 
+    unmatched_monkeyocr, 
+    'name', 
+    'book_id'
+)
+
+# Display the dataframe structure
+print("Detailed DataFrame shape:", detailed_df.shape)
+print("\nDataFrame columns:")
+print(detailed_df.columns.tolist())
+
+# Display sample in readable format
+display_detailed_unmatched_sample(detailed_df)
+
+# Show the actual dataframe (first few rows)
+print(f"\n{'='*80}")
+print("DATAFRAME PREVIEW")
+print(f"{'='*80}")
+print(detailed_df.head())
+
+# Access individual book data example
+if len(detailed_df) > 0:
+    print(f"\n{'='*80}")
+    print("EXAMPLE: Accessing data for first book")
+    print(f"{'='*80}")
+    first_book = detailed_df.iloc[0]
+    book_id = first_book['Book_ID']
+    dolphin_data = first_book['Unmatched_Dolphin']
+    monkeyocr_data = first_book['Unmatched_MonkeyOCR']
+    
+    print(f"Book ID: {book_id}")
+    print(f"Dolphin unmatched count: {dolphin_data['count']}")
+    print(f"Dolphin unmatched names: {dolphin_data['names']}")
+    print(f"MonkeyOCR unmatched count: {monkeyocr_data['count']}")
+    print(f"MonkeyOCR unmatched names: {monkeyocr_data['names']}")
+book_data = detailed_df.iloc[0]
+dolphin_count = book_data['Unmatched_Dolphin']['count']
+dolphin_names = book_data['Unmatched_Dolphin']['names']
+
+monkeyocr_count = book_data['Unmatched_MonkeyOCR']['count']
+monkeyocr_names = book_data['Unmatched_MonkeyOCR']['names']
+
+import pandas as pd
+import re
+import difflib
+import os
+from pathlib import Path
+
+def compare_ocr_files_batch(file_pairs, engine1_name="Engine1", engine2_name="Engine2"):
+    """
+    Compares multiple pairs of OCR text files and returns metrics in a DataFrame.
+    
+    Args:
+        file_pairs (list): List of tuples containing (file1_path, file2_path)
+        engine1_name (str): Name of the first OCR engine
+        engine2_name (str): Name of the second OCR engine
+    
+    Returns:
+        pd.DataFrame: DataFrame with comparison metrics for each file pair
+    """
+    
+    def preprocess_text(text):
+        """Normalizes OCR text for comparison with comprehensive LaTeX removal."""
+        if pd.isna(text) or text is None:
+            return ""
+        
+        processed_text = str(text)
+        
+        # Remove LaTeX math environments (display and inline)
+        processed_text = re.sub(r'\$\$.*?\$\$', '', processed_text, flags=re.DOTALL)
+        processed_text = re.sub(r'\$[^$]*\$', '', processed_text)
+        
+        # Remove LaTeX environments
+        latex_environments = [
+            'array', 'align', 'equation', 'eqnarray', 'matrix', 'pmatrix', 
+            'bmatrix', 'vmatrix', 'cases', 'split', 'gather', 'multline'
+        ]
+        
+        for env in latex_environments:
+            pattern = rf'\\begin\{{{env}\}}.*?\\end\{{{env}\}}'
+            processed_text = re.sub(pattern, '', processed_text, flags=re.DOTALL)
+        
+        # Remove LaTeX commands with arguments
+        processed_text = re.sub(r'\\text\{[^}]*\}', '', processed_text)
+        processed_text = re.sub(r'\\[a-zA-Z]+\{[^}]*\}', '', processed_text)
+        
+        # Remove common LaTeX symbols and commands
+        latex_commands = [
+            r'\\\\', r'\\hline', r'\\newline', r'\\linebreak', r'\\pagebreak',
+            r'\\left', r'\\right', r'\\big', r'\\Big', r'\\bigg', r'\\Bigg',
+            r'\\quad', r'\\qquad', r'\\,', r'\\:', r'\\;', r'\\!',
+            r'\\alpha', r'\\beta', r'\\gamma', r'\\delta', r'\\epsilon',
+            r'\\cdot', r'\\times', r'\\div', r'\\pm', r'\\mp',
+            r'\\leq', r'\\geq', r'\\neq', r'\\approx', r'\\equiv',
+            r'\\sum', r'\\prod', r'\\int', r'\\lim', r'\\infty'
+        ]
+        
+        for cmd in latex_commands:
+            processed_text = re.sub(cmd, ' ', processed_text)
+        
+        # Remove remaining LaTeX commands (backslash followed by letters)
+        processed_text = re.sub(r'\\[a-zA-Z]+', '', processed_text)
+        
+        # Remove LaTeX special characters and brackets
+        processed_text = re.sub(r'[{}]', '', processed_text)
+        processed_text = re.sub(r'[\[\]]', '', processed_text)
+        
+        # Remove ampersands used for alignment in LaTeX tables
+        processed_text = re.sub(r'&', ' ', processed_text)
+        
+        # Replace image links with placeholder
+        processed_text = re.sub(r'!\[[^\]]*\]\([^)]*\)', '[IMAGE]', processed_text)
+        
+        # Remove figure references and captions
+        processed_text = re.sub(r'!\[Figure\].*?\.png\)', '[IMAGE]', processed_text)
+        processed_text = re.sub(r'figures/[^)]*\.png', '[IMAGE]', processed_text)
+        
+        # Clean up spacing and formatting
+        processed_text = re.sub(r'\s+', ' ', processed_text)  # Multiple spaces to single
+        processed_text = re.sub(r'\n\s*\n', '\n', processed_text)  # Multiple newlines
+        processed_text = re.sub(r'^\s+|\s+$', '', processed_text, flags=re.MULTILINE)  # Trim lines
+        
+        return processed_text.strip()
+    
+    def calculate_metrics(text1, text2):
+        """Calculate comparison metrics between two texts."""
+        if not text1 and not text2:
+            return {
+                'similarity_ratio': 1.0,
+                'character_error_rate': 0.0,
+                'word_error_rate': 0.0,
+                'edit_distance': 0,
+                'text1_length': 0,
+                'text2_length': 0,
+                'length_difference': 0
+            }
+        
+        # Basic metrics
+        text1_length = len(text1)
+        text2_length = len(text2)
+        length_difference = abs(text1_length - text2_length)
+        
+        # Similarity ratio using difflib
+        matcher = difflib.SequenceMatcher(None, text1, text2)
+        similarity_ratio = matcher.ratio()
+        
+        # Character Error Rate (CER)
+        opcodes = matcher.get_opcodes()
+        edits = sum(max(i2 - i1, j2 - j1) for tag, i1, i2, j1, j2 in opcodes if tag != 'equal')
+        cer = (edits / text1_length) if text1_length > 0 else 0
+        
+        # Word Error Rate (WER)
+        words1 = text1.split()
+        words2 = text2.split()
+        word_matcher = difflib.SequenceMatcher(None, words1, words2)
+        word_opcodes = word_matcher.get_opcodes()
+        word_edits = sum(max(i2 - i1, j2 - j1) for tag, i1, i2, j1, j2 in word_opcodes if tag != 'equal')
+        wer = (word_edits / len(words1)) if len(words1) > 0 else 0
+        
+        return {
+            'similarity_ratio': similarity_ratio,
+            'character_error_rate': cer,
+            'word_error_rate': wer,
+            'edit_distance': edits,
+            'text1_length': text1_length,
+            'text2_length': text2_length,
+            'length_difference': length_difference
+        }
+    
+    # Process all file pairs
+    results = []
+    
+    for i, (file1_path, file2_path) in enumerate(file_pairs):
+        try:
+            # Read files
+            with open(file1_path, 'r', encoding='utf-8') as f1:
+                text1 = f1.read()
+            with open(file2_path, 'r', encoding='utf-8') as f2:
+                text2 = f2.read()
+            
+            # Preprocess texts
+            clean_text1 = preprocess_text(text1)
+            clean_text2 = preprocess_text(text2)
+            
+            # Calculate metrics
+            metrics = calculate_metrics(clean_text1, clean_text2)
+            
+            # Create result record
+            result = {
+                'file_pair_id': i + 1,
+                'file1_path': str(file1_path),
+                'file2_path': str(file2_path),
+                'file1_name': Path(file1_path).name,
+                'file2_name': Path(file2_path).name,
+                f'{engine1_name}_length': metrics['text1_length'],
+                f'{engine2_name}_length': metrics['text2_length'],
+                'length_difference': metrics['length_difference'],
+                'similarity_ratio': metrics['similarity_ratio'],
+                'character_error_rate': metrics['character_error_rate'],
+                'word_error_rate': metrics['word_error_rate'],
+                'edit_distance': metrics['edit_distance'],
+                'status': 'success'
+            }
+            
+        except Exception as e:
+            # Handle errors
+            result = {
+                'file_pair_id': i + 1,
+                'file1_path': str(file1_path),
+                'file2_path': str(file2_path),
+                'file1_name': Path(file1_path).name if file1_path else 'N/A',
+                'file2_name': Path(file2_path).name if file2_path else 'N/A',
+                f'{engine1_name}_length': 0,
+                f'{engine2_name}_length': 0,
+                'length_difference': 0,
+                'similarity_ratio': 0.0,
+                'character_error_rate': 1.0,
+                'word_error_rate': 1.0,
+                'edit_distance': 0,
+                'status': f'error: {str(e)}'
+            }
+        
+        results.append(result)
+    
+    # Create DataFrame
+    df = pd.DataFrame(results)
+    return df
+
+dolphin_md_dir = r"D:\data\HCNC\norway\biographies\storage\Dolphin\markdown"
+monkeyocr_md_dir = r"D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007"
+
+def create_file_pairs_from_directories_with_df(df, book_id_column, dir1, dir2, file_extension='.md'):
+    """
+    Create file pairs from two directories based on book_id values in DataFrame.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing book_id values
+        book_id_column (str): Name of the column containing book_id values
+        dir1 (str): Path to first directory (e.g., Dolphin markdown)
+        dir2 (str): Path to second directory (e.g., MonkeyOCR markdown)
+        file_extension (str): File extension to match (default: '.md')
+    
+    Returns:
+        list: List of (file1_path, file2_path) tuples
+    """
+    dir1_path = Path(dir1)
+    dir2_path = Path(dir2)
+    
+    file_pairs = []
+    
+    # Get unique book_ids from the DataFrame
+    book_ids = df[book_id_column].unique()
+    
+    for book_id in book_ids:
+        # Create filename from book_id
+        filename = f"{book_id}{file_extension}"
+        
+        # Create full file paths
+        file1 = dir1_path / filename
+        file2 = dir2_path / filename
+        
+        # Check if both files exist
+        if file1.exists() and file2.exists():
+            file_pairs.append((str(file1), str(file2)))
+        else:
+            # Print which files are missing for debugging
+            if not file1.exists():
+                print(f"Missing in {dir1}: {filename}")
+            if not file2.exists():
+                print(f"Missing in {dir2}: {filename}")
+    
+    return file_pairs
 
 
 
-# Call the function with your unmatched dataframes
-analyze_unmatched_by_book_id(unmatched_dolphin, unmatched_monkeyocr, 'name', 'book_id')
-# Run the quick overview
-df = quick_unmatched_by_book_dataframe(unmatched_dolphin, unmatched_monkeyocr, 'name', 'book_id')
-df
+# Usage with your DataFrame
+file_pairs = create_file_pairs_from_directories_with_df(
+    result_df, 
+    'book_id',      
+    dolphin_md_dir, 
+    monkeyocr_md_dir,
+    '.md'
+)
+
+print(f"Found {len(file_pairs)} file pairs to compare")
+
+# Show sample of file pairs
+if len(file_pairs) > 0:
+    print("\nSample file pairs:")
+    for i, (file1, file2) in enumerate(file_pairs[:5]):
+        print(f"{i+1}. {Path(file1).name} <-> {Path(file2).name}")
+
+# Run the OCR comparison
+if len(file_pairs) > 0:
+    results_df = compare_ocr_files_batch(file_pairs, "Dolphin", "MonkeyOCR")
+    
+    # Display results
+    print("\n" + "="*80)
+    print("OCR COMPARISON RESULTS")
+    print("="*80)
+    
+    # Summary statistics
+    print(f"\nSummary Statistics:")
+    print(f"Total file pairs processed: {len(results_df)}")
+    print(f"Successful comparisons: {(results_df['status'] == 'success').sum()}")
+    print(f"Failed comparisons: {(results_df['status'] != 'success').sum()}")
+    
+    # Show successful comparisons only
+    successful_df = results_df[results_df['status'] == 'success'].copy()
+    
+    if len(successful_df) > 0:
+        print(f"\nOverall Statistics (successful comparisons only):")
+        print(f"Average similarity ratio: {successful_df['similarity_ratio'].mean():.3f}")
+        print(f"Average character error rate: {successful_df['character_error_rate'].mean():.3f}")
+        print(f"Average word error rate: {successful_df['word_error_rate'].mean():.3f}")
+        print(f"Median similarity ratio: {successful_df['similarity_ratio'].median():.3f}")
+        
+        # Show top 10 results
+        print(f"\nTop 10 results:")
+        display_cols = ['file1_name', 'file2_name', 'similarity_ratio', 'character_error_rate', 'word_error_rate']
+        print(successful_df[display_cols].head(10).to_string(index=False))
+    
+    # Save results to CSV
+    results_df.to_csv('ocr_comparison_results.csv', index=False)
+    print(f"\nResults saved to 'ocr_comparison_results.csv'")
+    
+    # Show any errors
+    error_df = results_df[results_df['status'] != 'success']
+    if len(error_df) > 0:
+        print(f"\nErrors encountered:")
+        for idx, row in error_df.iterrows():
+            print(f"  {row['file1_name']} vs {row['file2_name']}: {row['status']}")
+    else:
+        print("No matching file pairs found!")
+
+# Extract book_id from file1_name by removing .md extension
+results_df['Book_ID'] = results_df['file1_name'].str.replace('.md', '')
+
+# Merge detailed_df and results_df based on Book_ID and extracted book_id
+merged_analysis_df = pd.merge(
+    detailed_df, 
+    results_df, 
+    on='Book_ID', 
+    how='outer'
+)
+
+# Clean up - remove the temporary column
+merged_analysis_df = merged_analysis_df.drop('book_id_from_file', axis=1)
+
+merged_analysis_df.head(20)
+# Save the merged analysis DataFrame to a CSV file
+merged_analysis_df.to_csv('merged_biography_analysis.csv', index=False)
+
