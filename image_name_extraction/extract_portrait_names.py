@@ -166,3 +166,5 @@ if __name__ == "__main__":
 ## Basic usage
 #python extract_portrait_names.py "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\output" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\output\extracted_portrait_names_with_chunks.csv"
 
+#python extract_portrait_names.py "D:\data\HCNC\norway\biographies\storage\Dolphin\output" #"D:\data\HCNC\norway\biographies\storage\Dolphin\markdown\concatenated_all.md" #"D:\data\HCNC\norway\biographies\storage\Dolphin\output\extracted_portrait_names_with_chunks.csv"
+

@@ -67,6 +67,7 @@ def extract_last_digits(book_id):
 
 
 df_dolphin = pd.read_csv(r'd:\data\HCNC\norway\biographies\storage\Dolphin\output\extracted_all_names_portraits_biographies_Dolphin_final.csv')
+df_dolphin = pd.read_csv(r'd:\data\HCNC\norway\biographies\storage\Dolphin\output\extracted_all_names_portraits_biographies_final.csv')
 df_dolphin.head()
 df_dolphin.columns
 

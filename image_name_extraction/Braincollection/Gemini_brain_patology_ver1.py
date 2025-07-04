@@ -64,6 +64,8 @@ prompt_content = """
                     "- Etiske og kulturelle hensyn (sprog, religion, holdninger til behandling)"
                     """
 
+
+
 # Alternative structured prompt for detailed patient record format
 structured_prompt = """
 Analyser venligst det vedhæftede kliniske PDF-dokument og udtræk patientinformation i et struktureret JSON-format.
