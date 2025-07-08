@@ -14,14 +14,53 @@ def extract_names_to_dataframe(json_directory):
         with open(json_file, 'r', encoding='utf-8') as f:
             content = json.load(f)
         
-        for association in content.get('associations', []):
+        # Handle both old and new data structures
+        entries = []
+        
+        # Check for new structure with "biographical_entries"
+        if 'biographical_entries' in content:
+            entries = content['biographical_entries']
+        # Check for old structure with "associations"
+        elif 'associations' in content:
+            entries = content['associations']
+        else:
+            # If neither key exists, skip this file
+            print(f"Warning: No 'biographical_entries' or 'associations' found in {json_file}")
+            continue
+        
+        for association in entries:
             if association.get('associated_person'):
+                # Handle different key variations for image filename
+                image_filename = ''
+                if 'image_filename' in association:
+                    image_filename = association['image_filename']
+                elif 'filename' in association:
+                    image_filename = association['filename']
+                
+                # Handle different key variations for page
+                page = ''
+                if 'image_page' in association:
+                    page = association['image_page']
+                elif 'page' in association:
+                    page = association['page']
+                elif 'book_id' in association:
+                    # Extract page from book_id if available (e.g., "digibok_2007031501007_0057" -> "0057")
+                    book_id_parts = association['book_id'].split('_')
+                    if len(book_id_parts) >= 3:
+                        page = book_id_parts[-1]
+                
+                # Handle confidence (should be consistent)
+                confidence = association.get('confidence', 0)
+                
+                # Handle book_id - check both association level and content level
+                book_id = association.get('book_id', '') or content.get('book_id', '')
+                
                 data.append({
                     'name': association['associated_person'],
-                    'image_filename': association.get('image_filename', ''),
-                    'page': association.get('image_page', ''),
-                    'confidence': association.get('confidence', 0),
-                    'book_id': content.get('book_id', '')
+                    'image_filename': image_filename,
+                    'page': page,
+                    'confidence': confidence,
+                    'book_id': book_id
                 })
     
     df = pd.DataFrame(data)
@@ -30,7 +69,7 @@ def extract_names_to_dataframe(json_directory):
     if not df.empty:
         df = df[df['name'] != df['name'].shift()]  
 
-    return df    
+    return df  
     
 
 def chunk_markdown_by_names(markdown_file_path, names_list):
@@ -168,3 +207,4 @@ if __name__ == "__main__":
 
 #python extract_portrait_names.py "D:\data\HCNC\norway\biographies\storage\Dolphin\output" #"D:\data\HCNC\norway\biographies\storage\Dolphin\markdown\concatenated_all.md" #"D:\data\HCNC\norway\biographies\storage\Dolphin\output\extracted_portrait_names_with_chunks.csv"
 
+#python extract_portrait_names.py #"D:\data\HCNC\norway\biographies\storage\AzureOCR\output_portrait_name_associations" #"D:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json\concatenated_all.md" #"D:\data\HCNC\norway\biographies\storage\AzureOCR\output_csv\extracted_portrait_names_with_chunks.csv"

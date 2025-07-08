@@ -73,7 +73,7 @@ tba_model = {
 tba_input = """
 The structure of the text is generally: 
  - name of main person 
- - occupation
+ - title or current occupation
  - birth date 
  - birth place
  - optionally death date
@@ -86,11 +86,11 @@ The structure of the text is generally:
  - The father of the spouse including name and occupation
  - The children of main person including name, birth date (always given), and birth place (optional)
  - Educations including education degree/name, institution, and years of enrollment or completion. This part begins with a three to four character short form of a degree which always include a "/".
- - Jobs including title, location and/or company, and years
+ - Current and previous jobs including title, location and/or company, and years. Please include all jobs, even if they are not current. The years can be a range or a single year. Don't forget to include the current title/job that is mentioned at the beginning of the biography after the name of the main person.
  
-The shift from educations to jobs is often difficult to identify. Put the entries under jobs if there is any doubt whether the entry is an education or job.
+The shift from educations to jobs is often difficult to identify. Please think carefully before deciding the entry.
 
-Sometimes there can be entries for figures, like ![Figure](figures/digibok_2007031501007_0057_figure_001.png). Just ignore this part and do not include it in the biography.
+Sometimes there can be entries for figures, like ![Figure](figures/digibok_2007031501007_0057_figure_001.png) or **[FIGURE: figure.id]**. There can also be tags for pagebreaks. Just ignore these part and do not include it in the biography.
 """
 
 class BiographyExtractor:
@@ -164,6 +164,7 @@ class BiographyExtractor:
     
         {{
             "name": "{name}",
+            "title": "current job title or occupation",
             "birth_date": "YYYY-MM-DD or partial date or empty string",
             "birth_place": "place name or empty string",
             "death_date": "YYYY-MM-DD or partial date or empty string",
@@ -211,7 +212,7 @@ class BiographyExtractor:
         """
     
         # Different temperatures to try
-        temperatures = [0.1, 0.1,0.2, 0.5]
+        temperatures = [0.01, 0.02,0.03, 0.2]
         max_retries = 3
         
         for temp_attempt, temperature in enumerate(temperatures, 1):
@@ -236,7 +237,7 @@ class BiographyExtractor:
                     # Configure generation with temperature
                     generate_content_config = types.GenerateContentConfig(
                         thinking_config=types.ThinkingConfig(
-                            thinking_budget=2000,
+                            thinking_budget=500,
                         ),
                         response_mime_type="application/json",
                         temperature=temperature,

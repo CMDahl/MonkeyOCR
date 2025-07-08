@@ -18,7 +18,7 @@ def concatenate_md_files_custom(input_directory, output_file_path, file_separato
         output_file_path (str): Path for the output concatenated file
     
     Returns:
-        int: Number of files concatenated
+        tuple: (number of files concatenated, list of small filenames)
     """
     input_dir = Path(input_directory)
     
@@ -27,7 +27,7 @@ def concatenate_md_files_custom(input_directory, output_file_path, file_separato
     
     if not digibok_files:
         print(f"No digibok_*.md files found in {input_directory}")
-        return 0
+        return 0, []
     
     # Sort files numerically by extracting the number from filename
     def extract_number(file_path):
@@ -45,12 +45,20 @@ def concatenate_md_files_custom(input_directory, output_file_path, file_separato
         os.makedirs(output_dir)
         print(f"Created output directory: {output_dir}")
     
+    # Track small files
+    small_files = []
+    
     # Concatenate all files
     with open(output_file_path, 'w', encoding='utf-8') as output_file:
         for i, md_file in enumerate(digibok_files):
             try:
                 with open(md_file, 'r', encoding='utf-8') as input_file:
                     content = input_file.read()
+                
+                # Check file size and track small files
+                file_size = len(content.encode('utf-8'))
+                if file_size < 200:
+                    small_files.append(md_file.name)
                 
                 # Add spacing between files
                 if i > 0:
@@ -62,16 +70,24 @@ def concatenate_md_files_custom(input_directory, output_file_path, file_separato
                 
                 output_file.write(content)
                 
-                print(f"Added {md_file.name} ({len(content):,} characters)")
+                print(f"Added {md_file.name} ({len(content):,} characters, {file_size} bytes)")
                 
             except Exception as e:
                 print(f"Error reading {md_file.name}: {e}")
                 continue
     
+    # Print small files summary
+    if small_files:
+        print(f"\n⚠️  Files with size less than 200 bytes ({len(small_files)} files):")
+        for filename in small_files:
+            print(f"  {filename}")
+    else:
+        print(f"\n✅ No files found with size less than 200 bytes")
+    
     print(f"\nConcatenation complete!")
     print(f"Output saved to: {output_file_path}")
     
-    return len(digibok_files)
+    return len(digibok_files), small_files
 
 def main():
     parser = argparse.ArgumentParser(
@@ -116,7 +132,7 @@ Examples:
         print("-" * 50)
         
         # Run concatenation with custom spacing
-        files_processed = concatenate_md_files_custom(
+        files_processed,small_files = concatenate_md_files_custom(
             args.input_directory, 
             args.output_file,
             file_separator=args.file_separator,
@@ -139,6 +155,7 @@ Examples:
         print(f"❌ Error during concatenation: {e}")
         sys.exit(1)
 
+    print("this is a list of small files that were found and where the conversion from json to markdown failed:")
 
 
 if __name__ == "__main__":
@@ -158,3 +175,5 @@ if __name__ == "__main__":
 
 # Get help
 #python concatenate_all_md_files.py --help    
+
+#python concatenate_all_md_files.py #"d:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json" #"d:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json\concatenate#d_all.md" --file-separator --spacing 2

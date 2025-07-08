@@ -38,56 +38,168 @@ def extract_names_to_dataframe(json_file_path):
 
 def chunk_markdown_by_names(markdown_file_path, names_list):
     """
-    Chunk markdown content by names, where each chunk starts with name[i] 
-    and ends before name[i+1]
+    Chunk markdown content prioritizing complete biographical information
+    Allows large chunks to preserve valuable content
     """
     with open(markdown_file_path, 'r', encoding='utf-8') as f:
         markdown_content = f.read()
     
     chunks = []
     
-    for i, name in enumerate(names_list):
-        # Find the start position of current name
-        # Use regex to find the name pattern (case insensitive)
-        name_pattern = re.escape(name)
-        start_match = re.search(name_pattern, markdown_content, re.IGNORECASE)
+    def find_name_in_text(name, text, start_from=0):
+        """Find a name in text using multiple strategies"""
+        search_text = text[start_from:]
         
-        if not start_match:
-            # If exact match not found, try without special characters
-            simplified_name = re.sub(r'[^\w\s]', '', name)
-            start_match = re.search(re.escape(simplified_name), markdown_content, re.IGNORECASE)
+        # Strategy 1: Exact match
+        escaped_name = re.escape(name)
+        match = re.search(escaped_name, search_text, re.IGNORECASE)
+        if match:
+            return start_from + match.start()
         
-        if start_match:
-            start_pos = start_match.start()
+        # Strategy 2: Flexible surname matching
+        name_parts = name.split(',')
+        if len(name_parts) >= 2:
+            surname = name_parts[0].strip()
+            given_names = name_parts[1].strip()
             
-            # Find the end position (start of next name)
-            if i + 1 < len(names_list):
-                next_name = names_list[i + 1]
-                next_name_pattern = re.escape(next_name)
-                end_match = re.search(next_name_pattern, markdown_content[start_pos + len(name):], re.IGNORECASE)
-                
-                if not end_match:
-                    # Try simplified version of next name
-                    simplified_next_name = re.sub(r'[^\w\s]', '', next_name)
-                    end_match = re.search(re.escape(simplified_next_name), markdown_content[start_pos + len(name):], re.IGNORECASE)
-                
-                if end_match:
-                    end_pos = start_pos + len(name) + end_match.start()
-                else:
-                    end_pos = len(markdown_content)  # If next name not found, go to end
+            pattern = rf'\b{re.escape(surname)},\s+{re.escape(given_names.split()[0])}'
+            match = re.search(pattern, search_text, re.IGNORECASE)
+            if match:
+                return start_from + match.start()
+        
+        # Strategy 3: Simplified match
+        simplified_name = re.sub(r'[^\w\s]', '', name)
+        pattern = re.escape(simplified_name)
+        match = re.search(pattern, search_text, re.IGNORECASE)
+        if match:
+            return start_from + match.start()
+        
+        return None
+    
+    def find_complete_biographical_end(text, start_pos, next_name_pos=None, max_search=50000):
+        """
+        Find the complete end of a biographical entry, prioritizing completeness
+        """
+        search_end = min(len(text), start_pos + max_search)
+        if next_name_pos:
+            search_end = min(search_end, next_name_pos + 1000)  # Allow some overlap for safety
+        
+        search_section = text[start_pos:search_end]
+        
+        # Look for definitive biographical entry endings in order of confidence
+        ending_patterns = [
+            # Next biographical entry (strongest indicator)
+            r'\n\s*[A-Z][A-Z\s]{3,},\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s*,\s+[a-z]',
+            
+            # Figure marker followed by new entry
+            r'\*\*\[FIGURE:[^\]]+\]\*\*\s*\n\s*[A-Z][A-Z\s]+,\s+[A-Z][a-z]+',
+            
+            # Reference entry (NAME, se OTHER)
+            r'\n\s*[A-Z][A-Z\s]+,\s+[A-Z][a-z]+.*?,\s+se\s+[A-Z]',
+            
+            # Double line breaks followed by new biographical pattern
+            r'\n\s*\n\s*[A-Z][A-Z\s]{3,},\s+[A-Z][a-z]+',
+        ]
+        
+        best_end = None
+        best_confidence = 0
+        
+        for confidence, pattern in enumerate(ending_patterns, 1):
+            matches = list(re.finditer(pattern, search_section))
+            if matches:
+                # Take the first match as it represents the next entry
+                match_pos = start_pos + matches[0].start()
+                if confidence > best_confidence:
+                    best_end = match_pos
+                    best_confidence = confidence
+                break  # Take the first strong pattern we find
+        
+        # If no strong pattern found, use next name position or extend reasonably
+        if best_end is None:
+            if next_name_pos:
+                best_end = next_name_pos
             else:
-                end_pos = len(markdown_content)  # Last name, go to end of file
-            
-            chunk = markdown_content[start_pos:end_pos].strip()
-            chunks.append(chunk)
-        else:
-            chunks.append("")  # Empty chunk if name not found
+                # For last entries or when next name not found, be generous
+                # Look for any reasonable stopping point
+                fallback_patterns = [
+                    r'\n\s*\n\s*[A-Z]',  # Double break + capital
+                    r'\*\*\[FIGURE:',     # Any figure marker
+                    r'<!-- File:',        # File boundary
+                ]
+                
+                for pattern in fallback_patterns:
+                    match = re.search(pattern, search_section[2000:])  # Skip first 2K to avoid cutting short
+                    if match:
+                        best_end = start_pos + 2000 + match.start()
+                        break
+                
+                # Absolute fallback - generous chunk size
+                if best_end is None:
+                    best_end = min(start_pos + 15000, len(text))  # 15KB max, but generous
+        
+        return best_end
+    
+    print(f"Comprehensive chunking {len(names_list)} names (prioritizing complete biographies)...")
+    
+    for i, name in enumerate(names_list):
+        if i % 100 == 0:
+            print(f"  Processing name {i+1}/{len(names_list)}: {name}")
+        
+        # Find current name position
+        start_pos = find_name_in_text(name, markdown_content)
+        
+        if start_pos is None:
+            print(f"  ✗ Could not find: {name}")
+            chunks.append("")
+            continue
+        
+        # Find next name to help determine boundaries
+        next_name_pos = None
+        if i + 1 < len(names_list):
+            next_name = names_list[i + 1]
+            next_name_pos = find_name_in_text(next_name, markdown_content, start_pos + len(name))
+        
+        # Find complete biographical end
+        end_pos = find_complete_biographical_end(markdown_content, start_pos, next_name_pos)
+        
+        # Extract chunk
+        chunk = markdown_content[start_pos:end_pos].strip()
+        
+        # Clean up chunk (remove excessive file markers but preserve content)
+        chunk = re.sub(r'\n?<!-- File: [^>]+ -->\n?', '\n[PAGE_BREAK]\n', chunk)
+        chunk = re.sub(r'\n+', '\n', chunk).strip()
+        
+        chunks.append(chunk)
+        
+        # Report on chunk characteristics (informational, not limiting)
+        chunk_size = len(chunk)
+        if chunk_size > 20000:
+            print(f"  📖 Very comprehensive entry ({chunk_size} chars) for: {name}")
+        elif chunk_size > 8000:
+            print(f"  📄 Substantial entry ({chunk_size} chars) for: {name}")
+        elif chunk_size < 500:
+            print(f"  📝 Brief entry ({chunk_size} chars) for: {name}")
+    
+    # Statistics (informational)
+    chunk_lengths = [len(c) for c in chunks]
+    avg_length = sum(chunk_lengths) / len(chunk_lengths) if chunk_lengths else 0
+    max_length = max(chunk_lengths) if chunk_lengths else 0
+    substantial_chunks = len([c for c in chunk_lengths if c > 5000])
+    comprehensive_chunks = len([c for c in chunk_lengths if c > 10000])
+    
+    print(f"\nComprehensive chunking completed!")
+    print(f"  Average chunk size: {avg_length:.0f} chars")
+    print(f"  Largest chunk size: {max_length} chars")
+    print(f"  Substantial entries (>5K chars): {substantial_chunks}")
+    print(f"  Comprehensive entries (>10K chars): {comprehensive_chunks}")
+    print(f"  Brief entries (<500 chars): {len([c for c in chunk_lengths if c < 500])}")
+    print(f"  Empty chunks: {chunk_lengths.count(0)}")
     
     return chunks
 
 def add_chunks_to_dataframe(df, markdown_file_path):
     """
-    Add markdown chunks to the dataframe
+    Add markdown chunks to the dataframe using comprehensive chunking
     """
     if df.empty:
         df['markdown_chunk'] = []
@@ -153,6 +265,7 @@ def save_figure_starting_files_info(files_starting_with_figures, output_path):
     # Print summary
     print(f"Total files starting with portrait pattern: {len(files_starting_with_figures)}")
 
+
 def associate_portraits_with_names(df, files_starting_with_figures, portrait_pattern):
     """
     Associate portraits with names based on files that start with portrait pattern
@@ -163,26 +276,50 @@ def associate_portraits_with_names(df, files_starting_with_figures, portrait_pat
     
     print("Associating portraits with names...")
     
+    # Detect if we're using AzureOCR based on portrait pattern
+    is_azure_ocr = portrait_pattern.startswith('**[FIGURE:')
+    
     for file_info in files_starting_with_figures:
         file_name = file_info['file_name']
         first_line = file_info['first_line']
         
-        # Extract the figure filename from the first line based on the pattern
-        if portrait_pattern.startswith('![Figure]'):
-            # Standard ![Figure](figures/filename.png) pattern
-            figure_match = re.search(r'!\[Figure\]\(figures/([^)]+)\)', first_line)
-        elif portrait_pattern.startswith('![Figure('):
-            # Alternative ![Figure(filename.png) pattern
-            figure_match = re.search(r'!\[Figure\(([^)]+)\)', first_line)
+
+        # Extract the figure information based on the pattern
+        if is_azure_ocr:
+            # AzureOCR pattern: **[FIGURE: 1.2]**
+            figure_match = re.search(r'\*\*\[FIGURE:\s*([^\]]+)\]\*\*', first_line)
+            if figure_match:
+                figure_id = figure_match.group(1).strip()
+                
+                # Extract base filename from the markdown file (e.g., digibok_2007031501007_0057)
+                base_name_match = re.search(r'(digibok_\d+_\d+)', file_name)
+                if base_name_match:
+                    base_name = base_name_match.group(1)
+                    portrait_filename = f"{base_name}_{figure_id}.png"
+                else:
+                    print(f"  ✗ Could not extract base name from: {file_name}")
+                    continue
+            else:
+                print(f"  ✗ Could not extract figure ID from AzureOCR pattern: {first_line}")
+                continue
+
         else:
-            # Custom pattern - try to extract filename from parentheses
-            figure_match = re.search(r'\(([^)]+)\)', first_line)
-        
-        if not figure_match:
-            print(f"  ✗ Could not extract figure filename from: {first_line}")
-            continue
+            # Original patterns for MonkeyOCR and Dolphin
+            if portrait_pattern.startswith('![Figure]'):
+                # Standard ![Figure](figures/filename.png) pattern
+                figure_match = re.search(r'!\[Figure\]\(figures/([^)]+)\)', first_line)
+            elif portrait_pattern.startswith('![Figure('):
+                # Alternative ![Figure(filename.png) pattern
+                figure_match = re.search(r'!\[Figure\(([^)]+)\)', first_line)
+            else:
+                # Custom pattern - try to extract filename from parentheses
+                figure_match = re.search(r'\(([^)]+)\)', first_line)
             
-        portrait_filename = figure_match.group(1)
+            if not figure_match:
+                print(f"  ✗ Could not extract figure filename from: {first_line}")
+                continue
+                
+            portrait_filename = figure_match.group(1)
         
         # Extract the base book_id from current file (e.g., digibok_2007031501007_0060.md)
         # We want to find the previous page: digibok_2007031501007_0059
@@ -261,8 +398,8 @@ def main():
         
         print(f"Found {len(df)} names")
         
-        # Add markdown chunks
-        print(f"Adding markdown chunks from: {args.markdown_file_path}")
+        # Add markdown chunks using comprehensive chunking
+        print(f"Adding comprehensive markdown chunks from: {args.markdown_file_path}")
         df = add_chunks_to_dataframe(df, args.markdown_file_path)
         
         # Save to CSV with chunks
@@ -314,18 +451,16 @@ def main():
         
     except Exception as e:
         print(f"Error during processing: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
-#jf = r"D:\data\HCNC\norway\biographies\storage\MonkeyOCR\output\all_books_names.json"
-#df = extract_names_to_dataframe(jf)
-#df.head()
-#md = r"D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\concatenated_all.md"
-#df = add_chunks_to_dataframe(df, md)
-#df.head()
 if __name__ == "__main__":
     main()
 
+# Example usage:
+# python extract_all_names.py "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_portrait_name_associations\all_books_names.json" "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json\" "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_csv\" --portrait-pattern "**[FIGURE:"
 # Example with your paths
 #python extract_all_names.py "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\output\all_books_names.json" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\" "D:\data\HCNC\norway\biographies\storage\MonkeyOCR\digibok_2007031501007\output\" --portrait-pattern "![](images/"
 
-# python extract_all_names.py "D:\data\HCNC\norway\biographies\storage\Dolphin\output\all_books_names.json" "D:\data\HCNC\norway\biographies\storage\Dolphin\markdown\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\Dolphin\markdown\" "D:\data\HCNC\norway\biographies\storage\Dolphin\output\" --portrait-pattern "![Figure]"
+# python extract_all_names.py python extract_all_names.py "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_portrait_name_associations\all_books_names.json" "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json\concatenated_all.md" "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_md_and_json\" "D:\data\HCNC\norway\biographies\storage\AzureOCR\output_csv\" --portrait-pattern "**[FIGURE:"
