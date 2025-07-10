@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "Cand. med.",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "assistentlege",
+    "reservelege"
+  ],
+  "azure_accuracy_rating": 8,
+  "monkey_accuracy_rating": 7,
+  "azure_analysis": "Azure OCR correctly identified 'lege', 'assistent og vikar', 'kandidat'. It missed 'assistentlege' and 'reservelege' as distinct entries, instead repeating 'assistent og vikar' and 'kandidat'. However, its text content is slightly more accurate for specific words like 'øyesykdommer' and 'lægers' compared to Monkey's 'øyesykkdommer' and 'lærers'.",
+  "monkey_analysis": "Monkey OCR also correctly identified 'lege', 'Assistent og vikar for distr.lege', and 'kandidat'. Similar to Azure, it repeated 'Assistent og vikar for distr.lege' and 'kandidat' instead of extracting 'assistentlege' and 'reservelege'. Its text content had minor spelling errors ('øyesykkdommer', 'lærers') that Azure did not.",
+  "text_quality_issues": "Both OCR systems produced very similar text content with high accuracy. The main 'issues' leading to discrepancies in job title extraction are not severe OCR errors, but rather the interpretation of distinct job titles from a continuous list of roles. For instance, 'assistentlege' and 'reservelege' are clearly stated but were not extracted as separate entities by either system's job title extraction logic, which instead repeated earlier, more general terms. There are minor OCR errors in Monkey's text ('øyesykkdommer' instead of 'øyesykdommer', 'lærers' instead of 'lægers') which Azure avoided.",
+  "recommendation": "Azure OCR performed slightly better for this specific record. While both systems struggled with the nuanced extraction of all distinct job titles from the continuous list, Azure's underlying text content was marginally more accurate in terms of spelling ('øyesykdommer', 'lægers'). Neither system fully captured all the distinct job titles present in the text, indicating a limitation in their job title extraction logic rather than severe OCR text quality issues.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0468",
+  "name_azure": "WEIDER, Aasta",
+  "name_monkey": "WEIDER, Aasta",
+  "original_azure_jobs": [
+    "lege",
+    "assistent og vikar",
+    "assistent og vikar",
+    "kandidat",
+    "kandidat"
+  ],
+  "original_monkey_jobs": [
+    "lege",
+    "Assistent og vikar for distr.lege",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "kandidat"
+  ],
+  "inspection_reason": "Only Azure jobs found",
+  "analysis_timestamp": "2025-07-10 12:12:45",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

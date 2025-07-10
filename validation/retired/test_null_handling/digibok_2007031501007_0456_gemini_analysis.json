@@ -1,0 +1,36 @@
+{
+  "correct_job_titles": [
+    "Bestyrer",
+    "ungdomsprest og sekretær",
+    "kretssekretær",
+    "hjelpeprest",
+    "sjømannsprest"
+  ],
+  "azure_accuracy_rating": 7,
+  "monkey_accuracy_rating": 8,
+  "azure_analysis": "Azure OCR extracted 4 out of 5 job titles correctly. It missed 'Bestyrer' entirely. The titles it did extract ('ungdomsprest og sekretær', 'kretssekretær', 'hjelpeprest', 'sjømannsprest') are all accurate in spelling and represent actual roles. The relative order of the extracted jobs is correct, but it's incomplete.",
+  "monkey_analysis": "Monkey OCR extracted all 5 job titles. It correctly identified 'Bestyrer', which Azure missed. However, it placed 'sjømannsprest' first, which is the final job chronologically, likely due to it appearing next to the person's name at the beginning of the entry. It also had a minor spelling error, extracting 'kretsekretær' instead of 'kretssekretær'. Despite the ordering and minor spelling issue, it captured all relevant job titles.",
+  "text_quality_issues": "Both OCR systems generally produced high-quality text for this record. The main discrepancy in job title extraction seems to stem from interpretation or parsing logic rather than severe OCR errors. Monkey OCR had a minor spelling error ('kretsekretær' instead of 'kretssekretær'), which is a common OCR artifact (missing a double consonant). Azure's text for 'kretssekretær' was correct.",
+  "recommendation": "Monkey OCR performed better for this specific record because it successfully identified all five job titles, whereas Azure missed one. Although Monkey had a minor spelling error and an incorrect initial ordering, its completeness in extraction is more valuable for biographical data analysis. The chronological order can be re-established programmatically if all titles are present.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0456",
+  "name_azure": "VAKSDAL, Ivar",
+  "name_monkey": "† VAKSDAL, Ivar",
+  "original_azure_jobs": [
+    "ungdomsprest og sekretær",
+    "kretssekretær",
+    "hjelpeprest",
+    "sjømannsprest"
+  ],
+  "original_monkey_jobs": [
+    "sjømannsprest",
+    "Bestyrer",
+    "ungdomsprest og sekretær",
+    "kretsekretær",
+    "hjelpeprest"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 12:38:09",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

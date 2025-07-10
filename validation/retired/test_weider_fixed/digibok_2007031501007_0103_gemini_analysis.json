@@ -1,0 +1,27 @@
+{
+  "correct_job_titles": [
+    "ansatt ved rikstelefonen",
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 7,
+  "azure_analysis": "Azure OCR failed to extract any job titles for the person. This is primarily due to a severe text truncation issue, where the OCR output for Azure completely omits the second part of the biographical entry that contains the job information. As a result, it had no relevant text to process for job extraction.",
+  "monkey_analysis": "Monkey OCR successfully captured the full biographical text, including the sentence 'Var ansatt ved rikstelefonen i Halden ved sin død.' It correctly identified 'ansatt' (employed/staff member) as a job-related term. However, its extraction was incomplete, as it only returned 'ansatt' and missed the crucial context 'ved rikstelefonen' (at the national telephone company), which forms the complete job title.",
+  "text_quality_issues": "The primary text quality issue is with the Azure OCR output, which is severely truncated. It only provides the first sentence of the biography and completely cuts off the subsequent sentences that contain the job information. This is a critical OCR error that prevents any accurate job extraction. Monkey OCR's text quality appears to be complete and accurate for the provided snippet.",
+  "recommendation": "Monkey OCR performed significantly better for this specific record. While its job title extraction was not perfectly complete ('ansatt' instead of 'ansatt ved rikstelefonen'), it at least provided the relevant text and identified a key term. Azure OCR failed entirely due to a fundamental text truncation error, rendering it useless for job extraction in this instance.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "ansatt"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 13:03:49",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

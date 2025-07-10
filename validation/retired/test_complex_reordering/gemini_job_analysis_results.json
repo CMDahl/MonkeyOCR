@@ -1,0 +1,63 @@
+{
+  "input_flagged_csv": "test_heggoy_record.csv",
+  "input_comparison_csv": "comprehensive_comparison_dataframe.csv",
+  "output_directory": "test_complex_reordering",
+  "total_flagged_records": 1,
+  "successful_analyses": 1,
+  "failed_analyses": 0,
+  "processing_timestamp": "2025-07-10 17:34:47",
+  "gemini_model": "gemini-2.5-flash",
+  "analyses": [
+    {
+      "correct_job_titles": [
+        "prest",
+        "Styrer av heim for kabylgutter",
+        "leder av misjonsarbeidet",
+        "tilsynsmann",
+        "prest"
+      ],
+      "correct_job_locations": [
+        "metodistkirken, Stavanger",
+        "El-Biar, Alger, Algerie",
+        "Stor-Kabylia, Algerie",
+        "Algerie og Tunis",
+        "Virginia, U.S.A."
+      ],
+      "correct_job_years": [
+        "1935",
+        "1936-37",
+        "1937-45, 1947-50",
+        "1950-52",
+        "1953-57"
+      ],
+      "azure_accuracy_rating": 9,
+      "monkey_accuracy_rating": 8,
+      "azure_analysis": "Azure OCR performed very well. It correctly identified all five distinct job roles, their locations, and years. The only minor inaccuracy was listing 'Reverend, Montross, Virginia, U.S.A.' as a separate job1 without a year, when the text indicates this is his current role from 1956- as a 'prest' in Virginia. However, it correctly extracted the 'prest' role in Virginia later with the correct years. The translation of 'prest' to 'Reverend' is acceptable, but 'prest' is more precise to the original text.",
+      "monkey_analysis": "Monkey OCR also performed well, extracting the same five job roles, locations, and years as Azure. Similar to Azure, it listed 'Reverend, Montross, Virginia, U.S.A.' as job1 with '1956-' as years, which is part of the later 'prest' role in Virginia. The translation of 'prest' to 'Priest' is less common for a Methodist minister than 'Reverend' or 'Pastor'. The main difference is the initial 'Reverend' entry which is a partial extraction of the last job, and the translation of 'tilsynsmann' to 'Supervisor for the Methodist Church' which is a bit verbose compared to Azure's 'tilsynsmann'.",
+      "text_quality_issues": "Both OCR texts are of high quality with very few errors relevant to job extraction. The main 'issue' is how the initial 'Reverend, Montross, Virginia, U.S.A.' is presented at the very beginning of the biography, which can be misinterpreted as a standalone job rather than a current status/title related to his final 'prest' role. The text 'Rever- end' in Azure suggests a hyphenation error, but it's correctly interpreted. Monkey's text has a slight truncation at the end of the job list ('amerikanska' instead of 'amerikanske blad og tidsskrifter'), but this does not affect job extraction.",
+      "recommendation": "Azure OCR performed slightly better for this specific record. While both systems accurately extracted the core job information, Azure's extraction of 'tilsynsmann' was more direct and accurate to the original Norwegian term. Both systems struggled slightly with the initial 'Reverend' entry, but Azure's overall consistency and slightly better translation/transcription of 'tilsynsmann' gives it a slight edge.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0200",
+      "name_azure": "HEGGØY, Willy Normann",
+      "name_monkey": "HEGGØY, Willy Normann",
+      "original_azure_jobs": [
+        "Reverend",
+        "prest",
+        "Styrer av heim for kabylgutter",
+        "leder av misjonsarbeidet",
+        "tilsynsmann"
+      ],
+      "original_monkey_jobs": [
+        "Reverend",
+        "Priest",
+        "Director of home for Kabyle boys",
+        "Leader of missionary work",
+        "Supervisor for the Methodist Church"
+      ],
+      "inspection_reason": "Low overlap (0.200 < 0.5)",
+      "analysis_timestamp": "2025-07-10 17:34:46",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.01
+    }
+  ]
+}

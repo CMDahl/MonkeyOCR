@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "lege",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "assistentlege",
+    "reservelege"
+  ],
+  "azure_accuracy_rating": 7,
+  "monkey_accuracy_rating": 8,
+  "azure_analysis": "Azure correctly identified 'lege', 'assistent og vikar', and 'kandidat'. However, it duplicated 'assistent og vikar' and 'kandidat' without distinguishing the more specific 'assistentlege' or 'reservelege'. It also missed the crucial 'for distr.lege' part of the first assistant role, making it less specific.",
+  "monkey_analysis": "Monkey OCR correctly identified 'lege', 'Assistent og vikar for distr.lege', and 'kandidat'. It also duplicated 'Assistent og vikar for distr.lege' and 'kandidat' in its output, similar to Azure, indicating a potential pattern in how these systems extract repeated roles. However, it captured the full and more accurate 'Assistent og vikar for distr.lege' which is a significant improvement over Azure's 'assistent og vikar'. Like Azure, it failed to extract 'assistentlege' and 'reservelege' as distinct roles.",
+  "text_quality_issues": "Both OCR systems produced very high-quality text, with minimal errors. The main discrepancy in job title extraction seems to stem from how the systems interpret and segment the list of roles presented in the biography, rather than significant OCR errors in the text itself. For instance, the text lists multiple hospital affiliations after 'kandidat', 'assistentlege', and 'reservelege', which might lead the OCR to group or omit these distinct titles. Monkey OCR had a minor typo ('øyesykkdommer' instead of 'øyesykdommer') but this did not impact job title extraction.",
+  "recommendation": "Monkey OCR performed slightly better for this specific record because it accurately captured the more detailed job title 'Assistent og vikar for distr.lege', which Azure missed. While both systems struggled to identify all distinct job titles (like 'assistentlege' and 'reservelege') and instead duplicated earlier ones, Monkey's output was more precise for the roles it did extract.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0468",
+  "name_azure": "WEIDER, Aasta",
+  "name_monkey": "WEIDER, Aasta",
+  "original_azure_jobs": [
+    "lege",
+    "assistent og vikar",
+    "assistent og vikar",
+    "kandidat",
+    "kandidat"
+  ],
+  "original_monkey_jobs": [
+    "lege",
+    "Assistent og vikar for distr.lege",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "kandidat"
+  ],
+  "inspection_reason": "Only Azure jobs found",
+  "analysis_timestamp": "2025-07-10 12:36:59",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

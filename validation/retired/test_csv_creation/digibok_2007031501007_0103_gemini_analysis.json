@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    "ansatt ved rikstelefonen",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    "Halden",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    "until 1934",
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR failed to extract any job information. Its text content is significantly shorter and misses the crucial sentence containing the job details. It only captured the initial biographical data about birth, death, and parents.",
+  "monkey_analysis": "Monkey OCR successfully extracted the relevant sentence: 'Var ansatt ved rikstelefonen i Halden ved sin død.' It correctly identified 'ansatt' as a job-related term, 'rikstelefonen i Halden' as the location/employer, and 'until 1934' (derived from 'ved sin død' and the death date) as the year. The only minor point is that 'ansatt' is a general term for 'employed', but it accurately reflects what is stated in the text.",
+  "text_quality_issues": "The primary issue is the significant difference in the completeness of the OCR output between Azure and Monkey. Azure's text is truncated, missing the entire sentence that describes the person's employment. Monkey's text is much more complete and includes the critical job information. There are no significant OCR errors within the text provided by Monkey that would hinder extraction.",
+  "recommendation": "Monkey OCR performed significantly better for this specific record because it captured the complete biographical text, including the sentence detailing the person's employment. Azure OCR's output was incomplete, leading to a complete failure in job extraction. Therefore, Monkey OCR is the superior system for this record.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "ansatt"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 18:16:05",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

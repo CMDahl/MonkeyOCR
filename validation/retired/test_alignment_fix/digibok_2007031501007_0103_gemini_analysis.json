@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    "ansatt ved rikstelefonen",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    "Halden",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    "until 1934",
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR completely missed the biographical information containing the job title. Its extracted text ends prematurely, omitting the crucial sentence about employment. Therefore, it found no jobs, resulting in a very low accuracy.",
+  "monkey_analysis": "Monkey OCR successfully extracted the relevant sentence: 'Var ansatt ved rikstelefonen i Halden ved sin død.' It correctly identified 'ansatt' as a job-related term, 'rikstelefonen i Halden' as the location/employer, and 'until 1934' based on 'ved sin død'. The only minor point is that 'ansatt' is a general term for 'employed', but it accurately reflects what was stated. It could have been more specific if the text allowed, but it extracted what was present.",
+  "text_quality_issues": "The primary issue is with the Azure OCR text quality, which appears to be truncated or incomplete for this record, missing a significant portion of the biographical entry that Monkey OCR captured. This truncation directly led to Azure's failure to extract any job data. Monkey OCR's text quality for this specific entry is good, accurately reflecting the original content.",
+  "recommendation": "Monkey OCR performed significantly better for this specific record. It successfully captured the complete biographical text, including the job information, which Azure OCR failed to do due to apparent text truncation. Without the full text, job extraction is impossible, making Monkey OCR the superior choice for this instance.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "ansatt"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 17:32:06",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

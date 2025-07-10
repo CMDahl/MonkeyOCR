@@ -1,0 +1,9 @@
+GEMINI ANALYSIS STATISTICS
+==================================================
+
+Total records analyzed: 2
+Average Azure accuracy: 7.50/10
+Average Monkey accuracy: 7.00/10
+Azure wins: 1
+Monkey wins: 0
+Ties: 1

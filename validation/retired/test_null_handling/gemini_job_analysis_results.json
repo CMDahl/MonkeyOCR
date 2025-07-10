@@ -1,0 +1,122 @@
+{
+  "input_flagged_csv": "flagged_job_overlap_records.csv",
+  "input_comparison_csv": "comprehensive_comparison_dataframe.csv",
+  "output_directory": "test_null_handling",
+  "total_flagged_records": 3,
+  "successful_analyses": 3,
+  "failed_analyses": 0,
+  "processing_timestamp": "2025-07-10 12:38:09",
+  "gemini_model": "gemini-2.5-flash",
+  "analyses": [
+    {
+      "correct_job_titles": [
+        "lærer",
+        "lærer",
+        "lærer",
+        "lærer",
+        "lærer"
+      ],
+      "azure_accuracy_rating": 9,
+      "monkey_accuracy_rating": 9,
+      "azure_analysis": "Azure OCR correctly identified 'lærer' multiple times. The capitalization varies ('lærer', 'Lærer'), which is a minor inconsistency but doesn't change the meaning of the job title. It accurately captures the core profession.",
+      "monkey_analysis": "Monkey OCR also correctly identified 'lærer' multiple times, consistently using lowercase. This consistency is slightly better than Azure, but both accurately capture the job title.",
+      "text_quality_issues": "Both OCR systems produced high-quality text for the relevant sections. There are minor differences in hyphenation ('sløyd-lærereks.' vs 'sløyd-lærereks.') and a few word errors (Azure: 'alle-rede' vs Monkey: 'alle-rede valgt'; Azure: 'dømme om' vs Monkey: 'dømmme om'), but these do not impact the extraction of the job title 'lærer'. The main discrepancy in the provided 'EXTRACTED JOB TITLES' (Azure having mixed case, Monkey all lowercase) is a formatting difference, not an accuracy issue regarding the job title itself.",
+      "recommendation": "Both OCR systems performed equally well for extracting the core job title 'lærer' for this record. Monkey OCR showed slightly better consistency in capitalization (all lowercase), but Azure's mixed case is also acceptable as 'Lærer' is simply a capitalized form of 'lærer'. Given the task of extracting the job title, both are highly accurate.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0103",
+      "name_azure": "BRÆKKE, Asborg Jørgine",
+      "name_monkey": "BRÆKKE, Asborg Jørgine",
+      "original_azure_jobs": [
+        "lærer",
+        "Lærer",
+        "Lærer",
+        "Lærer",
+        "Lærer"
+      ],
+      "original_monkey_jobs": [
+        "lærer",
+        "lærer",
+        "lærer",
+        "lærer",
+        "lærer"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 12:37:53",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [
+        "Cand. med.",
+        "Assistent og vikar for distr.lege",
+        "kandidat",
+        "assistentlege",
+        "reservelege"
+      ],
+      "azure_accuracy_rating": 7,
+      "monkey_accuracy_rating": 8,
+      "azure_analysis": "Azure OCR extracted 'lege' as the first job, which is a general profession listed at the beginning of the entry, not a specific chronological job title within the career progression. It correctly identified 'assistent og vikar' but missed the crucial 'for distr.lege' part. It also correctly identified 'kandidat'. However, it only provided 5 entries, missing 'assistentlege' and 'reservelege' which are distinct roles mentioned later in the text. The repetition of 'assistent og vikar' and 'kandidat' in its output suggests it might have struggled with parsing the comma-separated list of roles and locations.",
+      "monkey_analysis": "Monkey OCR correctly identified 'lege' as the initial profession. Crucially, it accurately captured 'Assistent og vikar for distr.lege', which is a more specific and complete job title than Azure's extraction. It also correctly identified 'kandidat'. However, similar to Azure, it only provided 5 entries and missed the subsequent distinct job titles like 'assistentlege' and 'reservelege'. The repetition of 'Assistent og vikar for distr.lege' and 'kandidat' indicates a similar parsing issue as Azure, where it likely extracted the first few distinct roles and then repeated them to fill the expected number of slots, rather than identifying all unique roles.",
+      "text_quality_issues": "Both OCR systems produced very high-quality text, with minimal errors. The main challenge for both systems seems to be the parsing of a long, comma-separated list of job roles and associated locations/hospitals. The text lists roles sequentially (e.g., 'Assistent og vikar for distr.lege i Dovre og Lesja, Stangvik, kandidat Molde sykehus, Ullevål sykehus, assistentlege Ullevål sykehus, Sør-Odal sykehus, St. Torfinns Klinikk, Hamar og Namdal sykehus, Namsos, reservelege Ullevål sykehus, øyenavd.'). This structure makes it difficult for automated systems to correctly segment and identify each unique job title without also including the associated locations or repeating titles.",
+      "recommendation": "Monkey OCR performed slightly better for this specific record because it accurately captured the more complete job title 'Assistent og vikar for distr.lege' compared to Azure's truncated 'assistent og vikar'. While both systems struggled with extracting all distinct job titles from the comma-separated list and instead repeated earlier ones, Monkey's accuracy on the more complex phrase gives it an edge.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0468",
+      "name_azure": "WEIDER, Aasta",
+      "name_monkey": "WEIDER, Aasta",
+      "original_azure_jobs": [
+        "lege",
+        "assistent og vikar",
+        "assistent og vikar",
+        "kandidat",
+        "kandidat"
+      ],
+      "original_monkey_jobs": [
+        "lege",
+        "Assistent og vikar for distr.lege",
+        "Assistent og vikar for distr.lege",
+        "kandidat",
+        "kandidat"
+      ],
+      "inspection_reason": "Only Azure jobs found",
+      "analysis_timestamp": "2025-07-10 12:38:01",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [
+        "Bestyrer",
+        "ungdomsprest og sekretær",
+        "kretssekretær",
+        "hjelpeprest",
+        "sjømannsprest"
+      ],
+      "azure_accuracy_rating": 7,
+      "monkey_accuracy_rating": 8,
+      "azure_analysis": "Azure OCR extracted 4 out of 5 job titles correctly. It missed 'Bestyrer' entirely. The titles it did extract ('ungdomsprest og sekretær', 'kretssekretær', 'hjelpeprest', 'sjømannsprest') are all accurate in spelling and represent actual roles. The relative order of the extracted jobs is correct, but it's incomplete.",
+      "monkey_analysis": "Monkey OCR extracted all 5 job titles. It correctly identified 'Bestyrer', which Azure missed. However, it placed 'sjømannsprest' first, which is the final job chronologically, likely due to it appearing next to the person's name at the beginning of the entry. It also had a minor spelling error, extracting 'kretsekretær' instead of 'kretssekretær'. Despite the ordering and minor spelling issue, it captured all relevant job titles.",
+      "text_quality_issues": "Both OCR systems generally produced high-quality text for this record. The main discrepancy in job title extraction seems to stem from interpretation or parsing logic rather than severe OCR errors. Monkey OCR had a minor spelling error ('kretsekretær' instead of 'kretssekretær'), which is a common OCR artifact (missing a double consonant). Azure's text for 'kretssekretær' was correct.",
+      "recommendation": "Monkey OCR performed better for this specific record because it successfully identified all five job titles, whereas Azure missed one. Although Monkey had a minor spelling error and an incorrect initial ordering, its completeness in extraction is more valuable for biographical data analysis. The chronological order can be re-established programmatically if all titles are present.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0456",
+      "name_azure": "VAKSDAL, Ivar",
+      "name_monkey": "† VAKSDAL, Ivar",
+      "original_azure_jobs": [
+        "ungdomsprest og sekretær",
+        "kretssekretær",
+        "hjelpeprest",
+        "sjømannsprest"
+      ],
+      "original_monkey_jobs": [
+        "sjømannsprest",
+        "Bestyrer",
+        "ungdomsprest og sekretær",
+        "kretsekretær",
+        "hjelpeprest"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 12:38:09",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    }
+  ]
+}

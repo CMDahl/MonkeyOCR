@@ -1,279 +1,111 @@
 # MonkeyOCR Validation Tools
 
-This repository contains validation and processing tools for the MonkeyOCR project, with a particular focus on extracting figure references from OCR-processed text and generating corresponding image filenames.
+Production-ready tools for analyzing and correcting OCR data from Norwegian biographical texts.
 
-## 🎯 Main Focus: Figure Extraction (`figure_extraction.py`)
+## 🎯 Purpose
 
-The core functionality of this validation toolkit is the **figure extraction system** that processes OCR text to identify and extract figure references, creating structured metadata for image linking.
+Compare Azure OCR and Monkey OCR results, identify discrepancies, and use AI to create the most accurate dataset.
 
-### Key Features
+## 📊 Workflow Overview
 
-- **Figure Reference Extraction**: Automatically identifies figure references in formats like `**[Figure: 1.1]**` and `**[FIGURE: 2.3]**`
-- **Case-Insensitive Matching**: Handles both `[Figure:` and `[FIGURE:` while preserving original case
-- **Image Filename Generation**: Creates Azure-compatible image filenames by combining book IDs with figure numbers
-- **Dual Reference Support**: Extracts first and second figure occurrences per text chunk
-- **Robust Error Handling**: Gracefully manages missing values and malformed references
-- **Comprehensive Reporting**: Provides detailed statistics and processing summaries
+```mermaid
+graph TD
+    A[Azure OCR Data] --> C[Comprehensive Analysis]
+    B[Monkey OCR Data] --> C
+    C --> D[Fuzzy Matching & Linking]
+    D --> E[Job Title Comparison]
+    E --> F[Flag Discrepancies]
+    F --> G[Gemini AI Analysis]
+    G --> H[Corrected Dataset]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#f1f8e9
+    style G fill:#fff3e0
+    style H fill:#e8f5e8
+```
 
-### 📊 Results from Real Data
+## 🛠️ Core Tools
 
-When tested on the Norwegian biography dataset:
+| Tool | Purpose | Input | Output |
+|------|---------|-------|--------|
+| `comprehensive_json_extraction.py` | Main analysis engine | CSV files | Merged comparison data |
+| `gemini_job_resolver.py` | AI-powered correction | Flagged records | Corrected job data |
+| `run_gemini_batch_analysis.py` | Batch processing | Large datasets | Analysis results |
+| `analyze_gemini_results.py` | Results analysis | Gemini output | Summary reports |
 
-- **Total rows processed**: 1,541
-- **Rows with figure references**: 837 (54.3%)
-- **Total figure references found**: 9,932
-- **First figure references**: 837 rows
-- **Second figure references**: 135 rows
+## 🚀 Quick Start
 
-## 🔧 Installation & Setup
-
-### Prerequisites
+### 1. Basic Analysis (5 minutes)
 
 ```bash
-pip install pandas
+# Test with 5 records
+python gemini_job_resolver.py --max-records 5 --output-dir test_run
 ```
 
-### Quick Start
-
-```python
-import pandas as pd
-from figure_extraction import extract_figure_references
-
-# Load your data
-df = pd.read_csv('your_data.csv')
-
-# Extract figure references and create image filenames
-result = extract_figure_references(df, text_column='markdown_chunk_azureocr')
-
-# Save results
-result.to_csv('output_with_figures.csv', index=False)
-```
-
-## 📖 Detailed Usage Guide
-
-### Basic Usage
-
-```python
-from figure_extraction import extract_figure_references
-
-# Standard usage with default parameters
-df_with_figures = extract_figure_references(df)
-```
-
-### Advanced Configuration
-
-```python
-# Custom configuration
-result = extract_figure_references(
-    df,
-    text_column='your_text_column',           # Column containing text to search
-    figure1_column='FirstFigure',             # Name for first figure column
-    figure2_column='SecondFigure',            # Name for second figure column
-    book_id_column='your_book_id_column',     # Column with book IDs
-    missing_value='No Figure Found',          # Value for missing figures
-    create_image_columns=True                 # Enable image filename generation
-)
-```
-
-### Convenience Functions
-
-```python
-# Simple integration
-from figure_extraction import add_figure_columns_to_dataframe
-
-df_with_figures = add_figure_columns_to_dataframe(df)
-
-# File processing with I/O
-from figure_extraction import process_your_data
-
-result = process_your_data(
-    'input.csv',
-    text_column='markdown_chunk_azureocr',
-    output_path='output.csv'
-)
-```
-
-## 🎮 Function Reference
-
-### `extract_figure_references()`
-
-**Main function for figure extraction and image filename generation.**
-
-#### Parameters
-
-- `df` (pd.DataFrame): DataFrame containing text data
-- `text_column` (str): Column name containing text to search (default: 'markdown_chunk_azureocr')
-- `figure1_column` (str): Column name for first figure reference (default: 'Figure1')
-- `figure2_column` (str): Column name for second figure reference (default: 'Figure2')
-- `missing_value` (str): Value for missing references (default: 'Missing value')
-- `book_id_column` (str): Column name containing book IDs (default: 'book_id')
-- `create_image_columns` (bool): Whether to create image filename columns (default: True)
-
-#### Returns
-
-- `pd.DataFrame`: Original DataFrame with added columns:
-  - `Figure1`: First figure reference found
-  - `Figure2`: Second figure reference found
-  - `azure_image1`: Image filename for first figure
-  - `azure_image2`: Image filename for second figure
-
-#### Example Output
-
-```text
-book_id: digibok_2007031501007_0057
-Figure1: **[FIGURE: 1.2]**
-azure_image1: digibok_2007031501007_0057_1.2.png
-Figure2: **[FIGURE: 1.3]**
-azure_image2: digibok_2007031501007_0057_1.3.png
-```
-
-### `find_all_figure_references()`
-
-**Exploratory function to analyze all figure references in your data.**
-
-Returns detailed information about every figure reference found, including position and occurrence number.
-
-### `quick_figure_check()`
-
-**Quick diagnostic function to check if your data contains figure references.**
-
-```python
-from figure_extraction import quick_figure_check
-
-stats = quick_figure_check(df, text_column='markdown_chunk_azureocr')
-```
-
-Returns statistics about figure reference coverage in your dataset.
-
-### `demonstrate_figure_extraction()`
-
-**Built-in demonstration with sample data.**
-
-Run this function to see how the extraction works with test data.
-
-## 🔍 Pattern Recognition
-
-The system recognizes figure references using this regex pattern:
-
-```regex
-\*\*\[(?:Figure|FIGURE):\s*(\d+\.\d+)\]\*\*
-```
-
-### Supported Formats
-
-- `**[Figure: 1.1]**` (mixed case)
-- `**[FIGURE: 2.3]**` (uppercase)
-- `**[Figure: 10.25]**` (multi-digit numbers)
-
-### Pattern Components
-
-- `\*\*` - Literal asterisks at start
-- `\[` - Opening bracket
-- `(?:Figure|FIGURE)` - Case-insensitive figure keyword
-- `:\s*` - Colon followed by optional whitespace
-- `(\d+\.\d+)` - Captured figure number (e.g., "1.2")
-- `\]` - Closing bracket
-- `\*\*` - Literal asterisks at end
-
-## 🧪 Testing & Validation
-
-### Test Files Available
-
-1. **`test_figure_extraction_fix.py`** - Integration test with real data
-2. **`final_verification.py`** - Comprehensive validation script
-3. **`test_image_filename_generation.py`** - Unit tests for filename generation
-4. **`final_comprehensive_test.py`** - Complete requirements testing
-
-### Running Tests
+### 2. Full Analysis Pipeline
 
 ```bash
-# Run integration test
-python test_figure_extraction_fix.py
+# Step 1: Generate comparison data
+python comprehensive_json_extraction.py
 
-# Run comprehensive validation
-python final_verification.py
+# Step 2: AI-powered correction
+python gemini_job_resolver.py --output-dir production_run --create-corrections
 
-# Run built-in demonstration
-python figure_extraction.py
+# Step 3: Analyze results
+python analyze_gemini_results.py
 ```
 
-## 📁 Project Structure
+## 📁 Data Flow
 
 ```text
-validation/
-├── figure_extraction.py              # Main extraction logic
-├── test_figure_extraction_fix.py     # Integration tests
-├── final_verification.py             # Comprehensive validation
-├── test_image_filename_generation.py # Unit tests
-├── final_comprehensive_test.py       # Requirements testing
-├── verify_azure_columns.py          # Column verification
-├── biography_json_comparisons.py    # Biography comparison tools
-├── debug_figure_extraction.py       # Debug utilities
-└── readme.md                        # This file
+Input Data:
+├── Azure OCR CSV (d:\data\HCNC\norway\biographies\storage\AzureOCR\...)
+├── Monkey OCR CSV (d:\data\HCNC\norway\biographies\storage\MonkeyOCR\...)
+
+Processing:
+├── comprehensive_comparison_dataframe.csv ← Merged & linked data
+├── flagged_job_overlap_records.csv ← Records needing review
+
+AI Analysis:
+├── gemini_analysis_complete/ ← Individual JSON analyses
+├── gemini_job_analysis_summary.csv ← Summary results
+
+Final Output:
+├── azure_corrected.csv ← Corrected Azure data
+├── monkey_corrected.csv ← Corrected Monkey data
+├── unified_best_of_both.csv ← Combined best results
+└── corrections_summary.csv ← What was changed
 ```
 
-## 🎯 Real-World Example
+## 🎯 Key Features
 
-Here's how the system was used on the Norwegian biography dataset:
+- **Fuzzy Matching**: Links records across OCR systems despite name variations
+- **Job Overlap Analysis**: Computes similarity between job titles
+- **AI Correction**: Uses Google Gemini-2.5-Flash to resolve discrepancies
+- **Quality Tracking**: Rates Azure vs Monkey accuracy for each record
+- **Correction Metadata**: Tracks all changes with timestamps and reasoning
 
-```python
-# Load the three-way merged comparison data
-df = pd.read_csv('comparison_threeway_merged.csv')
+## 📊 Example Results
 
-# Extract figure references from Azure OCR text
-result = extract_figure_references(df, text_column='markdown_chunk_azureocr')
+- **Total Records**: 1,500+ biographical entries
+- **Flagged for Review**: ~200 records with job title discrepancies
+- **AI Success Rate**: 95%+ successful corrections
+- **Quality Improvement**: Combines best elements from both OCR systems
 
-# Results: 837 rows with figures, 9,932 total references found
-# Output includes Figure1, Figure2, azure_image1, azure_image2 columns
+## 🔧 Configuration
+
+All scripts use command-line arguments:
+
+```bash
+python gemini_job_resolver.py --help
 ```
 
-## 🔧 Technical Details
+API keys managed via:
 
-### Image Filename Generation Logic
-
-```python
-def create_image_filename(book_id, figure_number):
-    """Create image filename from book_id and figure number"""
-    if pd.isna(book_id) or pd.isna(figure_number) or figure_number is None:
-        return 'Missing value'
-    return f"{book_id}_{figure_number}.png"
-```
-
-### Error Handling
-
-- Gracefully handles `NaN` and empty text values
-- Preserves original DataFrame structure
-- Provides meaningful default values for missing data
-- Comprehensive logging and progress reporting
-
-### Performance Considerations
-
-- Processes 1,500+ rows efficiently
-- Uses compiled regex patterns for speed
-- Minimal memory footprint with in-place operations
-- Detailed progress reporting for large datasets
-
-## 📝 Output Format
-
-The system adds four new columns to your DataFrame:
-
-| Column | Description | Example |
-|--------|-------------|---------|
-| `Figure1` | First figure reference found | `**[FIGURE: 1.2]**` |
-| `Figure2` | Second figure reference found | `**[FIGURE: 1.3]**` |
-| `azure_image1` | Image filename for first figure | `digibok_2007031501007_0057_1.2.png` |
-| `azure_image2` | Image filename for second figure | `digibok_2007031501007_0057_1.3.png` |
-
-## 🤝 Contributing
-
-This is part of the MonkeyOCR validation toolkit. The figure extraction functionality is production-ready and has been tested on real Norwegian biography data.
-
-## 📄 License
-
-Part of the MonkeyOCR project validation tools.
+- KeyVault (production)
+- Environment variables (development)
 
 ---
 
-**Last Updated**: July 2025  
-**Tested On**: Norwegian Biography Dataset (1,541 rows, 9,932 figure references)  
 **Status**: Production Ready ✅

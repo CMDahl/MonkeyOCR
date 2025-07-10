@@ -1,0 +1,42 @@
+{
+  "correct_job_titles": [
+    "Husmor og mor",
+    "deltagelse i arbeidslivet",
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    "Oslo",
+    "Oslo",
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    "1937-",
+    "1937-",
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 7,
+  "monkey_accuracy_rating": 1,
+  "azure_analysis": "Azure correctly identified 'Husmor og mor' and 'sporadisk deltagelse i «arbeidslivet»' as potential job-related phrases. It correctly recognized these as distinct elements, although it presented them as 'job1' and 'job2'. The main issue is that 'sporadisk deltagelse i «arbeidslivet»' is not a specific job title but a description of an activity. However, given the context, it's the closest the text comes to describing a professional role beyond 'Husmor og mor'.",
+  "monkey_analysis": "Monkey OCR failed to extract any job titles for Aasta Weider, which is a significant oversight given the explicit mention of 'Husmor og mor' and the description of 'deltagelse i «arbeidslivet»'. This indicates a poor performance for this specific record.",
+  "text_quality_issues": "Both OCR systems had good text quality for the relevant section. The main challenge is not OCR errors but the interpretation of the biographical phrasing. The text describes Aasta Weider's primary role as 'Husmor og mor' and then adds a nuanced description of her involvement in 'arbeidslivet' (working life) without specifying a concrete job title. The hyphenation 'Hus- mor' across a line break was handled correctly by both, but the interpretation of 'sporadisk deltagelse i «arbeidslivet»' as a distinct job title is an interpretive challenge, not an OCR error.",
+  "recommendation": "Azure OCR performed significantly better for this specific record because it at least attempted to extract relevant phrases related to occupation, even if the interpretation required human refinement. Monkey OCR completely missed the relevant information. Azure's output provided a starting point for analysis, whereas Monkey's provided nothing.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0468",
+  "name_azure": "WEIDER, Aasta",
+  "name_monkey": "WEIDER, Aasta",
+  "original_azure_jobs": [
+    "Husmor og mor",
+    "sporadisk deltagelse i 'arbeidslivet'"
+  ],
+  "original_monkey_jobs": [],
+  "inspection_reason": "Only Azure jobs found",
+  "analysis_timestamp": "2025-07-10 18:27:18",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

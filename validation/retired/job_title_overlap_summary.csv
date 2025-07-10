@@ -1,0 +1,2 @@
+total_azure_titles,total_monkey_titles,matched_pairs,unmatched_azure,unmatched_monkey,azure_coverage_percent,monkey_coverage_percent,jaccard_similarity,overlap_coefficient,dice_coefficient,fuzzy_threshold,mean_similarity,median_similarity,std_similarity,min_similarity,max_similarity
+1701,1729,1504,197,512,88.4185773074662,86.9866975130133,0.7808930425752856,0.884185773074662,0.8769679300291545,80,98.82313829787235,100.0,3.5465141324280656,80,100

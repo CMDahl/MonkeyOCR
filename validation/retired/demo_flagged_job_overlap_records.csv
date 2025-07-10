@@ -1,0 +1,10 @@
+book_id,name_azure,name_monkey,fuzzy_score,total_azure_jobs,total_monkey_jobs,matched_pairs,overlap_coefficient,jaccard_similarity,avg_similarity,inspection_reason,azure_jobs,monkey_jobs,matched_pairs_details,unmatched_azure_jobs,unmatched_monkey_jobs
+book_001,Lars Hansen,Lars Hansen,100,3,3,0,0.0,0.0,0.0,Jobs in both but no matches,Lærer; Rektor; Forfatter,Teacher; Principal; Author,,Lærer; Rektor; Forfatter,Teacher; Principal; Author
+book_006,Liv Andersen,Liv Andersen,100,3,0,0,0.0,0.0,0.0,Only Azure jobs found,Professor; Dekan; Forsker,,,Professor; Dekan; Forsker,
+book_007,Per Kristiansen,Per Kristiansen,100,0,2,0,0.0,0.0,0.0,Only Monkey jobs found,,Architect; Urban Planner,,,Architect; Urban Planner
+book_004,Kari Berg,Kari Berg,100,2,3,0,0.0,0.0,0.0,Jobs in both but no matches,Advokat; Dommer,Lawyer; Legal Advisor; Judge,,Advokat; Dommer,Lawyer; Legal Advisor; Judge
+book_002,Anna Olsen,Anna Olsen,100,2,2,0,0.0,0.0,0.0,Jobs in both but no matches,Sykepleier; Avdelingsleder,Nurse; Department Head,,Sykepleier; Avdelingsleder,Nurse; Department Head
+book_005,Ole Svendsen,Ole Svendsen,100,3,3,0,0.0,0.0,0.0,Jobs in both but no matches,Lege; Kirurg; Forsker,Baker; Chef; Restaurant Owner,,Lege; Kirurg; Forsker,Baker; Chef; Restaurant Owner
+book_009,Nils Johansen,Nils Johansen,100,3,2,0,0.0,0.0,0.0,Jobs in both but no matches,Bonde; Gårdbruker; Småbruker,Farmer; Fisherman,,Bonde; Gårdbruker; Småbruker,Farmer; Fisherman
+book_003,Erik Nordahl,Erik Nordahl,100,3,2,0,0.0,0.0,0.0,Jobs in both but no matches,Ingeniør; Prosjektleder; Konsulent,Engineer; Manager,,Ingeniør; Prosjektleder; Konsulent,Engineer; Manager
+book_010,Ingrid Larsen,Ingrid Larsen,100,2,3,0,0.0,0.0,0.0,Jobs in both but no matches,Fisker; Kaptein,Fisherman; Captain; Sailor,,Fisker; Kaptein,Fisherman; Captain; Sailor

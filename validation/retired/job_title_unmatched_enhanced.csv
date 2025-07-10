@@ -1,0 +1,20 @@
+title,source,matched,book_id,name_azure,name_monkey,job_column
+Principal,Azure,False,book2,Jane Doe,Jane Doe,job2_title_azure
+Chef,Azure,False,book10,Ivy Anderson,Ivy Anderson,job1_title_azure
+Teacher,Azure,False,book2,Jane Doe,Jane Doe,job1_title_azure
+Consultant,Azure,False,book1,John Smith,John Smith,job3_title_azure
+Artist,Azure,False,book8,Grace Lee,Grace Lee,job1_title_azure
+Scientist,Azure,False,book9,Henry Taylor,Henry Taylor,job1_title_azure
+Doctor,Azure,False,book1,John Smith,John Smith,job1_title_azure
+Writer,Azure,False,book7,Frank Miller,Frank Miller,job1_title_azure
+Lawyer,Azure,False,book4,Alice Brown,Alice Brown,job1_title_azure
+Author,Monkey,False,book7,Frank Miller,Frank Miller,job1_title_monkey
+Academic,Monkey,False,book9,Henry Taylor,Henry Taylor,job2_title_monkey
+Cook,Monkey,False,book10,Ivy Anderson,Ivy Anderson,job1_title_monkey
+Painter,Monkey,False,book8,Grace Lee,Grace Lee,job1_title_monkey
+Educator,Monkey,False,book2,Jane Doe,Jane Doe,job1_title_monkey
+Physician,Monkey,False,book1,John Smith,John Smith,job1_title_monkey
+Advisor,Monkey,False,book1,John Smith,John Smith,job3_title_monkey
+Headmaster,Monkey,False,book2,Jane Doe,Jane Doe,job2_title_monkey
+Researcher,Monkey,False,book9,Henry Taylor,Henry Taylor,job1_title_monkey
+Attorney,Monkey,False,book4,Alice Brown,Alice Brown,job1_title_monkey

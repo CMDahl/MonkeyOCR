@@ -1,0 +1,11 @@
+book_id,name_azure,name_monkey,fuzzy_score,total_azure_jobs,total_monkey_jobs,matched_pairs,unmatched_azure,unmatched_monkey,azure_coverage,monkey_coverage,jaccard_similarity,overlap_coefficient,dice_coefficient,avg_similarity,needs_inspection,azure_jobs,monkey_jobs,matched_pairs_details,unmatched_azure_jobs,unmatched_monkey_jobs,inspection_reason
+book_009,Nils Kristiansen,Nils Kristiansen,100,0,2,0,0,2,0.0,0.0,0.0,0.0,0.0,0.0,True,,fisker; kaptein,,,fisker; kaptein,Only Monkey jobs found
+book_002,Kari Andersen,Kari Andersen,100,2,2,2,0,0,1.0,1.0,1.0,1.0,1.0,93.5,False,sykepleier; avdelingsleder,sykepleierske; avdelingsleder,sykepleier ↔ sykepleierske (87%); avdelingsleder ↔ avdelingsleder (100%),,,Good overlap
+book_004,Anna Olsen,Anna Olsen,100,2,2,0,2,2,0.0,0.0,0.0,0.0,0.0,0.0,True,lege; kirurg,baker; konditor,,lege; kirurg,baker; konditor,Jobs in both but no matches
+book_007,Per Johansen,Per Johansen,100,2,2,2,0,0,1.0,1.0,1.0,1.0,1.0,97.5,False,bokholder; regnskapsfører,bokkholder; regnskapsfører,bokholder ↔ bokkholder (95%); regnskapsfører ↔ regnskapsfører (100%),,,Good overlap
+book_006,Liv Haugen,Liv Haugen,100,3,2,1,2,1,0.3333333333333333,0.5,0.25,0.5,0.4,100.0,False,journalist; redaktør; forfatter,journalist; forlegger,journalist ↔ journalist (100%),redaktør; forfatter,forlegger,Good overlap
+book_010,Ingrid Svendsen,Ingrid Svendsen,100,2,2,2,0,0,1.0,1.0,1.0,1.0,1.0,100.0,False,professor; forsker,professor; forsker,professor ↔ professor (100%); forsker ↔ forsker (100%),,,Good overlap
+book_003,Lars Hansen,Lars Hansen,100,2,2,2,0,0,1.0,1.0,1.0,1.0,1.0,100.0,False,ingeniør; prosjektleder,ingeniør; prosjektleder,ingeniør ↔ ingeniør (100%); prosjektleder ↔ prosjektleder (100%),,,Good overlap
+book_005,Erik Berg,Erik Berg,100,2,0,0,2,0,0.0,0.0,0.0,0.0,0.0,0.0,True,advokat; dommer,,,advokat; dommer,,Only Azure jobs found
+book_001,Ola Nordmann,Ola Nordmann,100,3,3,3,0,0,1.0,1.0,1.0,1.0,1.0,91.66666666666667,False,lærer; rektor; skolebestyrer,lærer; rector; skolestyrer,lærer ↔ lærer (100%); rektor ↔ rector (83%); skolebestyrer ↔ skolestyrer (92%),,,Good overlap
+book_008,Astrid Larsen,Astrid Larsen,100,2,2,1,1,1,0.5,0.5,0.3333333333333333,0.5,0.5,100.0,False,bibliotekar; arkivar,biblioteksassistent; arkivar,arkivar ↔ arkivar (100%),bibliotekar,biblioteksassistent,Good overlap

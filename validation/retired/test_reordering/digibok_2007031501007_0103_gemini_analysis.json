@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    "ansatt ved rikstelefonen",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    "Halden",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    "until 1934",
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR completely missed the relevant sentence containing the job information. Its extracted text ends prematurely, omitting the entire line 'Hd/L - Var ansatt ved rikstelefonen i Halden ved sin død.' This resulted in 'No jobs found'.",
+  "monkey_analysis": "Monkey OCR successfully extracted the crucial sentence 'Hd/L - Var ansatt ved rikstelefonen i Halden ved sin død.' It correctly identified 'ansatt' as a job-related term, 'rikstelefonen i Halden' as the location/employer, and 'until 1934' (derived from 'ved sin død' and the death date) as the years. The only minor point is that 'ansatt' is a general term for 'employed', but it accurately reflects what was stated. The extraction was very close to perfect.",
+  "text_quality_issues": "The primary issue is with Azure OCR's text extraction quality for this specific record. It appears to have truncated the text, missing a significant portion of the biographical entry that contained the job details. Monkey OCR, on the other hand, captured the full relevant text, indicating better overall text quality for this record.",
+  "recommendation": "Monkey OCR performed significantly better for this specific record. It successfully extracted the complete biographical text, including the sentence detailing the person's employment. Azure OCR failed to capture this critical information, leading to a complete miss on job extraction. Therefore, Monkey OCR is recommended for this record due to its superior text completeness and subsequent accurate job data extraction.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "ansatt"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 17:33:29",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

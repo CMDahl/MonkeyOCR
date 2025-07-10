@@ -1,0 +1,11 @@
+book_id,name_azure,name_monkey,fuzzy_score,total_azure_jobs,total_monkey_jobs,matched_pairs,unmatched_azure,unmatched_monkey,azure_coverage,monkey_coverage,jaccard_similarity,overlap_coefficient,dice_coefficient,avg_similarity,needs_inspection,azure_jobs,monkey_jobs,matched_pairs_details,unmatched_azure_jobs,unmatched_monkey_jobs,inspection_reason
+book_001,Lars Hansen,Lars Hansen,100,3,3,0,3,3,0.0,0.0,0.0,0.0,0.0,0.0,True,Lærer; Rektor; Forfatter,Teacher; Principal; Author,,Lærer; Rektor; Forfatter,Teacher; Principal; Author,Jobs in both but no matches
+book_006,Liv Andersen,Liv Andersen,100,3,0,0,3,0,0.0,0.0,0.0,0.0,0.0,0.0,True,Professor; Dekan; Forsker,,,Professor; Dekan; Forsker,,Only Azure jobs found
+book_007,Per Kristiansen,Per Kristiansen,100,0,2,0,0,2,0.0,0.0,0.0,0.0,0.0,0.0,True,,Architect; Urban Planner,,,Architect; Urban Planner,Only Monkey jobs found
+book_008,Astrid Haugen,Astrid Haugen,100,2,2,1,1,1,0.5,0.5,0.3333333333333333,0.5,0.5,100.0,False,Journalist; Redaktør,Journalist; Editor,Journalist ↔ Journalist (100%),Redaktør,Editor,Good overlap
+book_004,Kari Berg,Kari Berg,100,2,3,0,2,3,0.0,0.0,0.0,0.0,0.0,0.0,True,Advokat; Dommer,Lawyer; Legal Advisor; Judge,,Advokat; Dommer,Lawyer; Legal Advisor; Judge,Jobs in both but no matches
+book_002,Anna Olsen,Anna Olsen,100,2,2,0,2,2,0.0,0.0,0.0,0.0,0.0,0.0,True,Sykepleier; Avdelingsleder,Nurse; Department Head,,Sykepleier; Avdelingsleder,Nurse; Department Head,Jobs in both but no matches
+book_005,Ole Svendsen,Ole Svendsen,100,3,3,0,3,3,0.0,0.0,0.0,0.0,0.0,0.0,True,Lege; Kirurg; Forsker,Baker; Chef; Restaurant Owner,,Lege; Kirurg; Forsker,Baker; Chef; Restaurant Owner,Jobs in both but no matches
+book_009,Nils Johansen,Nils Johansen,100,3,2,0,3,2,0.0,0.0,0.0,0.0,0.0,0.0,True,Bonde; Gårdbruker; Småbruker,Farmer; Fisherman,,Bonde; Gårdbruker; Småbruker,Farmer; Fisherman,Jobs in both but no matches
+book_003,Erik Nordahl,Erik Nordahl,100,3,2,0,3,2,0.0,0.0,0.0,0.0,0.0,0.0,True,Ingeniør; Prosjektleder; Konsulent,Engineer; Manager,,Ingeniør; Prosjektleder; Konsulent,Engineer; Manager,Jobs in both but no matches
+book_010,Ingrid Larsen,Ingrid Larsen,100,2,3,0,2,3,0.0,0.0,0.0,0.0,0.0,0.0,True,Fisker; Kaptein,Fisherman; Captain; Sailor,,Fisker; Kaptein,Fisherman; Captain; Sailor,Jobs in both but no matches

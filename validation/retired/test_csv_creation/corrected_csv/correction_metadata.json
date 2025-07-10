@@ -1,0 +1,13 @@
+{
+  "creation_timestamp": "2025-07-10 18:16:12",
+  "source_azure_csv": "d:\\data\\HCNC\\norway\\biographies\\storage\\AzureOCR\\output_csv\\extracted_all_names_portraits_biographies_final.csv",
+  "source_monkey_csv": "d:\\data\\HCNC\\norway\\biographies\\storage\\MonkeyOCR\\output_csv\\extracted_all_names_portraits_biographies_final.csv",
+  "total_corrections_applied": 2,
+  "gemini_model": "gemini-2.5-flash",
+  "files_created": {
+    "azure_corrected": "test_csv_creation\\corrected_csv\\azure_extracted_all_names_portraits_biographies_final.csv",
+    "monkey_corrected": "test_csv_creation\\corrected_csv\\monkey_extracted_all_names_portraits_biographies_final.csv",
+    "unified_corrected": "test_csv_creation\\corrected_csv\\extracted_all_names_portraits_biographies_final.csv",
+    "corrections_summary": "test_csv_creation\\corrected_csv\\gemini_corrections_summary.csv"
+  }
+}

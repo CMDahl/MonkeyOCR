@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "Cand. med.",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "assistentlege",
+    "reservelege"
+  ],
+  "azure_accuracy_rating": 7,
+  "monkey_accuracy_rating": 8,
+  "azure_analysis": "Azure OCR extracted 'lege' as the first job, which is a general profession listed at the beginning of the entry, not a specific chronological job title within the career progression. It correctly identified 'assistent og vikar' but missed the crucial 'for distr.lege' part. It also correctly identified 'kandidat'. However, it only provided 5 entries, missing 'assistentlege' and 'reservelege' which are distinct roles mentioned later in the text. The repetition of 'assistent og vikar' and 'kandidat' in its output suggests it might have struggled with parsing the comma-separated list of roles and locations.",
+  "monkey_analysis": "Monkey OCR correctly identified 'lege' as the initial profession. Crucially, it accurately captured 'Assistent og vikar for distr.lege', which is a more specific and complete job title than Azure's extraction. It also correctly identified 'kandidat'. However, similar to Azure, it only provided 5 entries and missed the subsequent distinct job titles like 'assistentlege' and 'reservelege'. The repetition of 'Assistent og vikar for distr.lege' and 'kandidat' indicates a similar parsing issue as Azure, where it likely extracted the first few distinct roles and then repeated them to fill the expected number of slots, rather than identifying all unique roles.",
+  "text_quality_issues": "Both OCR systems produced very high-quality text, with minimal errors. The main challenge for both systems seems to be the parsing of a long, comma-separated list of job roles and associated locations/hospitals. The text lists roles sequentially (e.g., 'Assistent og vikar for distr.lege i Dovre og Lesja, Stangvik, kandidat Molde sykehus, Ullevål sykehus, assistentlege Ullevål sykehus, Sør-Odal sykehus, St. Torfinns Klinikk, Hamar og Namdal sykehus, Namsos, reservelege Ullevål sykehus, øyenavd.'). This structure makes it difficult for automated systems to correctly segment and identify each unique job title without also including the associated locations or repeating titles.",
+  "recommendation": "Monkey OCR performed slightly better for this specific record because it accurately captured the more complete job title 'Assistent og vikar for distr.lege' compared to Azure's truncated 'assistent og vikar'. While both systems struggled with extracting all distinct job titles from the comma-separated list and instead repeated earlier ones, Monkey's accuracy on the more complex phrase gives it an edge.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0468",
+  "name_azure": "WEIDER, Aasta",
+  "name_monkey": "WEIDER, Aasta",
+  "original_azure_jobs": [
+    "lege",
+    "assistent og vikar",
+    "assistent og vikar",
+    "kandidat",
+    "kandidat"
+  ],
+  "original_monkey_jobs": [
+    "lege",
+    "Assistent og vikar for distr.lege",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "kandidat"
+  ],
+  "inspection_reason": "Only Azure jobs found",
+  "analysis_timestamp": "2025-07-10 12:38:01",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

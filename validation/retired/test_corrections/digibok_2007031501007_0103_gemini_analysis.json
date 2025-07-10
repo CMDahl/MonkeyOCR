@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    "ansatt ved rikstelefonen",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    "Halden",
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    "til 1934",
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR completely missed the job information. Its extracted text ends abruptly before the relevant sentence containing the job title. This indicates a significant failure in capturing the full biographical content for this record.",
+  "monkey_analysis": "Monkey OCR successfully extracted the sentence containing the job information. It correctly identified 'ansatt' as a job-related term and 'rikstelefonen i Halden' as the location/employer, and 'until 1934' based on 'ved sin død'. The only minor point is that 'ansatt' is 'employed' and 'rikstelefonen' is the employer, so 'ansatt ved rikstelefonen' is a more complete description of the role than just 'ansatt'.",
+  "text_quality_issues": "The primary issue is that Azure OCR's text content is incomplete. It appears to have truncated the original text, missing the entire sentence that describes the person's employment. Monkey OCR's text content is much more complete and accurately reflects the original source, including the relevant job information.",
+  "recommendation": "Monkey OCR performed significantly better for this specific record. It was the only system that captured the relevant biographical sentence containing the job title, location, and year information. Azure OCR's output was incomplete and therefore useless for job extraction in this instance.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "ansatt"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 18:17:51",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

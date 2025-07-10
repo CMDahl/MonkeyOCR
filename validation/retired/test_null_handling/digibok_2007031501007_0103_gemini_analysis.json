@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer"
+  ],
+  "azure_accuracy_rating": 9,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR correctly identified 'lærer' multiple times. The capitalization varies ('lærer', 'Lærer'), which is a minor inconsistency but doesn't change the meaning of the job title. It accurately captures the core profession.",
+  "monkey_analysis": "Monkey OCR also correctly identified 'lærer' multiple times, consistently using lowercase. This consistency is slightly better than Azure, but both accurately capture the job title.",
+  "text_quality_issues": "Both OCR systems produced high-quality text for the relevant sections. There are minor differences in hyphenation ('sløyd-lærereks.' vs 'sløyd-lærereks.') and a few word errors (Azure: 'alle-rede' vs Monkey: 'alle-rede valgt'; Azure: 'dømme om' vs Monkey: 'dømmme om'), but these do not impact the extraction of the job title 'lærer'. The main discrepancy in the provided 'EXTRACTED JOB TITLES' (Azure having mixed case, Monkey all lowercase) is a formatting difference, not an accuracy issue regarding the job title itself.",
+  "recommendation": "Both OCR systems performed equally well for extracting the core job title 'lærer' for this record. Monkey OCR showed slightly better consistency in capitalization (all lowercase), but Azure's mixed case is also acceptable as 'Lærer' is simply a capitalized form of 'lærer'. Given the task of extracting the job title, both are highly accurate.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [
+    "lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer"
+  ],
+  "original_monkey_jobs": [
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 12:37:53",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

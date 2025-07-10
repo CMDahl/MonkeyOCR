@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "Lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer"
+  ],
+  "azure_accuracy_rating": 9,
+  "monkey_accuracy_rating": 8,
+  "azure_analysis": "Azure OCR correctly identified 'lærer' (teacher) as the job title. It also captured the capitalization variation ('Lærer' vs 'lærer') which is present in the original text, where 'Lærer' is used for the chronological job entries and 'lærer' for the initial description. The extracted list of 5 'Lærer' entries aligns well with the chronological job history provided.",
+  "monkey_analysis": "Monkey OCR also correctly identified 'lærer' as the job title. However, it consistently extracted it in lowercase ('lærer'), whereas the original text uses 'Lærer' for each of the chronological job entries. While functionally correct, it misses the capitalization detail present in the source.",
+  "text_quality_issues": "The text quality is generally good for both OCR systems. There are minor discrepancies like 'Stavern' vs 'Stavernen' (both refer to the same place) and 'kunne jeg' vs 'hadde jeg' in the philosophical section, but these do not impact job title extraction. The main difference in job title extraction is the capitalization of 'Lærer'/'lærer', which is a minor OCR detail rather than a significant error.",
+  "recommendation": "Azure OCR performed slightly better for this specific record. While both systems correctly identified the job title 'lærer', Azure's output ('lærer', 'Lærer', 'Lærer', 'Lærer', 'Lærer') more accurately reflects the capitalization variations present in the original text, where the chronological job entries begin with a capital 'L'. Monkey's consistent lowercase 'lærer' is less precise in this regard.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [
+    "lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer"
+  ],
+  "original_monkey_jobs": [
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 12:36:51",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

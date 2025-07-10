@@ -1,0 +1,179 @@
+{
+  "input_flagged_csv": "flagged_job_overlap_records.csv",
+  "input_comparison_csv": "comprehensive_comparison_dataframe.csv",
+  "output_directory": "gemini_job_analysis_extended",
+  "total_flagged_records": 5,
+  "successful_analyses": 5,
+  "failed_analyses": 0,
+  "processing_timestamp": "2025-07-10 12:17:38",
+  "gemini_model": "gemini-2.5-flash",
+  "analyses": [
+    {
+      "correct_job_titles": [
+        "lærer",
+        "medlem av kommunestyre",
+        "formann i ungdomslag",
+        "medlem av forsorgstyre",
+        "medlem av trygdekassestyre"
+      ],
+      "azure_accuracy_rating": 7,
+      "monkey_accuracy_rating": 7,
+      "azure_analysis": "Azure OCR correctly identifies 'lærer' multiple times, including the initial general profession and specific teaching positions. It capitalizes 'Lærer' in some instances, which is a minor inconsistency but doesn't change the meaning. It misses the other significant roles/positions mentioned (kommunestyre, ungdomslag, forsorgstyre, trygdekassestyre) which are relevant professional/public roles in a biographical context.",
+      "monkey_analysis": "Monkey OCR also correctly identifies 'lærer' consistently in lowercase. Like Azure, it accurately captures the primary profession and the various teaching posts. However, it similarly fails to extract the additional public and organizational roles (kommunestyre, ungdomslag, forsorgstyre, trygdekassestyre) that are clearly stated for the individual.",
+      "text_quality_issues": "Both OCR systems provided very high-quality text for this specific record, with minimal errors that would impede job title extraction. The main issue is not OCR quality, but rather the extraction logic of the systems, as neither system identified the secondary public/organizational roles ('Medl. kommunestyre', 'form. ungdomslag', etc.) as job titles or professional roles, focusing solely on 'lærer'. There's a minor OCR error in Monkey's text ('vårdbruker' instead of 'gårdbruker' for the father-in-law), but this does not affect the extraction for Reidar BRÆKKAN.",
+      "recommendation": "Both OCR systems performed equally well in terms of text quality and the extraction of the primary job title ('lærer'). Neither system, however, managed to extract the additional public and organizational roles that are clearly listed for the individual. Therefore, for this specific record, neither system significantly outperformed the other in terms of comprehensive job title extraction beyond the primary occupation.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0103",
+      "name_azure": "BRÆKKE, Asborg Jørgine",
+      "name_monkey": "BRÆKKE, Asborg Jørgine",
+      "original_azure_jobs": [
+        "lærer",
+        "Lærer",
+        "Lærer",
+        "Lærer",
+        "Lærer"
+      ],
+      "original_monkey_jobs": [
+        "lærer",
+        "lærer",
+        "lærer",
+        "lærer",
+        "lærer"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 12:17:08",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [
+        "Cand. med.",
+        "Assistent og vikar for distr.lege",
+        "kandidat",
+        "assistentlege",
+        "reservelege"
+      ],
+      "azure_accuracy_rating": 4,
+      "monkey_accuracy_rating": 5,
+      "azure_analysis": "Azure OCR extracted 'lege' (general term), 'assistent og vikar' (missing the important 'for distr.lege' context), and 'kandidat'. It duplicated entries and missed several distinct and important job titles like 'Cand. med.', 'assistentlege', and 'reservelege'. Its extraction is too generic and incomplete.",
+      "monkey_analysis": "Monkey OCR correctly identified 'Assistent og vikar for distr.lege', which is a more precise title than Azure's 'assistent og vikar'. However, like Azure, it duplicated entries and missed other key job titles such as 'Cand. med.', 'assistentlege', and 'reservelege'. It also included 'lege' as a general term.",
+      "text_quality_issues": "Both OCR systems produced very clean text, indicating high-quality source material. The discrepancies in job title extraction are not due to OCR errors in reading the text itself, but rather in the interpretation or segmentation of the job titles. Both systems seem to have a limited scope for what they identify as a 'job title', often stopping at the first word or a short phrase, and failing to capture the full, nuanced titles or the complete list of roles mentioned.",
+      "recommendation": "Monkey OCR performed slightly better for this specific record because it accurately captured the more specific job title 'Assistent og vikar for distr.lege' compared to Azure's truncated 'assistent og vikar'. However, both systems performed poorly in extracting the full range and specificity of job titles present in the text, indicating a need for more sophisticated biographical entity extraction rather than just simple keyword spotting.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0468",
+      "name_azure": "WEIDER, Aasta",
+      "name_monkey": "WEIDER, Aasta",
+      "original_azure_jobs": [
+        "lege",
+        "assistent og vikar",
+        "assistent og vikar",
+        "kandidat",
+        "kandidat"
+      ],
+      "original_monkey_jobs": [
+        "lege",
+        "Assistent og vikar for distr.lege",
+        "Assistent og vikar for distr.lege",
+        "kandidat",
+        "kandidat"
+      ],
+      "inspection_reason": "Only Azure jobs found",
+      "analysis_timestamp": "2025-07-10 12:17:15",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [
+        "Bestyrer",
+        "ungdomsprest og sekretær",
+        "kretssekretær",
+        "hjelpeprest",
+        "sjømannsprest"
+      ],
+      "azure_accuracy_rating": 7,
+      "monkey_accuracy_rating": 9,
+      "azure_analysis": "Azure OCR extracted four out of five job titles. It correctly identified 'ungdomsprest og sekretær', 'kretssekretær', 'hjelpeprest', and 'sjømannsprest'. However, it completely missed 'Bestyrer', which is clearly stated as the first chronological role.",
+      "monkey_analysis": "Monkey OCR extracted all five job titles mentioned in the text: 'sjømannsprest', 'Bestyrer', 'ungdomsprest og sekretær', 'kretsekretær', and 'hjelpeprest'. The only minor inaccuracy is a spelling error in 'kretsekretær' (missing an 's'), which should be 'kretssekretær'. Despite this small error, it captured all the distinct roles.",
+      "text_quality_issues": "The overall text quality from both OCR systems is good, making the job titles relatively easy to identify. The main discrepancy is Azure's omission of 'Bestyrer'. Monkey's 'kretsekretær' instead of 'kretssekretær' is a minor OCR error (a single character omission) but does not hinder identification of the role.",
+      "recommendation": "Monkey OCR performed better for this specific record. While it had a minor spelling error ('kretsekretær' instead of 'kretssekretær'), it successfully identified and extracted all five distinct job titles mentioned in the biography. Azure, on the other hand, completely missed one of the job titles ('Bestyrer'), which is a more significant omission.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0456",
+      "name_azure": "VAKSDAL, Ivar",
+      "name_monkey": "† VAKSDAL, Ivar",
+      "original_azure_jobs": [
+        "ungdomsprest og sekretær",
+        "kretssekretær",
+        "hjelpeprest",
+        "sjømannsprest"
+      ],
+      "original_monkey_jobs": [
+        "sjømannsprest",
+        "Bestyrer",
+        "ungdomsprest og sekretær",
+        "kretsekretær",
+        "hjelpeprest"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 12:17:22",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [
+        "siviløkonom",
+        "ansatt",
+        "egen forretning"
+      ],
+      "azure_accuracy_rating": 1,
+      "monkey_accuracy_rating": 4,
+      "azure_analysis": "Azure OCR stated 'No jobs found' for GRANLUND, Odvar. However, the text provided is for GRANRUD, Magnus. For GRANRUD, Magnus, Azure OCR did not extract any specific job titles, which is incorrect as 'siviløkonom' and 'egen forretning' are present. It also missed the repeated 'ansatt' (employed) status.",
+      "monkey_analysis": "Monkey OCR extracted 'Ansatt' multiple times and 'egen forretning'. While 'egen forretning' is correct, 'Ansatt' is a very generic term ('employed') and not a specific job title. It also completely missed 'siviløkonom', which is a clear professional title stated at the beginning of the biography. The repetition of 'Ansatt' is redundant.",
+      "text_quality_issues": "The primary issue is a mismatch between the 'PERSON INFORMATION' (GRANLUND, Odvar) and the 'ORIGINAL TEXT CONTENT' (GRANRUD, Magnus). Both OCR systems correctly transcribed the text for GRANRUD, Magnus, but the job extraction task was implicitly linked to GRANLUND, Odvar, for whom no biographical text was provided. \n\nFor GRANRUD, Magnus's text, both OCR outputs are largely clean and readable, with no significant OCR errors that would impede job title extraction. Azure's text has a minor formatting issue with '[FIGURE: 1.1]' and '¡ GRANRUD', but it doesn't affect the job title content. Monkey's text includes an image placeholder, which is irrelevant to text content.",
+      "recommendation": "Neither system performed well for the *stated* person (GRANLUND, Odvar) as no text was provided for them. \n\nFor the *actual* person in the text (GRANRUD, Magnus):\nMonkey OCR performed slightly better than Azure because it at least identified 'egen forretning' and the generic 'Ansatt' status, whereas Azure found nothing. However, both systems failed to identify 'siviløkonom' as a key professional title. The ideal extraction would be 'siviløkonom', 'ansatt' (as a general status before owning a business), and 'egen forretning'.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0172",
+      "name_azure": "GRANLUND, Odvar",
+      "name_monkey": "GRANLUND, Odvar",
+      "original_azure_jobs": [],
+      "original_monkey_jobs": [
+        "Ansatt",
+        "Ansatt",
+        "Ansatt",
+        "Ansatt",
+        "egen forretning"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 12:17:30",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [],
+      "azure_accuracy_rating": 10,
+      "monkey_accuracy_rating": 10,
+      "azure_analysis": "Azure OCR correctly identified the start of a new biographical entry for THORGERSEN, Rolf Harry Bakkekjær and did not extract any job titles for him, as none are present in the provided text for this specific person. The job titles listed in the prompt's 'EXTRACTED JOB TITLES' section (kontorsjef, innkjøpssjef, regnskapssjef) belong to the preceding person, THORGERSEN, Jørgen, in the biography.",
+      "monkey_analysis": "Monkey OCR also correctly identified the start of a new biographical entry for THORGERSEN, Rolf Harry Bakkekjær and did not extract any job titles for him, as none are present in the provided text for this specific person. Similar to Azure, the job titles listed in the prompt's 'EXTRACTED JOB TITLES' section belong to THORGERSEN, Jørgen.",
+      "text_quality_issues": "There are no significant OCR errors or text quality issues that would explain discrepancies in job title extraction for THORGERSEN, Rolf Harry Bakkekjær, because no job titles are actually listed for him in the provided text. The text clearly marks the beginning of his entry. The discrepancy arises from a misattribution of job titles from the previous biographical entry (THORGERSEN, Jørgen) to Rolf Harry Bakkekjær.",
+      "recommendation": "Both OCR systems performed equally well for this specific record regarding THORGERSEN, Rolf Harry Bakkekjær, as they both correctly did not extract job titles for him because none are present in the text. The issue is not with the OCR systems' performance but with the premise that job titles were extracted for Rolf Harry Bakkekjær when they actually belong to the preceding person in the text.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0439",
+      "name_azure": "THORGERSEN, Rolf Harry Bakkekjær",
+      "name_monkey": "THORGERSEN, Rolf Harry Bakkekjær",
+      "original_azure_jobs": [
+        "kontorsjef",
+        "innkjøpssjef",
+        "regnskapssjef"
+      ],
+      "original_monkey_jobs": [
+        "regnskapssjef",
+        "Kontorsjef",
+        "innkjøpssjef",
+        "regnskapssjef"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 12:17:38",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    }
+  ]
+}

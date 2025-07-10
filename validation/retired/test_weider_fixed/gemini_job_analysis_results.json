@@ -1,0 +1,67 @@
+{
+  "input_flagged_csv": "flagged_job_overlap_records.csv",
+  "input_comparison_csv": "comprehensive_comparison_dataframe.csv",
+  "output_directory": "test_weider_fixed",
+  "total_flagged_records": 2,
+  "successful_analyses": 2,
+  "failed_analyses": 0,
+  "processing_timestamp": "2025-07-10 13:03:57",
+  "gemini_model": "gemini-2.5-flash",
+  "analyses": [
+    {
+      "correct_job_titles": [
+        "ansatt ved rikstelefonen",
+        null,
+        null,
+        null,
+        null
+      ],
+      "azure_accuracy_rating": 1,
+      "monkey_accuracy_rating": 7,
+      "azure_analysis": "Azure OCR failed to extract any job titles for the person. This is primarily due to a severe text truncation issue, where the OCR output for Azure completely omits the second part of the biographical entry that contains the job information. As a result, it had no relevant text to process for job extraction.",
+      "monkey_analysis": "Monkey OCR successfully captured the full biographical text, including the sentence 'Var ansatt ved rikstelefonen i Halden ved sin død.' It correctly identified 'ansatt' (employed/staff member) as a job-related term. However, its extraction was incomplete, as it only returned 'ansatt' and missed the crucial context 'ved rikstelefonen' (at the national telephone company), which forms the complete job title.",
+      "text_quality_issues": "The primary text quality issue is with the Azure OCR output, which is severely truncated. It only provides the first sentence of the biography and completely cuts off the subsequent sentences that contain the job information. This is a critical OCR error that prevents any accurate job extraction. Monkey OCR's text quality appears to be complete and accurate for the provided snippet.",
+      "recommendation": "Monkey OCR performed significantly better for this specific record. While its job title extraction was not perfectly complete ('ansatt' instead of 'ansatt ved rikstelefonen'), it at least provided the relevant text and identified a key term. Azure OCR failed entirely due to a fundamental text truncation error, rendering it useless for job extraction in this instance.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0103",
+      "name_azure": "BRÆKKE, Asborg Jørgine",
+      "name_monkey": "BRÆKKE, Asborg Jørgine",
+      "original_azure_jobs": [],
+      "original_monkey_jobs": [
+        "ansatt"
+      ],
+      "inspection_reason": "Only Monkey jobs found",
+      "analysis_timestamp": "2025-07-10 13:03:49",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    },
+    {
+      "correct_job_titles": [
+        "cand. pharm.",
+        "husmor",
+        null,
+        null,
+        null
+      ],
+      "azure_accuracy_rating": 6,
+      "monkey_accuracy_rating": 1,
+      "azure_analysis": "Azure correctly identified 'Husmor og mor' as a primary role. It also picked up 'sporadisk deltagelse i «arbeidslivet»', which describes her activity but isn't a specific job title. However, it missed 'cand. pharm.' which is a professional qualification and often functions as a de facto job title (pharmacist) in such biographical contexts, and chronologically precedes her role as 'husmor'.",
+      "monkey_analysis": "Monkey OCR failed to extract any job titles for Aasta Weider, despite the clear mention of 'Husmor og mor' and 'cand. pharm.' in the text.",
+      "text_quality_issues": "Both Azure and Monkey OCR provided very high-quality text for Aasta Weider's entry. There were no significant OCR errors that would explain the discrepancies in job title extraction. The hyphenation of 'Hus- mor' was present in both, but this is a minor formatting issue and doesn't obscure the word.",
+      "recommendation": "Azure OCR performed significantly better for this specific record because it managed to extract relevant information ('Husmor og mor' and the description of 'sporadisk deltagelse i «arbeidslivet»'), whereas Monkey OCR extracted nothing at all. While Azure missed 'cand. pharm.', its partial success makes it superior in this instance.",
+      "confidence_level": "high",
+      "book_id": "digibok_2007031501007_0468",
+      "name_azure": "WEIDER, Aasta",
+      "name_monkey": "WEIDER, Aasta",
+      "original_azure_jobs": [
+        "Husmor og mor",
+        "sporadisk deltagelse i 'arbeidslivet'"
+      ],
+      "original_monkey_jobs": [],
+      "inspection_reason": "Only Azure jobs found",
+      "analysis_timestamp": "2025-07-10 13:03:56",
+      "gemini_attempt": 1,
+      "gemini_temperature": 0.1
+    }
+  ]
+}

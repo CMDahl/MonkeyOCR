@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 10,
+  "monkey_accuracy_rating": 1,
+  "azure_analysis": "Azure OCR correctly identified that no job titles were found for Rolf Harry Bakkekjær Thorgersen. While it transcribed 'Pr/R 2', it did not incorrectly classify it as a job title, which aligns with the instruction to ignore such abbreviations.",
+  "monkey_analysis": "Monkey OCR incorrectly extracted 'Pr/R' as a job title. This abbreviation is not a conventional job title and was explicitly excluded by the instructions. The '∞' symbol is also an OCR error for what Azure correctly transcribed as '2'.",
+  "text_quality_issues": "The main text quality issue is the transcription of 'Pr/R 2' (Azure) vs. 'Pr/R ∞' (Monkey). The '∞' symbol in Monkey's output is clearly an OCR error for the digit '2'. This specific abbreviation ('Pr/R') is not a job title and likely refers to a military unit, rank, or internal code within the biographical record, which both systems struggled to interpret correctly in terms of its meaning, though Azure's transcription was more accurate.",
+  "recommendation": "Azure OCR performed significantly better for this specific record. It correctly identified that no job titles were found for the person in question, aligning with the analysis that 'Pr/R' is not a job title. Monkey OCR, on the other hand, incorrectly extracted 'Pr/R' as a job and also had a transcription error ('∞' instead of '2').",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0439",
+  "name_azure": "THORGERSEN, Rolf Harry Bakkekjær",
+  "name_monkey": "THORGERSEN, Rolf Harry Bakkekjær",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "Pr/R"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 18:18:17",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

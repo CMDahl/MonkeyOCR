@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "lærer",
+    "medlem av kommunestyre",
+    "formann i ungdomslag",
+    "medlem av forsorgstyre",
+    "medlem av trygdekassestyre"
+  ],
+  "azure_accuracy_rating": 7,
+  "monkey_accuracy_rating": 7,
+  "azure_analysis": "Azure OCR correctly identifies 'lærer' multiple times, including the initial general profession and specific teaching positions. It capitalizes 'Lærer' in some instances, which is a minor inconsistency but doesn't change the meaning. It misses the other significant roles/positions mentioned (kommunestyre, ungdomslag, forsorgstyre, trygdekassestyre) which are relevant professional/public roles in a biographical context.",
+  "monkey_analysis": "Monkey OCR also correctly identifies 'lærer' consistently in lowercase. Like Azure, it accurately captures the primary profession and the various teaching posts. However, it similarly fails to extract the additional public and organizational roles (kommunestyre, ungdomslag, forsorgstyre, trygdekassestyre) that are clearly stated for the individual.",
+  "text_quality_issues": "Both OCR systems provided very high-quality text for this specific record, with minimal errors that would impede job title extraction. The main issue is not OCR quality, but rather the extraction logic of the systems, as neither system identified the secondary public/organizational roles ('Medl. kommunestyre', 'form. ungdomslag', etc.) as job titles or professional roles, focusing solely on 'lærer'. There's a minor OCR error in Monkey's text ('vårdbruker' instead of 'gårdbruker' for the father-in-law), but this does not affect the extraction for Reidar BRÆKKAN.",
+  "recommendation": "Both OCR systems performed equally well in terms of text quality and the extraction of the primary job title ('lærer'). Neither system, however, managed to extract the additional public and organizational roles that are clearly listed for the individual. Therefore, for this specific record, neither system significantly outperformed the other in terms of comprehensive job title extraction beyond the primary occupation.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0103",
+  "name_azure": "BRÆKKE, Asborg Jørgine",
+  "name_monkey": "BRÆKKE, Asborg Jørgine",
+  "original_azure_jobs": [
+    "lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer",
+    "Lærer"
+  ],
+  "original_monkey_jobs": [
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer",
+    "lærer"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 12:17:08",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

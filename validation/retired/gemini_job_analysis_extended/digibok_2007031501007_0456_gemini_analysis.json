@@ -1,0 +1,36 @@
+{
+  "correct_job_titles": [
+    "Bestyrer",
+    "ungdomsprest og sekretær",
+    "kretssekretær",
+    "hjelpeprest",
+    "sjømannsprest"
+  ],
+  "azure_accuracy_rating": 7,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR extracted four out of five job titles. It correctly identified 'ungdomsprest og sekretær', 'kretssekretær', 'hjelpeprest', and 'sjømannsprest'. However, it completely missed 'Bestyrer', which is clearly stated as the first chronological role.",
+  "monkey_analysis": "Monkey OCR extracted all five job titles mentioned in the text: 'sjømannsprest', 'Bestyrer', 'ungdomsprest og sekretær', 'kretsekretær', and 'hjelpeprest'. The only minor inaccuracy is a spelling error in 'kretsekretær' (missing an 's'), which should be 'kretssekretær'. Despite this small error, it captured all the distinct roles.",
+  "text_quality_issues": "The overall text quality from both OCR systems is good, making the job titles relatively easy to identify. The main discrepancy is Azure's omission of 'Bestyrer'. Monkey's 'kretsekretær' instead of 'kretssekretær' is a minor OCR error (a single character omission) but does not hinder identification of the role.",
+  "recommendation": "Monkey OCR performed better for this specific record. While it had a minor spelling error ('kretsekretær' instead of 'kretssekretær'), it successfully identified and extracted all five distinct job titles mentioned in the biography. Azure, on the other hand, completely missed one of the job titles ('Bestyrer'), which is a more significant omission.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0456",
+  "name_azure": "VAKSDAL, Ivar",
+  "name_monkey": "† VAKSDAL, Ivar",
+  "original_azure_jobs": [
+    "ungdomsprest og sekretær",
+    "kretssekretær",
+    "hjelpeprest",
+    "sjømannsprest"
+  ],
+  "original_monkey_jobs": [
+    "sjømannsprest",
+    "Bestyrer",
+    "ungdomsprest og sekretær",
+    "kretsekretær",
+    "hjelpeprest"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 12:17:22",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

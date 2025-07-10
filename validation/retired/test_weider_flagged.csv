@@ -1,0 +1,2 @@
+book_id,name_azure,name_monkey,fuzzy_score,total_azure_jobs,total_monkey_jobs,matched_pairs,overlap_coefficient,jaccard_similarity,avg_similarity,inspection_reason,azure_jobs,monkey_jobs,matched_pairs_details,unmatched_azure_jobs,unmatched_monkey_jobs
+digibok_2007031501007_0468,"WEIDER, Aasta","WEIDER, Aasta",100,2,0,0,0.0,0.0,0.0,Only Azure jobs found,Husmor og mor; sporadisk deltagelse i 'arbeidslivet',,,Husmor og mor; sporadisk deltagelse i 'arbeidslivet',

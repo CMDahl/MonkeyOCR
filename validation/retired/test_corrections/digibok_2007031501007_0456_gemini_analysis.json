@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 10,
+  "monkey_accuracy_rating": 1,
+  "azure_analysis": "Azure OCR correctly identified that no job titles were found for Ivar Vaksdal in the provided text. This is accurate as the text only mentions his parents' professions and an abbreviation 'Pr/R' which is not a job title for the person in question.",
+  "monkey_analysis": "Monkey OCR incorrectly extracted 'Pr/R' as a job title. This abbreviation is not a recognized job title for the individual and, as per instructions, should not be included. The text does not provide any actual job titles for Ivar Vaksdal.",
+  "text_quality_issues": "Both OCR systems produced very clean and accurate transcriptions of the original text. There are no significant OCR errors or text quality issues that would explain the discrepancy in job extraction. The discrepancy arises from the interpretation of 'Pr/R' and the absence of actual job titles for the subject.",
+  "recommendation": "Azure OCR performed better for this specific record because it correctly identified the absence of job titles for Ivar Vaksdal. Monkey OCR failed by extracting 'Pr/R', which is an abbreviation and not a job title for the individual, and should have been ignored based on the provided instructions.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0456",
+  "name_azure": "VAKSDAL, Ivar",
+  "name_monkey": "† VAKSDAL, Ivar",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "Pr/R"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 18:18:03",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

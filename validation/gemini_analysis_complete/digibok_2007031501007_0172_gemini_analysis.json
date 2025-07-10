@@ -1,0 +1,29 @@
+{
+  "correct_job_titles": [
+    "siviløkonom",
+    "ansatt",
+    "egen forretning"
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 4,
+  "azure_analysis": "Azure OCR stated 'No jobs found' for GRANLUND, Odvar. However, the text provided is for GRANRUD, Magnus. For GRANRUD, Magnus, Azure OCR did not extract any specific job titles, which is incorrect as 'siviløkonom' and 'egen forretning' are present. It also missed the repeated 'ansatt' (employed) status.",
+  "monkey_analysis": "Monkey OCR extracted 'Ansatt' multiple times and 'egen forretning'. While 'egen forretning' is correct, 'Ansatt' is a very generic term ('employed') and not a specific job title. It also completely missed 'siviløkonom', which is a clear professional title stated at the beginning of the biography. The repetition of 'Ansatt' is redundant.",
+  "text_quality_issues": "The primary issue is a mismatch between the 'PERSON INFORMATION' (GRANLUND, Odvar) and the 'ORIGINAL TEXT CONTENT' (GRANRUD, Magnus). Both OCR systems correctly transcribed the text for GRANRUD, Magnus, but the job extraction task was implicitly linked to GRANLUND, Odvar, for whom no biographical text was provided. \n\nFor GRANRUD, Magnus's text, both OCR outputs are largely clean and readable, with no significant OCR errors that would impede job title extraction. Azure's text has a minor formatting issue with '[FIGURE: 1.1]' and '¡ GRANRUD', but it doesn't affect the job title content. Monkey's text includes an image placeholder, which is irrelevant to text content.",
+  "recommendation": "Neither system performed well for the *stated* person (GRANLUND, Odvar) as no text was provided for them. \n\nFor the *actual* person in the text (GRANRUD, Magnus):\nMonkey OCR performed slightly better than Azure because it at least identified 'egen forretning' and the generic 'Ansatt' status, whereas Azure found nothing. However, both systems failed to identify 'siviløkonom' as a key professional title. The ideal extraction would be 'siviløkonom', 'ansatt' (as a general status before owning a business), and 'egen forretning'.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0172",
+  "name_azure": "GRANLUND, Odvar",
+  "name_monkey": "GRANLUND, Odvar",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "Ansatt",
+    "Ansatt",
+    "Ansatt",
+    "Ansatt",
+    "egen forretning"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 12:17:30",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

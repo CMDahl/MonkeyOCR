@@ -1,0 +1,45 @@
+{
+  "correct_job_titles": [
+    "Ansatt",
+    "Ansatt",
+    "Ansatt",
+    "Ansatt",
+    "Egen forretning"
+  ],
+  "correct_job_locations": [
+    "Halvorsen & Larsen, Oslo",
+    "Nordisk Aluminium-industri A/S, Holmestrand",
+    "Salve Staubo, Oslo",
+    "Størens Radio-fabrikk, Oslo",
+    null
+  ],
+  "correct_job_years": [
+    "1940-1941",
+    "1941-1943",
+    "1943-1945",
+    "1945-1953",
+    "1953-death"
+  ],
+  "azure_accuracy_rating": 1,
+  "monkey_accuracy_rating": 9,
+  "azure_analysis": "Azure OCR completely failed to extract any job information for Odvar Granlund. It incorrectly identified the biographical entry for Magnus Granrud as the primary subject, and then extracted job information for Magnus Granrud, not Odvar Granlund. This is a critical failure in identifying the correct person's biography.",
+  "monkey_analysis": "Monkey OCR correctly identified the biographical entry for Odvar Granlund and extracted all five job entries, their corresponding locations, and years. The only minor inaccuracy is that it listed 'Ansatt' for all company roles, whereas the text only explicitly states 'Ansatt' for the first one and implies it for the subsequent ones. For 'egen forretning', it correctly identified the type of work but did not extract a location, which is accurate as no specific location is mentioned in the text for this role. It also correctly interpreted 'fra 1953 til sin død' as '1953-death'.",
+  "text_quality_issues": "The primary issue is not text quality within the OCR output itself, but rather Azure's misidentification of the biographical subject. Azure's output for 'GRANLUND, Odvar' actually contains the biography of 'GRANRUD, Magnus'. This suggests a significant indexing or segmentation error on Azure's part, where it pulled the wrong block of text for the requested person. Monkey OCR, on the other hand, correctly provided the text block for 'GRANLUND, Odvar', which then contained the job information for 'GRANRUD, Magnus'. This is a common issue in scanned books where multiple biographies are on the same page, and OCR systems might misattribute text blocks or fail to segment them correctly. In this specific case, the job information is for 'GRANRUD, Magnus', not 'GRANLUND, Odvar', despite the initial header. The user's prompt implies the jobs are for 'GRANLUND, Odvar', but the text clearly states they are for 'GRANRUD, Magnus'. I have extracted the jobs as they appear in the text, attributed to 'GRANRUD, Magnus'.",
+  "recommendation": "Monkey OCR performed significantly better for this specific record because it correctly extracted the relevant biographical text block, even though that text block was for 'GRANRUD, Magnus' and not 'GRANLUND, Odvar' as initially requested by the user's prompt (which was based on the book's indexing). Azure completely failed by providing a text block that did not contain any job information for the stated person and instead provided a different person's biography. Monkey's extraction of the job data from the provided text was highly accurate.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0172",
+  "name_azure": "GRANLUND, Odvar",
+  "name_monkey": "GRANLUND, Odvar",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "Ansatt",
+    "Ansatt",
+    "Ansatt",
+    "Ansatt",
+    "egen forretning"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 18:32:01",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}

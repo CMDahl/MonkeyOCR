@@ -1,0 +1,37 @@
+{
+  "correct_job_titles": [
+    "Cand. med.",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "assistentlege",
+    "reservelege"
+  ],
+  "azure_accuracy_rating": 4,
+  "monkey_accuracy_rating": 5,
+  "azure_analysis": "Azure OCR extracted 'lege' (general term), 'assistent og vikar' (missing the important 'for distr.lege' context), and 'kandidat'. It duplicated entries and missed several distinct and important job titles like 'Cand. med.', 'assistentlege', and 'reservelege'. Its extraction is too generic and incomplete.",
+  "monkey_analysis": "Monkey OCR correctly identified 'Assistent og vikar for distr.lege', which is a more precise title than Azure's 'assistent og vikar'. However, like Azure, it duplicated entries and missed other key job titles such as 'Cand. med.', 'assistentlege', and 'reservelege'. It also included 'lege' as a general term.",
+  "text_quality_issues": "Both OCR systems produced very clean text, indicating high-quality source material. The discrepancies in job title extraction are not due to OCR errors in reading the text itself, but rather in the interpretation or segmentation of the job titles. Both systems seem to have a limited scope for what they identify as a 'job title', often stopping at the first word or a short phrase, and failing to capture the full, nuanced titles or the complete list of roles mentioned.",
+  "recommendation": "Monkey OCR performed slightly better for this specific record because it accurately captured the more specific job title 'Assistent og vikar for distr.lege' compared to Azure's truncated 'assistent og vikar'. However, both systems performed poorly in extracting the full range and specificity of job titles present in the text, indicating a need for more sophisticated biographical entity extraction rather than just simple keyword spotting.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0468",
+  "name_azure": "WEIDER, Aasta",
+  "name_monkey": "WEIDER, Aasta",
+  "original_azure_jobs": [
+    "lege",
+    "assistent og vikar",
+    "assistent og vikar",
+    "kandidat",
+    "kandidat"
+  ],
+  "original_monkey_jobs": [
+    "lege",
+    "Assistent og vikar for distr.lege",
+    "Assistent og vikar for distr.lege",
+    "kandidat",
+    "kandidat"
+  ],
+  "inspection_reason": "Only Azure jobs found",
+  "analysis_timestamp": "2025-07-10 12:17:15",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

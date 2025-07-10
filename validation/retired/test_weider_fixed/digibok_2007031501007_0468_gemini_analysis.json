@@ -1,0 +1,28 @@
+{
+  "correct_job_titles": [
+    "cand. pharm.",
+    "husmor",
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 6,
+  "monkey_accuracy_rating": 1,
+  "azure_analysis": "Azure correctly identified 'Husmor og mor' as a primary role. It also picked up 'sporadisk deltagelse i «arbeidslivet»', which describes her activity but isn't a specific job title. However, it missed 'cand. pharm.' which is a professional qualification and often functions as a de facto job title (pharmacist) in such biographical contexts, and chronologically precedes her role as 'husmor'.",
+  "monkey_analysis": "Monkey OCR failed to extract any job titles for Aasta Weider, despite the clear mention of 'Husmor og mor' and 'cand. pharm.' in the text.",
+  "text_quality_issues": "Both Azure and Monkey OCR provided very high-quality text for Aasta Weider's entry. There were no significant OCR errors that would explain the discrepancies in job title extraction. The hyphenation of 'Hus- mor' was present in both, but this is a minor formatting issue and doesn't obscure the word.",
+  "recommendation": "Azure OCR performed significantly better for this specific record because it managed to extract relevant information ('Husmor og mor' and the description of 'sporadisk deltagelse i «arbeidslivet»'), whereas Monkey OCR extracted nothing at all. While Azure missed 'cand. pharm.', its partial success makes it superior in this instance.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0468",
+  "name_azure": "WEIDER, Aasta",
+  "name_monkey": "WEIDER, Aasta",
+  "original_azure_jobs": [
+    "Husmor og mor",
+    "sporadisk deltagelse i 'arbeidslivet'"
+  ],
+  "original_monkey_jobs": [],
+  "inspection_reason": "Only Azure jobs found",
+  "analysis_timestamp": "2025-07-10 13:03:56",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.1
+}

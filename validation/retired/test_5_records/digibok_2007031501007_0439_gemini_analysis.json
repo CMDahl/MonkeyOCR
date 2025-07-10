@@ -1,0 +1,41 @@
+{
+  "correct_job_titles": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_locations": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "correct_job_years": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "azure_accuracy_rating": 9,
+  "monkey_accuracy_rating": 2,
+  "azure_analysis": "Azure OCR correctly identified that no explicit job titles for Rolf Harry Bakkekjær Thorgersen were present in the text. It did not attempt to interpret 'Pr/R 2' as a job title, which aligns with the instruction to ignore abbreviations that are not clear job titles.",
+  "monkey_analysis": "Monkey OCR incorrectly extracted 'Pr/R' as a job title. This abbreviation is not a conventional job title and was explicitly excluded by the instructions. While it correctly identified 'Kolbotn, Oppegård' as a location, it incorrectly associated it with 'Pr/R' as a job.",
+  "text_quality_issues": "The main text quality issue is the abbreviation 'Pr/R' followed by a symbol ('2' in Azure, '∞' in Monkey). This abbreviation is ambiguous without further context and is not a clear job title. The hyphenation of 'Bakkekjær' as 'Bak- kekjær' is a minor OCR error but does not affect job title extraction.",
+  "recommendation": "Azure OCR performed better for this specific record. It correctly identified the absence of explicit job titles for the person in question, adhering to the instruction to ignore abbreviations like 'Pr/R'. Monkey OCR failed by interpreting 'Pr/R' as a job title, which was explicitly disallowed.",
+  "confidence_level": "high",
+  "book_id": "digibok_2007031501007_0439",
+  "name_azure": "THORGERSEN, Rolf Harry Bakkekjær",
+  "name_monkey": "THORGERSEN, Rolf Harry Bakkekjær",
+  "original_azure_jobs": [],
+  "original_monkey_jobs": [
+    "Pr/R"
+  ],
+  "inspection_reason": "Only Monkey jobs found",
+  "analysis_timestamp": "2025-07-10 18:32:06",
+  "gemini_attempt": 1,
+  "gemini_temperature": 0.01
+}
