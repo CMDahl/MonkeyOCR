@@ -19,8 +19,8 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 processor = AutoProcessor.from_pretrained(model_path,use_fast=True)
 
 
-def ocr_page_with_nanonets_s(image_path, model, processor, max_new_tokens=4096):
-    prompt = """Extract the text from the above document as if you were reading it naturally"""
+def ocr_page_with_nanonets_s(image_path, model, processor, max_new_tokens=8192,
+                           prompt="""Extract the text from the above document as if you were reading it naturally"""):
     image = Image.open(image_path)
     messages = [
         {"role": "user", "content": [
@@ -38,7 +38,7 @@ def ocr_page_with_nanonets_s(image_path, model, processor, max_new_tokens=4096):
     output_text = processor.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=True)
     return output_text[0]
 
-image_path = r'd:\data\HCNC\norway\biographies\raw\corpus\digibok_2007031501007\digibok_2007031501007_0103.jpg'
+image_path = r'd:\GitHub\rma_ocr\data\amd\amd1921\Book_0015_CROP16.jpg'
 result = ocr_page_with_nanonets_s(image_path, model, processor)
 print(result)
 ## Output: NOT GOOD
