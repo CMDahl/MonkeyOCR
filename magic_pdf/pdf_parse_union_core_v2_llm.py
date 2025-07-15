@@ -1,6 +1,5 @@
 import copy
 import math
-import os
 import re
 import statistics
 import time
@@ -854,7 +853,5 @@ def pdf_parse_union(
     return new_pdf_info_dict
 
 
-if __name__ == '__main__':
-    pass
 if __name__ == '__main__':
     pass
