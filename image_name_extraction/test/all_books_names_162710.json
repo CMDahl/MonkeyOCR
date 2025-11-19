@@ -2,7 +2,7 @@
   "input_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test\\input_staging",
   "output_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
   "books_found": 2,
-  "processing_timestamp": "2025-11-19 16:27:05",
+  "processing_timestamp": "2025-11-19 16:24:09",
   "filter_applied": {
     "single_file": null,
     "file_range": null,
@@ -18,7 +18,7 @@
           "book_id": "digibok_2007031501007_0154"
         }
       ],
-      "processing_timestamp": "2025-11-19 16:27:08"
+      "processing_timestamp": "2025-11-19 16:24:12"
     },
     "digibok_2007031501007_0155": {
       "book_id": "digibok_2007031501007_0155",
@@ -41,7 +41,7 @@
           "book_id": "digibok_2007031501007_0155"
         }
       ],
-      "processing_timestamp": "2025-11-19 16:27:10"
+      "processing_timestamp": "2025-11-19 16:24:14"
     }
   }
 }

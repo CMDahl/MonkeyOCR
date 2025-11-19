@@ -1,0 +1,106 @@
+{
+  "prompt_config_version": "1.0",
+  "description": "AI prompts and model settings for the OCR pipeline",
+  
+  "gemini_settings": {
+    "model": "gemini-2.5-flash",
+    "temperature": 0.05,
+    "max_retries": 3,
+    "retry_delay_seconds": 2
+  },
+  
+  "prompts": {
+    "portrait_association": {
+      "system_instruction": [
+        "You are an expert at analyzing biographical text and identifying portrait images.",
+        "Your task is to associate portrait images with the person they depict by carefully reading the biographical text."
+      ],
+      
+      "user_prompt_template": [
+        "Below is a biographical text that may contain references to portrait images using HTML img tags like <img src=\"imgs/filename.jpg\">.",
+        "",
+        "Your task:",
+        "1. Identify all portrait images mentioned in the text",
+        "2. Determine which person each portrait depicts by reading the surrounding context",
+        "3. Return a JSON object mapping each portrait filename to the person's name",
+        "",
+        "Format your response as a JSON object:",
+        "{",
+        "  \"portraits\": [",
+        "    {",
+        "      \"filename\": \"img_in_image_box_123.jpg\",",
+        "      \"person_name\": \"First Last\"",
+        "    }",
+        "  ]",
+        "}",
+        "",
+        "If no portraits are found, return: {\"portraits\": []}",
+        "",
+        "Biographical text:",
+        "{markdown_content}"
+      ],
+      
+      "notes": "This prompt looks for HTML img tags with src='imgs/...' pattern"
+    },
+    
+    "name_extraction": {
+      "system_instruction": [
+        "You are an expert at extracting names from Norwegian biographical texts.",
+        "Extract all person names mentioned in the biography, focusing on the main subject and related individuals."
+      ],
+      
+      "user_prompt_template": [
+        "Extract all person names from the following biographical text. Return a JSON array of names.",
+        "",
+        "Format:",
+        "{",
+        "  \"names\": [",
+        "    \"First Last\",",
+        "    \"Another Person\"",
+        "  ]",
+        "}",
+        "",
+        "Biographical text:",
+        "{markdown_content}"
+      ],
+      
+      "notes": "Extracts all names from concatenated markdown file"
+    },
+    
+    "biography_extraction": {
+      "system_instruction": [
+        "You are an expert at extracting structured biographical information from Norwegian biographical texts.",
+        "Extract key details about the person's life, career, and relationships."
+      ],
+      
+      "user_prompt_template": [
+        "Extract structured biographical information from the following text chunk about {name}.",
+        "",
+        "Return a JSON object with these fields:",
+        "{",
+        "  \"birth_year\": \"YYYY or null\",",
+        "  \"death_year\": \"YYYY or null\",",
+        "  \"birth_place\": \"Location or null\",",
+        "  \"occupation\": \"Primary occupation or null\",",
+        "  \"education\": \"Educational background or null\",",
+        "  \"achievements\": \"Notable achievements or null\",",
+        "  \"family\": \"Family information or null\",",
+        "  \"summary\": \"Brief 2-3 sentence summary\"",
+        "}",
+        "",
+        "Text chunk:",
+        "{text_chunk}"
+      ],
+      
+      "notes": "Extracts structured data for each person found in the text"
+    }
+  },
+  
+  "extraction_rules": {
+    "min_text_chunk_length": 10,
+    "max_text_chunk_length": 3000,
+    "include_context_before_name": true,
+    "include_context_after_name": true,
+    "context_length_chars": 500
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "pipeline_name": "OCR Illustration Pipeline",
+  "version": "1.0",
+  
+  "paths": {
+    "output_directory": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
+    "python_executable": "C:\\Users\\iu2-cmd\\AppData\\Local\\miniconda3\\envs\\OCR-Parser\\python.exe",
+    "original_images_path": "V:\\BDADShareData2\\HCNC\\norway\\biographies\\raw\\corpus"
+  },
+  
+  "input_files": [
+    "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0154\\digibok_2007031501007_0154.md",
+    "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0155\\digibok_2007031501007_0155.md"
+  ],
+  
+  "pipeline_steps": {
+    "1_portrait_association": {
+      "enabled": true,
+      "suppress_stderr": true,
+      "description": "Associate portraits with names using Gemini AI"
+    },
+    "2_concatenate_markdown": {
+      "enabled": true,
+      "suppress_stderr": false,
+      "description": "Combine all markdown files into one"
+    },
+    "3_extract_names_gemini": {
+      "enabled": true,
+      "suppress_stderr": true,
+      "description": "Extract all biographical names using Gemini"
+    },
+    "4_extract_names_chunks": {
+      "enabled": true,
+      "suppress_stderr": false,
+      "description": "Extract names with text chunks"
+    },
+    "5_merge_portraits": {
+      "enabled": true,
+      "suppress_stderr": true,
+      "description": "Merge portrait associations into CSV"
+    },
+    "6_extract_biographies": {
+      "enabled": true,
+      "suppress_stderr": false,
+      "description": "Extract structured biographical data"
+    },
+    "7_collect_data": {
+      "enabled": true,
+      "suppress_stderr": false,
+      "description": "Collect final statistics"
+    },
+    "8_visualize": {
+      "enabled": true,
+      "suppress_stderr": false,
+      "description": "Generate quality inspection visualizations"
+    }
+  },
+  
+  "output_files": {
+    "staging_folder": "input_staging",
+    "concatenated_markdown": "all_biographies.md",
+    "gemini_names_json": "gemini_all_names.json",
+    "names_csv": "all_names.csv",
+    "final_dataset": "final_dataset.csv",
+    "visualization_folder": "test_images"
+  }
+}

@@ -4,7 +4,7 @@
     "successful_extractions": 5,
     "failed_extractions": 0,
     "model_used": "gemini-2.5-flash",
-    "extraction_timestamp": "2025-11-19 15:36:05",
+    "extraction_timestamp": "2025-11-19 16:27:49",
     "enhanced_csv_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test\\extracted_all_names_with_chunks_and_portraits_with_biographies.csv"
   },
   "biographies": [
@@ -139,12 +139,12 @@
     },
     {
       "name": "FLØRENES, Leif Kristian",
-      "title": "småkirkeprest",
+      "title": "småkirkeprest Nordberg, Oslo",
       "birth_date": "1914-03-05",
       "birth_place": "Oslo",
       "death_date": "",
       "father_job": "maskinist",
-      "father_name": "Thorvald Nielsen F.",
+      "father_name": "Thorvald Nielsen Flørenes",
       "mother_name": "Magna Alvilde Aastorp",
       "jobs": [
         {
@@ -170,12 +170,12 @@
         {
           "title": "småkirkeprest",
           "location": "Nordberg, Oslo",
-          "years": "nå"
+          "years": ""
         }
       ],
       "educations": [
         {
-          "title": "Hg/E",
+          "title": "Oslo Handelsgymn.",
           "institution": "Oslo Handelsgymn.",
           "year": "1933"
         },

@@ -1,21 +1,62 @@
 # Configuration
 # --------------------------------------------------
-# Add your list of markdown files here (full paths)
-$InputFiles = @(
-    "C:\Users\iu2-cmd\GitHub\ocr-pipeline-paddle-deepseek\output_paddleOCR\digibok_2007031501007\digibok_2007031501007_0154\digibok_2007031501007_0154.md"
-    "C:\Users\iu2-cmd\GitHub\ocr-pipeline-paddle-deepseek\output_paddleOCR\digibok_2007031501007\digibok_2007031501007_0155\digibok_2007031501007_0155.md"
-    # Add more files as needed...
-)
+# Load configuration from JSON files
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ConfigPath = Join-Path $ScriptDir "pipeline_config.json"
+$PromptConfigPath = Join-Path $ScriptDir "prompt_config.json"
 
-# Output directory
-$OutputPath = "C:\Users\iu2-cmd\GitHub\MonkeyOCR\image_name_extraction\test"
+Write-Host "`n========================================" -ForegroundColor Cyan
+Write-Host "  OCR ILLUSTRATION PIPELINE" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
 
-# Python Executable (OCR-Parser environment)
-$PythonExe = "C:\Users\iu2-cmd\AppData\Local\miniconda3\envs\OCR-Parser\python.exe"
+# Load pipeline configuration
+if (-not (Test-Path $ConfigPath)) {
+    Write-Error "Configuration file not found: $ConfigPath"
+    exit 1
+}
+
+Write-Host "`n[Config] Loading pipeline_config.json..." -ForegroundColor Yellow
+$Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+
+# Load prompt configuration
+if (-not (Test-Path $PromptConfigPath)) {
+    Write-Warning "Prompt configuration file not found: $PromptConfigPath"
+    Write-Warning "Scripts will need to use hardcoded prompts"
+    $PromptConfig = $null
+} else {
+    Write-Host "[Config] Loading prompt_config.json..." -ForegroundColor Yellow
+    $PromptConfig = Get-Content $PromptConfigPath -Raw | ConvertFrom-Json
+}
+
+# Extract configuration values
+$InputFiles = $Config.input_files
+$OutputPath = $Config.paths.output_directory
+$OriginalImagesPath = $Config.paths.original_images_path
+$PythonExe = $Config.paths.python_executable
+
+# Validate Python executable
 if (-not (Test-Path $PythonExe)) {
-    Write-Warning "OCR-Parser python.exe not found at default location. Falling back to 'python'."
+    Write-Warning "Python executable not found at: $PythonExe"
+    Write-Warning "Falling back to 'python' command"
     $PythonExe = "python"
 }
+
+# Display configuration summary
+Write-Host "`n[Pipeline Settings]" -ForegroundColor Cyan
+Write-Host "  Name: $($Config.pipeline_name)" -ForegroundColor White
+Write-Host "  Version: $($Config.version)" -ForegroundColor White
+Write-Host "  Input files: $($InputFiles.Count)" -ForegroundColor White
+Write-Host "  Output: $OutputPath" -ForegroundColor White
+Write-Host "  Original images: $OriginalImagesPath" -ForegroundColor White
+
+if ($PromptConfig) {
+    Write-Host "`n[AI Settings]" -ForegroundColor Cyan
+    Write-Host "  Model: $($PromptConfig.gemini_settings.model)" -ForegroundColor White
+    Write-Host "  Temperature: $($PromptConfig.gemini_settings.temperature)" -ForegroundColor White
+    Write-Host "  Max retries: $($PromptConfig.gemini_settings.max_retries)" -ForegroundColor White
+}
+
+Write-Host "`n========================================`n" -ForegroundColor Cyan
 # --------------------------------------------------
 
 $ErrorActionPreference = "Stop"
@@ -116,11 +157,37 @@ if ($LASTEXITCODE -ne 0) { Write-Error "Step 5 failed"; exit 1 }
 # & $PythonExe $script "$OutputPath" "$mdFile" "$outputCsv"
 # if ($LASTEXITCODE -ne 0) { Write-Error "Step 6 failed"; exit 1 }
 
-# 7. Collect Final Data
-Write-Host "`n[6/7] Finalizing Data Collection..." -ForegroundColor Yellow
+# 6. Collect Final Data
+Write-Host "`n[6/6] Finalizing Data Collection..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "collect_data.py"
 & $PythonExe $script "$OutputPath"
-if ($LASTEXITCODE -ne 0) { Write-Error "Step 7 failed"; exit 1 }
+if ($LASTEXITCODE -ne 0) { Write-Error "Step 6 failed"; exit 1 }
+
+# 7. Generate Visualizations
+Write-Host "`n[Bonus] Generating Quality Inspection Visualizations..." -ForegroundColor Cyan
+$visualScript = Join-Path $ScriptDir "visualize_results.py"
+$finalCsv = Join-Path $OutputPath "final_dataset.csv"
+
+# Extract the base directory from the first input file (contains portraits in imgs/ subfolders)
+if ($InputFiles.Count -gt 0) {
+    $firstFile = $InputFiles[0]
+    $portraitBaseFolder = Split-Path (Split-Path $firstFile -Parent) -Parent
+    $visualOutputFolder = Join-Path $OutputPath "test_images"
+    
+    # Check if final CSV exists before visualization
+    if (Test-Path $finalCsv) {
+        & $PythonExe $visualScript "$finalCsv" "$OriginalImagesPath" "$portraitBaseFolder" "$visualOutputFolder"
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  Visualizations saved to: $visualOutputFolder" -ForegroundColor Green
+        } else {
+            Write-Warning "Visualization step encountered errors but pipeline completed"
+        }
+    } else {
+        Write-Warning "Final CSV not found. Skipping visualization step."
+    }
+} else {
+    Write-Warning "No input files specified. Skipping visualization."
+}
 
 Write-Host "`n--------------------------------------------------"
 Write-Host "Pipeline Completed Successfully!" -ForegroundColor Green
