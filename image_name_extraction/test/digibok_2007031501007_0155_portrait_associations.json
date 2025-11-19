@@ -1,0 +1,25 @@
+{
+  "book_id": "digibok_2007031501007_0155",
+  "total_entries": 2,
+  "biographical_entries": [
+    {
+      "filename": "img_in_image_box_173_357_600_930.jpg",
+      "portrait": "figure.id",
+      "associated_person": "FLØRENES, Leif Kristian",
+      "confidence": 1.0,
+      "reasoning": "Image is immediately followed by a name with an ALL-CAPS LASTNAME, indicating a direct association.",
+      "context_evidence": "FLØRENES, Leif Kristian, små-kirkeprest, Oslo f. 5/3–14 sst.",
+      "book_id": "digibok_2007031501007_0155"
+    },
+    {
+      "filename": "img_in_image_box_1095_353_1521_926.jpg",
+      "portrait": "figure.id",
+      "associated_person": "FLØRENES, Torlaug",
+      "confidence": 1.0,
+      "reasoning": "Image is immediately followed by a name with an ALL-CAPS LASTNAME, indicating a direct association.",
+      "context_evidence": "FLØRENES, Torlaug, husmor, Oslo, f. 22/10–13 sst.",
+      "book_id": "digibok_2007031501007_0155"
+    }
+  ],
+  "processing_timestamp": "2025-11-19 15:35:20"
+}

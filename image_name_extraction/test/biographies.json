@@ -1,0 +1,397 @@
+{
+  "extraction_info": {
+    "total_entries": 5,
+    "successful_extractions": 5,
+    "failed_extractions": 0,
+    "model_used": "gemini-2.5-flash",
+    "extraction_timestamp": "2025-11-19 15:36:05",
+    "enhanced_csv_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test\\extracted_all_names_with_chunks_and_portraits_with_biographies.csv"
+  },
+  "biographies": [
+    {
+      "name": "FLUGE, Frithjof",
+      "title": "professor",
+      "birth_date": "1912-10-02",
+      "birth_place": "Bergen",
+      "death_date": "",
+      "father_job": "arbeidsformann",
+      "father_name": "Emil F.",
+      "mother_name": "Anna Marie Wærø",
+      "jobs": [
+        {
+          "title": "professor",
+          "location": "Salt Lake City, Utah, U.S.A.",
+          "years": ""
+        },
+        {
+          "title": "Sekretær",
+          "location": "N.S.U.A.",
+          "years": "1932–33"
+        },
+        {
+          "title": "redaktør",
+          "location": "forbundets blad",
+          "years": "1932–33"
+        },
+        {
+          "title": "assistent",
+          "location": "Universitetets studentkontor",
+          "years": "1933"
+        },
+        {
+          "title": "journalist",
+          "location": "",
+          "years": "1933–37"
+        },
+        {
+          "title": "assistent",
+          "location": "Oslo skoleinspektorats psyk.-ped.undersøkelser",
+          "years": "1937"
+        },
+        {
+          "title": "manuduktør i filosofi",
+          "location": "",
+          "years": "1937–40"
+        },
+        {
+          "title": "bestyrer",
+          "location": "Kursinstitutt for filosofi",
+          "years": "1940–42, 1945–46"
+        },
+        {
+          "title": "Teaching og Research Asst.",
+          "location": "University of California",
+          "years": "1947–48"
+        },
+        {
+          "title": "professor",
+          "location": "Army Language School, California",
+          "years": "1948"
+        },
+        {
+          "title": "styrer norskavd. (Chairm. of the Dept.)",
+          "location": "Army Language School, California",
+          "years": "1948"
+        },
+        {
+          "title": "Spesialoppdrag",
+          "location": "amerikansk institusjon",
+          "years": "1954"
+        },
+        {
+          "title": "Medarbeider",
+          "location": "Norsk Biografisk Leksikon",
+          "years": ""
+        },
+        {
+          "title": "Medarbeider",
+          "location": "Familieboka",
+          "years": ""
+        },
+        {
+          "title": "Bokanmelder",
+          "location": "",
+          "years": ""
+        }
+      ],
+      "educations": [
+        {
+          "title": "filologi",
+          "institution": "",
+          "year": "1932–35"
+        },
+        {
+          "title": "Magistergraden i filosofi",
+          "institution": "",
+          "year": "1940"
+        },
+        {
+          "title": "Graduate School, relevant for Ph. D. kvalifisering",
+          "institution": "University of California",
+          "year": "1947, 1948"
+        }
+      ],
+      "stays_abroad": [
+        {
+          "country": "Danmark og Sverige",
+          "years": "1945–46",
+          "reason": "Studiereise"
+        },
+        {
+          "country": "U.S.A.",
+          "years": "1946–48",
+          "reason": "Med norske og amerikanske stipendier"
+        }
+      ],
+      "spouses": [
+        {
+          "name": "Kari Graff",
+          "birth_date": "1919-11-19",
+          "birth_place": ""
+        },
+        {
+          "name": "Judith Sofie Jacobsen",
+          "birth_date": "",
+          "birth_place": ""
+        }
+      ],
+      "children": []
+    },
+    {
+      "name": "FLØRENES, Leif Kristian",
+      "title": "småkirkeprest",
+      "birth_date": "1914-03-05",
+      "birth_place": "Oslo",
+      "death_date": "",
+      "father_job": "maskinist",
+      "father_name": "Thorvald Nielsen F.",
+      "mother_name": "Magna Alvilde Aastorp",
+      "jobs": [
+        {
+          "title": "Sekretær",
+          "location": "Norges kristelige student- og gymnasiastlag",
+          "years": "1940"
+        },
+        {
+          "title": "kst. sokneprest",
+          "location": "Enebakk",
+          "years": "1945"
+        },
+        {
+          "title": "feltprest",
+          "location": "Tyskland",
+          "years": "1 year"
+        },
+        {
+          "title": "prest i småkirkearbeidet",
+          "location": "Lovisenberg, Oslo",
+          "years": "1947"
+        },
+        {
+          "title": "småkirkeprest",
+          "location": "Nordberg, Oslo",
+          "years": "nå"
+        }
+      ],
+      "educations": [
+        {
+          "title": "Hg/E",
+          "institution": "Oslo Handelsgymn.",
+          "year": "1933"
+        },
+        {
+          "title": "cand. theol.",
+          "institution": "",
+          "year": "1938"
+        }
+      ],
+      "stays_abroad": [
+        {
+          "country": "Tyskland",
+          "years": "1 year",
+          "reason": "feltprest"
+        }
+      ],
+      "spouses": [
+        {
+          "name": "Torlaug Sveinsson",
+          "birth_date": "",
+          "birth_place": ""
+        }
+      ],
+      "children": [
+        {
+          "name": "Bjørg",
+          "birth_date": "1942-04-02",
+          "birth_place": ""
+        },
+        {
+          "name": "Tor Leif",
+          "birth_date": "1945-01-11",
+          "birth_place": ""
+        },
+        {
+          "name": "Svein Olav",
+          "birth_date": "1947-09-07",
+          "birth_place": ""
+        },
+        {
+          "name": "Kirsti",
+          "birth_date": "1952-11-01",
+          "birth_place": ""
+        }
+      ]
+    },
+    {
+      "name": "FLØRENES, Torlaug",
+      "title": "husmor",
+      "birth_date": "1913-10-22",
+      "birth_place": "Oslo",
+      "death_date": "",
+      "father_job": "lærer",
+      "father_name": "Olav Sveinsson",
+      "mother_name": "Caroline Lunde",
+      "jobs": [
+        {
+          "title": "husmor",
+          "location": "Oslo",
+          "years": ""
+        },
+        {
+          "title": "Lærerinne",
+          "location": "Trysil",
+          "years": "1934–35"
+        },
+        {
+          "title": "ansatt",
+          "location": "Statistisk Sentralbyrå",
+          "years": ""
+        }
+      ],
+      "educations": [
+        {
+          "title": "Studier",
+          "institution": "Universitetet i Oslo",
+          "year": "2 år"
+        },
+        {
+          "title": "Kurser",
+          "institution": "Statens kvinnelige industriskole",
+          "year": ""
+        }
+      ],
+      "stays_abroad": [],
+      "spouses": [
+        {
+          "name": "Leif Flørenes",
+          "birth_date": "",
+          "birth_place": ""
+        }
+      ],
+      "children": [
+        {
+          "name": "Bjørg",
+          "birth_date": "1942-04-02",
+          "birth_place": ""
+        },
+        {
+          "name": "Tor Leif",
+          "birth_date": "1945-01-11",
+          "birth_place": ""
+        },
+        {
+          "name": "Svein Olav",
+          "birth_date": "1947-09-07",
+          "birth_place": ""
+        },
+        {
+          "name": "Kirsti",
+          "birth_date": "1952-11-01",
+          "birth_place": ""
+        }
+      ]
+    },
+    {
+      "name": "FLÅM, Torbjørg",
+      "title": "husmor",
+      "birth_date": "1913-10-09",
+      "birth_place": "Bergen",
+      "death_date": "",
+      "father_job": "kjøpmann",
+      "father_name": "Ivar Pugerud",
+      "mother_name": "Anna Aga",
+      "jobs": [
+        {
+          "title": "husmor",
+          "location": "Aurland, Sogn",
+          "years": ""
+        },
+        {
+          "title": "tanntekniker",
+          "location": "Bergen",
+          "years": "til 1941"
+        },
+        {
+          "title": "Medlem av herredstyret",
+          "location": "",
+          "years": "annen periode"
+        },
+        {
+          "title": "Formann sanitetslaget",
+          "location": "",
+          "years": "flere år"
+        }
+      ],
+      "educations": [
+        {
+          "title": "tanntekniker",
+          "institution": "",
+          "year": ""
+        }
+      ],
+      "stays_abroad": [],
+      "spouses": [
+        {
+          "name": "John Beck Flåm",
+          "birth_date": "1901-04-26",
+          "birth_place": "Flåm"
+        }
+      ],
+      "children": [
+        {
+          "name": "Karoline Elisabeth",
+          "birth_date": "1943-12-19",
+          "birth_place": ""
+        },
+        {
+          "name": "Sjur Didrik",
+          "birth_date": "1946-04-24",
+          "birth_place": ""
+        },
+        {
+          "name": "Anna Margrethe",
+          "birth_date": "1947-08-03",
+          "birth_place": ""
+        }
+      ]
+    },
+    {
+      "name": "FLÄTEFJELL, Nils Johan",
+      "title": "lærer",
+      "birth_date": "1885-10-24",
+      "birth_place": "Grong",
+      "death_date": "",
+      "father_job": "små-bruker",
+      "father_name": "Nikolaus Nilsen Flåtefjell",
+      "mother_name": "Malena Kristine Nilsen",
+      "jobs": [
+        {
+          "title": "lærer",
+          "location": "Fauske",
+          "years": ""
+        }
+      ],
+      "educations": [],
+      "stays_abroad": [],
+      "spouses": [
+        {
+          "name": "Malene Kristine Johannessen",
+          "birth_date": "1891-07-17",
+          "birth_place": "Ingøy"
+        }
+      ],
+      "children": [
+        {
+          "name": "Martin Nordal",
+          "birth_date": "1918-01-10",
+          "birth_place": ""
+        },
+        {
+          "name": "Sverre Johan",
+          "birth_date": "1924-10-02",
+          "birth_place": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "input_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test\\input_staging",
+  "output_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
+  "books_found": 2,
+  "processing_timestamp": "2025-11-19 14:15:23",
+  "filter_applied": {
+    "single_file": null,
+    "file_range": null,
+    "file_list": null,
+    "start_page": null,
+    "end_page": null
+  },
+  "books": {
+    "digibok_2007031501007_0154": {
+      "book_id": "digibok_2007031501007_0154",
+      "total_entries": 1,
+      "biographical_entries": [
+        {
+          "filename": "0.jpg",
+          "portrait": "0.jpg",
+          "associated_person": "FLUGE, Frithjof",
+          "confidence": 0.95,
+          "reasoning": "The image tag immediately follows the biographical entry for FLUGE, Frithjof, and precedes the continuation of his biography. This is a strong contextual association.",
+          "context_evidence": "FLUGE, Frithjof, professor, Salt Lake City, Utah., U.S.A., f. t. Bergen, f. 2/10-12 sst., s. av arbeidsformann Emil F. (1875-1955) og Anna Marie Wærø (1882-). Gift 1942 med Kari Graff, f. 19/11-19, d. av ingeniør Reidar G. - Ekteskap oppløst 1952. Gift på ny 1956 med Judith Sofie Jacobsen, d. av Ottar J. Sy/L - Studerte filologi 1932-35, ![](images/0.jpg) Magistergraden i filosofi 1940.",
+          "book_id": "digibok_2007031501007_0154"
+        }
+      ],
+      "processing_timestamp": "2025-11-19 14:15:28"
+    },
+    "digibok_2007031501007_0155": {
+      "book_id": "digibok_2007031501007_0155",
+      "total_entries": 2,
+      "biographical_entries": [
+        {
+          "filename": "0.jpg",
+          "portrait": "images/0.jpg",
+          "associated_person": null,
+          "confidence": 0.0,
+          "reasoning": "Image appears at the very beginning of the page without an immediate name following it. Cannot associate based on provided rules and single page context.",
+          "context_evidence": "![](images/0.jpg)",
+          "book_id": "digibok_2007031501007_0155"
+        },
+        {
+          "filename": "1.jpg",
+          "portrait": "images/1.jpg",
+          "associated_person": null,
+          "confidence": 0.0,
+          "reasoning": "Image appears at the very beginning of the page without an immediate name following it. Cannot associate based on provided rules and single page context.",
+          "context_evidence": "![](images/1.jpg)",
+          "book_id": "digibok_2007031501007_0155"
+        }
+      ],
+      "processing_timestamp": "2025-11-19 14:15:33"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "input_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test\\input_staging",
+  "output_path": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
+  "books_found": 2,
+  "processing_timestamp": "2025-11-19 15:28:31",
+  "filter_applied": {
+    "single_file": null,
+    "file_range": null,
+    "file_list": null,
+    "start_page": null,
+    "end_page": null
+  },
+  "books": {
+    "digibok_2007031501007_0154": {
+      "book_id": "digibok_2007031501007_0154",
+      "total_entries": 1,
+      "biographical_entries": [
+        {
+          "filename": "img_in_image_box_1334_333_1760_903.jpg",
+          "portrait": "figure.id",
+          "associated_person": "FLUGE, Frithjof",
+          "confidence": 0.95,
+          "reasoning": "Image appears immediately after the biographical entry for FLUGE, Frithjof, and before the next person's entry.",
+          "context_evidence": "FLUGE, Frithjof, professor, Salt Lake City, Utah., U.S.A., f. t. Bergen, f. 2/10–12 sst., s. av arbeidsformann Emil F. (1875-1955) og Anna Marie Wærø (1882-). Gift 1942 med Kari Graff, f. 19/11-19, d. av ingeniør Reidar G. — Ekteskap oppløst 1952. Gift på ny 1956 med Judith Sofie Jacobsen, d. av Ottar J. Sy/L — Studerte filologi 1932–35, Magistergraden i filosofi 1940. Studiereise Danmark og Sverige 1915–46. Med norske og amerikanske stipendier i U.S.A. 1946–48, eks. Graduate School, University of California, relevant for Ph. D. kvalifisering 1947 og 1948. — Sekretær N.S.U.A. 1932–33 og samtidig redaktør for forbundets blad, assistent Universitetets studentkontor 1933, journalist 1933–37, assistent Oslo skoleinspektorats psyk.-ped.undersøkinger 1937, manuduktør i filosofi 1937–40, bestyrer for Kursinstitutt for filosofi 1940–42, 1945–46, Teaching og Research Asst., University of California 1947–48, professor 1948 og styrer norskavd. (Chairm. of the Dept.) Army Language School, California 1948. Spesialoppdrag fra amerikansk institusjon 1954. — Har utgitt: «Alkoholbruken som psykologisk problem» (1937), «Logisk-analytiske retninger i filosofien» (1945), «Medvetsproblemet. Psykologiens teoretiske grunnføresetnader» (1945), «Fredsarbeid og psykologi» (1946), «Basic Norwegian» (1948), «Lærebok i klasseledelse, undervisning og retorikk» (1957), samt ca. 40 mindre arbeider og avhandlinger. Medarbeider Norsk Biografisk Leksikon og Familieboka. Bokanmelder. — Tillits- verv innen N.S.U.A., Arbeidernes Ung- domsfylking. — Int: Bokbinding. Høyt vurdert egenskap? En humanetisk begrunnet høysinnet og tolerant innstilling til menneskenes sjelelige holdninger i på lag alle situasjoner, «tolerant» da definert som en stadig bestrebelse for å begripe de underliggende motiver til individuenes psykologiske puslespill med ukjente störrelser.",
+          "book_id": "digibok_2007031501007_0154"
+        }
+      ],
+      "processing_timestamp": "2025-11-19 15:28:37"
+    },
+    "digibok_2007031501007_0155": {
+      "book_id": "digibok_2007031501007_0155",
+      "total_entries": 2,
+      "biographical_entries": [
+        {
+          "filename": "img_in_image_box_173_357_600_930.jpg",
+          "portrait": "figure.id",
+          "associated_person": "FLØRENES, Leif Kristian",
+          "confidence": 1.0,
+          "reasoning": "Image is immediately followed by a name with an ALL-CAPS surname, indicating a direct association.",
+          "context_evidence": "FLØRENES, Leif Kristian, små-kirkeprest, Oslo f. 5/3–14 sst.",
+          "book_id": "digibok_2007031501007_0155"
+        },
+        {
+          "filename": "img_in_image_box_1095_353_1521_926.jpg",
+          "portrait": "figure.id",
+          "associated_person": "FLØRENES, Torlaug",
+          "confidence": 1.0,
+          "reasoning": "Image is immediately followed by a name with an ALL-CAPS surname, indicating a direct association.",
+          "context_evidence": "FLØRENES, Torlaug, husmor, Oslo, f. 22/10–13 sst.",
+          "book_id": "digibok_2007031501007_0155"
+        }
+      ],
+      "processing_timestamp": "2025-11-19 15:28:40"
+    }
+  }
+}
