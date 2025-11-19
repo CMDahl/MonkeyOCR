@@ -1,6 +1,7 @@
 {
-  "pipeline_name": "OCR Illustration Pipeline",
+  "pipeline_name": "OCR Illustration Pipeline - Folder Scanning Example",
   "version": "1.0",
+  "description": "Example configuration for processing all markdown files in specific folders",
   
   "paths": {
     "output_directory": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
@@ -9,31 +10,35 @@
   },
   
   "input": {
-    "mode": "files",
-    "description": "Input mode: 'files' for specific file list, 'folders' for scanning directories, 'mixed' for both",
+    "mode": "folders",
+    "description": "Scan entire directories for markdown files",
     
-    "files": [
-      "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0154\\digibok_2007031501007_0154.md",
-      "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0155\\digibok_2007031501007_0155.md"
-    ],
+    "files": [],
     
     "folders": [
       {
         "path": "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007",
         "pattern": "**/*.md",
         "recursive": true,
-        "description": "Scan for all markdown files recursively"
+        "description": "Process all biographies from book collection 2007031501007"
+      },
+      {
+        "path": "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2011052606015",
+        "pattern": "**/*.md",
+        "recursive": true,
+        "description": "Process all biographies from book collection 2011052606015"
       }
     ],
     
     "filters": {
       "exclude_patterns": [
         "*_backup*",
-        "*_temp*"
+        "*_temp*",
+        "*_draft*"
       ],
       "min_file_size_bytes": 100,
       "max_files": null,
-      "description": "Optional filters to apply to discovered files"
+      "description": "Process all files except backups, with minimum 100 bytes"
     }
   },
   

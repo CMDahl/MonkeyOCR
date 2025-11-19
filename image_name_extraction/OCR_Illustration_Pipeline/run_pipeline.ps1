@@ -29,10 +29,124 @@ if (-not (Test-Path $PromptConfigPath)) {
 }
 
 # Extract configuration values
-$InputFiles = $Config.input_files
 $OutputPath = $Config.paths.output_directory
 $OriginalImagesPath = $Config.paths.original_images_path
 $PythonExe = $Config.paths.python_executable
+
+# Process input configuration
+Write-Host "`n[Input] Processing input configuration..." -ForegroundColor Yellow
+$InputFiles = @()
+$InputMode = $Config.input.mode
+
+switch ($InputMode) {
+    "files" {
+        # Use specific file list
+        $InputFiles = $Config.input.files
+        Write-Host "  Mode: Specific files" -ForegroundColor White
+    }
+    "folders" {
+        # Scan folders for files
+        Write-Host "  Mode: Folder scanning" -ForegroundColor White
+        foreach ($folder in $Config.input.folders) {
+            $folderPath = $folder.path
+            $pattern = $folder.pattern
+            $recursive = $folder.recursive
+            
+            if (-not (Test-Path $folderPath)) {
+                Write-Warning "Folder not found: $folderPath"
+                continue
+            }
+            
+            Write-Host "  Scanning: $folderPath" -ForegroundColor Gray
+            
+            if ($recursive) {
+                $files = Get-ChildItem -Path $folderPath -Filter "*.md" -Recurse -File
+            } else {
+                $files = Get-ChildItem -Path $folderPath -Filter "*.md" -File
+            }
+            
+            $InputFiles += $files.FullName
+            Write-Host "    Found: $($files.Count) files" -ForegroundColor Gray
+        }
+    }
+    "mixed" {
+        # Combine files and folder scanning
+        Write-Host "  Mode: Mixed (files + folders)" -ForegroundColor White
+        
+        # Add specific files
+        if ($Config.input.files) {
+            $InputFiles += $Config.input.files
+            Write-Host "  Added: $($Config.input.files.Count) specific files" -ForegroundColor Gray
+        }
+        
+        # Scan folders
+        foreach ($folder in $Config.input.folders) {
+            $folderPath = $folder.path
+            $recursive = $folder.recursive
+            
+            if (-not (Test-Path $folderPath)) {
+                Write-Warning "Folder not found: $folderPath"
+                continue
+            }
+            
+            Write-Host "  Scanning: $folderPath" -ForegroundColor Gray
+            
+            if ($recursive) {
+                $files = Get-ChildItem -Path $folderPath -Filter "*.md" -Recurse -File
+            } else {
+                $files = Get-ChildItem -Path $folderPath -Filter "*.md" -File
+            }
+            
+            $InputFiles += $files.FullName
+            Write-Host "    Found: $($files.Count) files" -ForegroundColor Gray
+        }
+    }
+    default {
+        Write-Error "Invalid input mode: $InputMode. Must be 'files', 'folders', or 'mixed'"
+        exit 1
+    }
+}
+
+# Apply filters
+if ($Config.input.filters) {
+    $beforeCount = $InputFiles.Count
+    
+    # Exclude patterns
+    if ($Config.input.filters.exclude_patterns) {
+        foreach ($pattern in $Config.input.filters.exclude_patterns) {
+            $InputFiles = $InputFiles | Where-Object { $_ -notlike $pattern }
+        }
+    }
+    
+    # Min file size filter
+    if ($Config.input.filters.min_file_size_bytes) {
+        $minSize = $Config.input.filters.min_file_size_bytes
+        $InputFiles = $InputFiles | Where-Object { 
+            (Get-Item $_).Length -ge $minSize 
+        }
+    }
+    
+    # Max files limit
+    if ($Config.input.filters.max_files -and $Config.input.filters.max_files -gt 0) {
+        $InputFiles = $InputFiles | Select-Object -First $Config.input.filters.max_files
+    }
+    
+    $afterCount = $InputFiles.Count
+    if ($beforeCount -ne $afterCount) {
+        Write-Host "  Filters applied: $beforeCount → $afterCount files" -ForegroundColor Gray
+    }
+}
+
+# Remove duplicates
+$InputFiles = $InputFiles | Select-Object -Unique
+
+# Validate we have files to process
+if ($InputFiles.Count -eq 0) {
+    Write-Error "No input files found! Check your configuration."
+    exit 1
+}
+
+Write-Host "  Total files to process: $($InputFiles.Count)" -ForegroundColor Green
 
 # Validate Python executable
 if (-not (Test-Path $PythonExe)) {

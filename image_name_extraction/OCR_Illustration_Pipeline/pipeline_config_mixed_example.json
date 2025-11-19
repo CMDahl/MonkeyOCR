@@ -1,6 +1,7 @@
 {
-  "pipeline_name": "OCR Illustration Pipeline",
+  "pipeline_name": "OCR Illustration Pipeline - Mixed Mode Example",
   "version": "1.0",
+  "description": "Example configuration combining specific files and folder scanning",
   
   "paths": {
     "output_directory": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
@@ -9,12 +10,12 @@
   },
   
   "input": {
-    "mode": "files",
-    "description": "Input mode: 'files' for specific file list, 'folders' for scanning directories, 'mixed' for both",
+    "mode": "mixed",
+    "description": "Combine specific important files with folder scanning for additional content",
     
     "files": [
-      "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0154\\digibok_2007031501007_0154.md",
-      "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0155\\digibok_2007031501007_0155.md"
+      "C:\\important\\biography_001.md",
+      "C:\\important\\biography_002.md"
     ],
     
     "folders": [
@@ -22,18 +23,17 @@
         "path": "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007",
         "pattern": "**/*.md",
         "recursive": true,
-        "description": "Scan for all markdown files recursively"
+        "description": "Add all files from main collection"
       }
     ],
     
     "filters": {
       "exclude_patterns": [
-        "*_backup*",
-        "*_temp*"
+        "*_test*"
       ],
-      "min_file_size_bytes": 100,
-      "max_files": null,
-      "description": "Optional filters to apply to discovered files"
+      "min_file_size_bytes": 50,
+      "max_files": 100,
+      "description": "Limit to first 100 files for testing"
     }
   },
   
@@ -74,9 +74,9 @@
       "description": "Collect final statistics"
     },
     "8_visualize": {
-      "enabled": true,
+      "enabled": false,
       "suppress_stderr": false,
-      "description": "Generate quality inspection visualizations"
+      "description": "Skip visualization for large batches"
     }
   },
   

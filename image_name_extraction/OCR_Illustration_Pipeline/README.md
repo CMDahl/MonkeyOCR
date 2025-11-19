@@ -42,13 +42,13 @@ This pipeline demonstrates the complete workflow for processing OCR results from
 
 ### Running the Pipeline
 
-1. **Configure input files** in `pipeline_config.json`:
+1. **Configure input** in `pipeline_config.json` (see [Input Modes](#input-modes)):
    ```json
    {
-     "input_files": [
-       "C:\\path\\to\\file1.md",
-       "C:\\path\\to\\file2.md"
-     ]
+     "input": {
+       "mode": "files",
+       "files": ["C:\\path\\to\\file1.md", "C:\\path\\to\\file2.md"]
+     }
    }
    ```
 
@@ -132,6 +132,116 @@ The pipeline executes **8 sequential steps**:
 ## ⚙️ Configuration
 
 The pipeline uses **two JSON configuration files**:
+
+### 📄 pipeline_config.json
+
+Controls pipeline behavior, paths, and input sources.
+
+### Input Modes
+
+The pipeline supports **three input modes** for maximum flexibility:
+
+#### 1. **Specific Files Mode** (`mode: "files"`)
+Process an explicit list of files:
+
+```json
+{
+  "input": {
+    "mode": "files",
+    "files": [
+      "C:\\path\\to\\file1.md",
+      "C:\\path\\to\\file2.md",
+      "C:\\path\\to\\file3.md"
+    ]
+  }
+}
+```
+
+**Use case:** Small samples, specific test cases, curated selections
+
+#### 2. **Folder Scanning Mode** (`mode: "folders"`)
+Automatically discover all markdown files in specified directories:
+
+```json
+{
+  "input": {
+    "mode": "folders",
+    "folders": [
+      {
+        "path": "C:\\data\\collection1",
+        "pattern": "**/*.md",
+        "recursive": true,
+        "description": "Process entire collection1"
+      },
+      {
+        "path": "C:\\data\\collection2",
+        "pattern": "**/*.md",
+        "recursive": true,
+        "description": "Process entire collection2"
+      }
+    ]
+  }
+}
+```
+
+**Use case:** Production runs, processing entire collections, automated workflows
+
+#### 3. **Mixed Mode** (`mode: "mixed"`)
+Combine specific files with folder scanning:
+
+```json
+{
+  "input": {
+    "mode": "mixed",
+    "files": [
+      "C:\\important\\special_case.md"
+    ],
+    "folders": [
+      {
+        "path": "C:\\data\\collection",
+        "recursive": true
+      }
+    ]
+  }
+}
+```
+
+**Use case:** Include priority files plus bulk processing
+
+### Input Filters
+
+Apply filters to discovered files:
+
+```json
+{
+  "input": {
+    "filters": {
+      "exclude_patterns": [
+        "*_backup*",
+        "*_temp*",
+        "*_draft*"
+      ],
+      "min_file_size_bytes": 100,
+      "max_files": 1000,
+      "description": "Filter options"
+    }
+  }
+}
+```
+
+**Filter options:**
+- `exclude_patterns`: Skip files matching these glob patterns
+- `min_file_size_bytes`: Skip files smaller than this (default: no limit)
+- `max_files`: Limit total files processed (default: no limit)
+
+### Example Configurations
+
+See example files:
+- `pipeline_config.json` - Default (files mode)
+- `pipeline_config_folders_example.json` - Folder scanning mode
+- `pipeline_config_mixed_example.json` - Mixed mode with filters
+
+### Full Configuration Structure
 
 ### 📄 pipeline_config.json
 
@@ -416,18 +526,75 @@ Monitor progress by checking intermediate files:
 
 ## 🎓 Example Use Cases
 
-### Processing a Small Sample
+### Processing a Small Sample (Files Mode)
 
-Test the pipeline on 2-3 files first:
+Test the pipeline on specific files:
 
 ```json
 {
-  "input_files": [
-    "path/to/sample1.md",
-    "path/to/sample2.md"
-  ]
+  "input": {
+    "mode": "files",
+    "files": [
+      "C:\\test\\sample1.md",
+      "C:\\test\\sample2.md"
+    ]
+  }
 }
 ```
+
+### Processing Entire Collections (Folders Mode)
+
+Process all biographies from multiple book collections:
+
+```json
+{
+  "input": {
+    "mode": "folders",
+    "folders": [
+      {
+        "path": "V:\\collections\\digibok_2007031501007",
+        "recursive": true,
+        "description": "2007 collection"
+      },
+      {
+        "path": "V:\\collections\\digibok_2011052606015",
+        "recursive": true,
+        "description": "2011 collection"
+      }
+    ],
+    "filters": {
+      "max_files": 100,
+      "description": "Limit to 100 files for initial run"
+    }
+  }
+}
+```
+
+### Production Workflow
+
+1. **Copy example config:**
+   ```powershell
+   Copy-Item pipeline_config_folders_example.json pipeline_config.json
+   ```
+
+2. **Edit paths** for your environment
+
+3. **Test with limit:**
+   ```json
+   "filters": { "max_files": 10 }
+   ```
+
+4. **Remove limit** for full production run:
+   ```json
+   "filters": { "max_files": null }
+   ```
+
+5. **Disable visualization** for large batches:
+   ```json
+   "pipeline_steps": {
+     "8_visualize": { "enabled": false }
+   }
+   ```
 
 ### Experimenting with Prompts
 
