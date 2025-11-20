@@ -47,7 +47,7 @@ class ConfigLoader:
         Get a prompt template and optionally format it with variables.
         
         Args:
-            prompt_name: Name of the prompt (e.g., 'portrait_association', 'biography_extraction')
+            prompt_name: Name of the prompt (e.g., 'portrait_association', 'biography_extraction', 'portrait_validation')
             **kwargs: Variables to format the prompt template with
         
         Returns:
@@ -58,15 +58,33 @@ class ConfigLoader:
             raise ValueError(f"Prompt '{prompt_name}' not found in prompt_config.json")
         
         prompt_data = prompts[prompt_name]
-        user_prompt = prompt_data.get('user_prompt_template', '')
+        
+        # Try to get 'template' first (new format), then fall back to 'user_prompt_template' (old format)
+        prompt_template = prompt_data.get('template', prompt_data.get('user_prompt_template', ''))
         
         # Handle both string and array formats
-        if isinstance(user_prompt, list):
-            user_prompt = '\n'.join(user_prompt)
+        if isinstance(prompt_template, list):
+            prompt_template = '\n'.join(prompt_template)
         
         if kwargs:
-            return user_prompt.format(**kwargs)
-        return user_prompt
+            return prompt_template.format(**kwargs)
+        return prompt_template
+    
+    def get_prompt_config(self, prompt_name: str) -> Dict[str, Any]:
+        """
+        Get the full configuration for a specific prompt including temperature, format, etc.
+        
+        Args:
+            prompt_name: Name of the prompt
+        
+        Returns:
+            Dictionary with prompt configuration
+        """
+        prompts = self.prompt_config.get('prompts', {})
+        if prompt_name not in prompts:
+            raise ValueError(f"Prompt '{prompt_name}' not found in prompt_config.json")
+        
+        return prompts[prompt_name]
     
     def get_system_instruction(self, prompt_name: str) -> str:
         """

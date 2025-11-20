@@ -21,13 +21,14 @@ import sys
 # And agents is in MonkeyOCR/agents
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from agents.key_vault import KeyVault
+from config_loader import ConfigLoader
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class BookPortraitAssociator:
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, config_loader: ConfigLoader = None):
         # Google Gemini configuration
         self.api_key = api_key or os.getenv("AMDGeminiFlashKey")
         if not self.api_key:
@@ -35,7 +36,13 @@ class BookPortraitAssociator:
         
         # Initialize Gemini client
         self.client = genai.Client(api_key=self.api_key)
-        self.model = "gemini-2.5-flash"
+        
+        # Load configuration
+        self.config = config_loader or ConfigLoader()
+        gemini_settings = self.config.get_gemini_settings()
+        self.model = gemini_settings.get('model', 'gemini-2.5-flash')
+        self.prompt_config = self.config.get_prompt_config('portrait_association')
+        self.temperature = self.prompt_config.get('temperature', 0.05)
     
     def get_page_number(self, page_dir_name: str) -> int:
         """Extract page number from page directory name"""
@@ -210,57 +217,11 @@ class BookPortraitAssociator:
             all_content += f"\n--- PAGE {page['page_number']} ---\n"
             all_content += page['content']
         
-        # Use triple quotes and avoid f-string formatting for the JSON template
-        prompt_content = f"""You are analyzing a Norwegian biography. Your task is to associate portrait images with the person they depict based on the provided markdown page.
-The book ID is: {book_id}
+        # Get prompt from configuration
+        prompt_content = self.config.get_prompt('portrait_association', book_id=book_id, all_content=all_content)
 
-IMPORTANT: Common patterns:
-
-1. Each page contains biographical entries with the format:
-SURNAME, Given names, profession, biographical details.
-2. Biographical entries may span multiple pages. Text in the beginning of the page belongs to a person whose name appeared last on the previous page. Please ignore this text. 
-3. Portraits/images are tagged in HTML format as: <img src="imgs/filename.jpg" alt="Image" width="18%" /> inside a div tag.
-
-TASK:
-Analyze the markdown pages and associate each portrait/image with the person it most likely depicts.
-
-IMPORTANT (strict pairing rules, in priority order):
-1. **Exact syntax** – Every portrait appears as HTML: <div style="text-align: center;"><img src="imgs/FILENAME.jpg" alt="Image" width="18%" /></div>. Search for this HTML pattern. The filename is the unique identifier (e.g., img_in_image_box_173_357_600_930.jpg).
-2. **Immediate-name rule (highest certainty)** – If the image tag is immediately followed by a name whose LASTNAME is in ALL-CAPS, **always pair this image with that name**. Treat this as a 100% match unless another image intervenes. IMPORTANT: If the name is not in ALL-CAPS, do NOT use it for pairing.
-3. **Paragraph-embedded rule** – If the image tag sits inside a prose paragraph that is clearly describing a person, pair the image with that individual rather than the next standalone name heading.  
-4. **Page-start rule (cross-page)** – When a markdown page *begins* with an image tag, assume the portrait belongs to the person whose name appeared last on the *previous* page. Do not attempt to make an association. The exception is if the **Immediate-name rule (highest certainty)** applies, in which case use that name instead. 
-
-CRITICAL: Ensure your response is valid JSON format. Escape all quotes and newlines properly in string values.
-
-For each image found (both referenced in markdown and available), determine:
-- Which person it most likely depicts
-- Your confidence level based on proximity and context
-
-Respond with ONLY a valid JSON array (no other text):""" + """
-[
-  {
-    "filename": "actual_image_filename.jpg",
-    "portrait": "figure.id",
-    "associated_person": "SURNAME, Given Names",
-    "confidence": 0.92,
-    "reasoning": "Brief explanation without quotes or newlines",
-    "context_evidence": "Relevant text snippet without quotes or newlines"
-  }
-]
-
-IMPORTANT (output hygiene):
-- Use only double quotes for JSON strings
-- Do not include newlines or unescaped quotes in string values
-- Replace any quotes in text with single quotes or apostrophes
-- Keep reasoning and context_evidence brief and on single lines
-- If no association can be made, set associated_person to null
-
-The markdown content to analyze:
-
-""" + all_content
-
-        # Temperature options for retry attempts
-        temperature_options = [0.01, 0.01, 0.1, 0.2]
+        # Temperature options for retry attempts (use from config or defaults)
+        temperature_options = self.config.get_gemini_settings().get('biography_temperatures', [0.01, 0.01, 0.1, 0.2])
         
         # Rest of the method remains the same...
         for attempt in range(4):
@@ -393,7 +354,13 @@ The markdown content to analyze:
             "books": {}
         }
         
+        total_books = len(books)
+        current_book = 0
+        
         for book_id, file_infos in books.items():
+            current_book += 1
+            print(f"\n[Progress] Processing book {current_book}/{total_books}: {book_id}", flush=True)
+            
             try:
                 book_result = self.process_book(book_id, file_infos)
                 results["books"][book_id] = book_result
@@ -404,11 +371,16 @@ The markdown content to analyze:
                 with open(book_output_file, 'w', encoding='utf-8') as f:
                     json.dump(book_result, f, indent=2, ensure_ascii=False)
                 
-                logger.info(f"Found {len(book_result.get('biographical_entries', []))} names in {book_id}")
+                num_portraits = len(book_result.get('biographical_entries', []))
+                print(f"  [OK] Found {num_portraits} portrait(s) in {book_id}", flush=True)
+                logger.info(f"Found {num_portraits} names in {book_id}")
                 
             except Exception as e:
                 logger.error(f"Error processing book {book_id}: {e}")
+                print(f"  [ERROR] Error processing {book_id}: {e}", flush=True)
                 results["books"][book_id] = {"error": str(e)}
+        
+        print(f"\n[Complete] Processed {total_books} book(s)", flush=True)
         
         # Save combined results with timestamp if file exists
         combined_output = output_path / "all_books_portrait_associations.json"

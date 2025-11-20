@@ -1,5 +1,8 @@
 # Configuration
 # --------------------------------------------------
+# Set UTF-8 encoding for Python to handle Unicode characters
+$env:PYTHONIOENCODING = "utf-8"
+
 # Load configuration from JSON files
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "pipeline_config.json"
@@ -184,10 +187,28 @@ if (-not (Test-Path $OutputPath)) {
     Write-Host "Created output directory: $OutputPath" -ForegroundColor Green
 }
 
-# Create staging directory
+# Create staging directory (clear if it exists to avoid old files)
 $StagingDir = Join-Path $OutputPath "input_staging"
-if (-not (Test-Path $StagingDir)) {
-    New-Item -ItemType Directory -Path $StagingDir -Force | Out-Null
+if (Test-Path $StagingDir) {
+    Write-Host "Clearing existing staging directory..." -ForegroundColor Yellow
+    Remove-Item -Path $StagingDir -Recurse -Force
+}
+New-Item -ItemType Directory -Path $StagingDir -Force | Out-Null
+
+# Clear old portrait association JSON files from previous runs
+Write-Host "Clearing old portrait association files..." -ForegroundColor Yellow
+Get-ChildItem -Path $OutputPath -Filter "*_portrait_associations.json" | Remove-Item -Force
+$oldJsonCount = (Get-ChildItem -Path $OutputPath -Filter "*_portrait_associations.json" -ErrorAction SilentlyContinue | Measure-Object).Count
+if ($oldJsonCount -eq 0) {
+    Write-Host "  Cleaned up portrait association files" -ForegroundColor Gray
+}
+
+# Clear old visualization images from previous runs
+$TestImagesDir = Join-Path $OutputPath "test_images"
+if (Test-Path $TestImagesDir) {
+    Write-Host "Clearing old visualization images..." -ForegroundColor Yellow
+    Remove-Item -Path $TestImagesDir -Recurse -Force
+    Write-Host "  Cleaned up test_images directory" -ForegroundColor Gray
 }
 
 # Copy input files to staging with proper naming
@@ -220,25 +241,31 @@ Write-Host "Script Directory: $ScriptDir"
 Write-Host "--------------------------------------------------"
 
 # 1. Run Gemini Portrait Name Associator
-Write-Host "`n[1/6] Running Gemini Portrait Name Associator..." -ForegroundColor Yellow
+Write-Host "`n[1/8] Running Gemini Portrait Name Associator..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "gemini_portrait_name_associator.py"
 & $PythonExe $script "$InputPath" "$OutputPath" 2>$null
 if ($LASTEXITCODE -ne 0) { Write-Error "Step 1 failed"; exit 1 }
 
+# 1b. Validate Portrait-Associated Names
+Write-Host "`n[1b/8] Validating Portrait-Associated Names..." -ForegroundColor Yellow
+$script = Join-Path $ScriptDir "validate_portrait_names.py"
+& $PythonExe $script "$OutputPath"
+if ($LASTEXITCODE -ne 0) { Write-Error "Step 1b failed"; exit 1 }
+
 # 2. Concatenate MD Files
-Write-Host "`n[2/6] Concatenating Markdown Files..." -ForegroundColor Yellow
+Write-Host "`n[2/8] Concatenating Markdown Files..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "concatenate_all_md_files.py"
 & $PythonExe $script "$InputPath" "$OutputPath"
 if ($LASTEXITCODE -ne 0) { Write-Error "Step 2 failed"; exit 1 }
 
-# 3. Run Gemini All Names Extractor
-Write-Host "`n[3/6] Extracting All Names (Gemini)..." -ForegroundColor Yellow
-$script = Join-Path $ScriptDir "gemini_all_names.py"
-& $PythonExe $script "$InputPath" "$OutputPath" 2>$null
+# 3. Extract Names from Portrait Associations (faster than running Gemini again)
+Write-Host "`n[3/8] Extracting Names from Portrait Associations..." -ForegroundColor Yellow
+$script = Join-Path $ScriptDir "extract_names_from_portraits.py"
+& $PythonExe $script "$OutputPath" "$OutputPath"
 if ($LASTEXITCODE -ne 0) { Write-Error "Step 3 failed"; exit 1 }
 
 # 4. Extract All Names & Chunks & Associate Portraits
-Write-Host "`n[4/6] Processing Names, Chunks, and Portraits..." -ForegroundColor Yellow
+Write-Host "`n[4/8] Processing Names, Chunks, and Portraits..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "extract_all_names.py"
 $jsonFile = Join-Path $OutputPath "all_books_names.json"
 $mdFile = Join-Path $OutputPath "all_text.md"
@@ -248,15 +275,21 @@ $mdFile = Join-Path $OutputPath "all_text.md"
 if ($LASTEXITCODE -ne 0) { Write-Error "Step 4 failed"; exit 1 }
 
 # 4b. Merge portrait associations from Step 1 into the CSV
-Write-Host "`n[4b/6] Merging Portrait Associations..." -ForegroundColor Yellow
+Write-Host "`n[4b/8] Merging Portrait Associations..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "merge_portraits.py"
 $inputCsv = Join-Path $OutputPath "extracted_all_names_with_chunks.csv"
 $outputCsv = Join-Path $OutputPath "extracted_all_names_with_chunks_and_portraits.csv"
-& $PythonExe $script "$inputCsv" "$OutputPath" "$outputCsv"
+
+# Get portrait handling settings from config
+$portraitMode = $Config.portrait_handling.multiple_portraits_per_person
+$portraitSeparator = $Config.portrait_handling.separator
+
+Write-Host "  Portrait handling: $portraitMode (separator: '$portraitSeparator')" -ForegroundColor Gray
+& $PythonExe $script "$inputCsv" "$OutputPath" "$outputCsv" --mode $portraitMode --separator $portraitSeparator
 if ($LASTEXITCODE -ne 0) { Write-Error "Step 4b failed"; exit 1 }
 
 # 5. Extract Biographies
-Write-Host "`n[5/6] Extracting Structured Biographies..." -ForegroundColor Yellow
+Write-Host "`n[5/8] Extracting Structured Biographies..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "biography_extractor.py"
 $inputCsv = Join-Path $OutputPath "extracted_all_names_with_chunks_and_portraits.csv"
 $outputJson = Join-Path $OutputPath "biographies.json"
@@ -272,35 +305,42 @@ if ($LASTEXITCODE -ne 0) { Write-Error "Step 5 failed"; exit 1 }
 # if ($LASTEXITCODE -ne 0) { Write-Error "Step 6 failed"; exit 1 }
 
 # 6. Collect Final Data
-Write-Host "`n[6/6] Finalizing Data Collection..." -ForegroundColor Yellow
+Write-Host "`n[6/8] Finalizing Data Collection..." -ForegroundColor Yellow
 $script = Join-Path $ScriptDir "collect_data.py"
 & $PythonExe $script "$OutputPath"
 if ($LASTEXITCODE -ne 0) { Write-Error "Step 6 failed"; exit 1 }
 
 # 7. Generate Visualizations
-Write-Host "`n[Bonus] Generating Quality Inspection Visualizations..." -ForegroundColor Cyan
+Write-Host "`n[7/8] Generating Quality Inspection Visualizations..." -ForegroundColor Cyan
 $visualScript = Join-Path $ScriptDir "visualize_results.py"
 $finalCsv = Join-Path $OutputPath "final_dataset.csv"
 
-# Extract the base directory from the first input file (contains portraits in imgs/ subfolders)
-if ($InputFiles.Count -gt 0) {
+# Get portrait base folder from config input folders
+$portraitBaseFolder = $null
+if ($Config.input.mode -eq "folders" -and $Config.input.folders.Count -gt 0) {
+    # Use the first folder path directly (it's already the base containing book_id folders)
+    $portraitBaseFolder = $Config.input.folders[0].path
+} elseif ($InputFiles.Count -gt 0) {
+    # Fallback: Extract from first input file
     $firstFile = $InputFiles[0]
     $portraitBaseFolder = Split-Path (Split-Path $firstFile -Parent) -Parent
-    $visualOutputFolder = Join-Path $OutputPath "test_images"
+}
+
+$visualOutputFolder = Join-Path $OutputPath "test_images"
+
+# Check if final CSV exists before visualization
+if (Test-Path $finalCsv) {
+    Write-Host "  Original images: $OriginalImagesPath" -ForegroundColor Gray
+    Write-Host "  Portrait base: $portraitBaseFolder" -ForegroundColor Gray
     
-    # Check if final CSV exists before visualization
-    if (Test-Path $finalCsv) {
-        & $PythonExe $visualScript "$finalCsv" "$OriginalImagesPath" "$portraitBaseFolder" "$visualOutputFolder"
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "  Visualizations saved to: $visualOutputFolder" -ForegroundColor Green
-        } else {
-            Write-Warning "Visualization step encountered errors but pipeline completed"
-        }
+    & $PythonExe $visualScript "$finalCsv" "$OriginalImagesPath" "$portraitBaseFolder" "$visualOutputFolder"
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  Visualizations saved to: $visualOutputFolder" -ForegroundColor Green
     } else {
-        Write-Warning "Final CSV not found. Skipping visualization step."
+        Write-Warning "Visualization step encountered errors but pipeline completed"
     }
 } else {
-    Write-Warning "No input files specified. Skipping visualization."
+    Write-Warning "Final CSV not found. Skipping visualization step."
 }
 
 Write-Host "`n--------------------------------------------------"

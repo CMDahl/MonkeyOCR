@@ -19,6 +19,7 @@ import re
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from agents.key_vault import KeyVault
+from config_loader import ConfigLoader
 
 # Initialize logger at module level
 logger = logging.getLogger(__name__)
@@ -94,7 +95,10 @@ Sometimes there can be entries for figures, like ![Figure](figures/digibok_20070
 """
 
 class BiographyExtractor:
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, config_loader: ConfigLoader = None):
+        # Load configuration
+        self.config = config_loader if config_loader else ConfigLoader()
+        
         # Google Gemini configuration
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         
@@ -109,8 +113,11 @@ class BiographyExtractor:
         
         # Initialize Gemini client
         self.client = genai.Client(api_key=self.api_key)
-        #self.model = "gemini-2.5-flash-lite-preview-06-17"
-        self.model = "gemini-2.5-flash"
+        
+        # Load model and temperatures from config
+        gemini_settings = self.config.get_gemini_settings()
+        self.model = gemini_settings.get('model', 'gemini-2.5-flash')
+        self.temperatures = gemini_settings.get('biography_temperatures', [0.01, 0.01, 0.1, 0.2])
         
     def safe_json_parse(self, response_text, person_name):
         """Safely parse JSON with error recovery"""
@@ -140,84 +147,16 @@ class BiographyExtractor:
     def extract_biography(self, name: str, markdown_chunk: str) -> dict:
         """Extract structured biographical information from markdown chunk with retry logic"""
     
-        prompt_content = f"""You are extracting structured biographical information from Norwegian biographical text.
+        # Get prompt from config
+        prompt_content = self.config.get_prompt('biography_extraction', name=name, text_chunk=markdown_chunk)
     
-        PERSON NAME: {name}
-    
-        INSTRUCTIONS:
-        {tba_input}
-    
-        BIOGRAPHICAL TEXT:
-        {markdown_chunk}
-    
-        CRITICAL JSON FORMATTING RULES:
-        - Return ONLY valid JSON, no additional text before or after
-        - Use double quotes for ALL strings
-        - Do NOT include newlines, line breaks, or unescaped quotes within string values
-        - Replace any quotes in text with single quotes or remove them
-        - If a field is missing, use empty string "" or empty array []
-        - Ensure all objects and arrays are properly closed with matching brackets
-        - Do not add comments or explanations
-    
-        TASK:
-        Extract biographical information for "{name}" and return it in this EXACT JSON structure:
-    
-        {{
-            "name": "{name}",
-            "title": "current job title or occupation",
-            "birth_date": "YYYY-MM-DD or partial date or empty string",
-            "birth_place": "place name or empty string",
-            "death_date": "YYYY-MM-DD or partial date or empty string",
-            "father_job": "occupation or empty string",
-            "father_name": "full name or empty string",
-            "mother_name": "full name or empty string",
-            "jobs": [
-                {{
-                    "title": "job title",
-                    "location": "workplace/company/location",
-                    "years": "year range or single year"
-                }}
-            ],
-            "educations": [
-                {{
-                    "title": "degree/education name",
-                    "institution": "school/university name",
-                    "year": "year or year range"
-                }}
-            ],
-            "stays_abroad": [
-                {{
-                    "country": "country name",
-                    "years": "year or year range",
-                    "reason": "purpose of stay"
-                }}
-            ],
-            "spouses": [
-                {{
-                    "name": "spouse full name",
-                    "birth_date": "birth date if available",
-                    "birth_place": "birth place if available"
-                }}
-            ],
-            "children": [
-                {{
-                    "name": "child full name",
-                    "birth_date": "birth date",
-                    "birth_place": "birth place if available"
-                }}
-            ]
-        }}
-    
-        Return ONLY the JSON object above with filled values. No other text.
-        """
-    
-        # Different temperatures to try
-        temperatures = [0.01, 0.02,0.03, 0.2]
+        # Different temperatures to try (from config)
+        temperatures = self.temperatures
         max_retries = 3
         
         for temp_attempt, temperature in enumerate(temperatures, 1):
-            print(f"🔄 Temperature attempt {temp_attempt}/4 for {name} (temp: {temperature})")
-            logger.info(f"Temperature attempt {temp_attempt}/4 for {name} with temperature {temperature}")
+            print(f"🔄 Temperature attempt {temp_attempt}/{len(temperatures)} for {name} (temp: {temperature})")
+            logger.info(f"Temperature attempt {temp_attempt}/{len(temperatures)} for {name} with temperature {temperature}")
             
             # Retry logic for each temperature
             for retry_attempt in range(max_retries):
@@ -624,9 +563,12 @@ def main():
     
     logger = logging.getLogger(__name__)
     
-    # Initialize extractor
+    # Initialize configuration loader
+    config_loader = ConfigLoader()
+    
+    # Initialize extractor with config
     try:
-        extractor = BiographyExtractor(api_key=args.api_key)
+        extractor = BiographyExtractor(api_key=args.api_key, config_loader=config_loader)
         
         logger.info(f"Processing CSV: {args.csv_file}")
         logger.info(f"Logging to: {args.log_file}")

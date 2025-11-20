@@ -15,21 +15,38 @@ warnings.filterwarnings('ignore')
 def display_image(ax, path, title, is_portrait=True):
     """Helper function to display an image on a matplotlib axis."""
     try:
-        if pd.notna(path) and os.path.exists(path):
+        if pd.notna(path) and path and os.path.exists(path):
             img = Image.open(path)
             ax.imshow(img)
             ax.set_title(title, fontsize=10, wrap=True)
+            ax.set_xticks([])
+            ax.set_yticks([])
+        elif pd.notna(path) and path:
+            # Path provided but doesn't exist - show detailed error
+            ax.text(0.5, 0.5, f'File not found:\n{path}', 
+                    ha='center', va='center', fontsize=7, bbox=dict(facecolor='lightyellow'),
+                    wrap=True)
+            ax.set_title(title, fontsize=10)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.set_xlim(0, 1)
+            ax.set_ylim(0, 1)
         else:
-            ax.text(0.5, 0.5, 'No Portrait' if pd.notna(path) else 'No Portrait', 
+            ax.text(0.5, 0.5, 'No Portrait', 
                     ha='center', va='center', fontsize=8, bbox=dict(facecolor='lightgray'))
             ax.set_title(title, fontsize=10)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.set_xlim(0, 1)
+            ax.set_ylim(0, 1)
     except Exception as e:
-        ax.text(0.5, 0.5, f'Error loading:\n{os.path.basename(path) if pd.notna(path) else "N/A"}', 
-                ha='center', va='center', fontsize=8)
+        ax.text(0.5, 0.5, f'Error loading:\n{str(e)}\n{os.path.basename(path) if pd.notna(path) and path else "N/A"}', 
+                ha='center', va='center', fontsize=7, wrap=True)
         ax.set_title(title, fontsize=8)
-    finally:
         ax.set_xticks([])
         ax.set_yticks([])
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
 
 def display_text_chunk(ax, text, title, max_chars=500):
     """Helper function to display text chunk on a matplotlib axis."""
@@ -135,21 +152,20 @@ def visualize_individual_data(book_id, df, original_images_path, portrait_base_f
         
     print(f"  Generating {len(book_df)} visualizations for {book_id}")
     
-    # Extract the corpus folder name (e.g., digibok_2007031501007) from book_id
-    corpus_folder = '_'.join(book_id.split('_')[:2])  # digibok_2007031501007 from digibok_2007031501007_0154
-    
     for i, (idx, row) in enumerate(book_df.iterrows()):
         fig = plt.figure(figsize=(20, 10), constrained_layout=True)
         gs_main = fig.add_gridspec(nrows=1, ncols=3, width_ratios=[1, 1, 1], wspace=0.05)
         
-        # LEFT: Full biography page from corpus folder
+        # LEFT: Full biography page - look for image directly in original_images_path
         ax_full_bio = fig.add_subplot(gs_main[0, 0])
         
-        # Look for original image in corpus folder: V:\...\corpus\digibok_2007031501007\digibok_2007031501007_0154.jpg
+        # Try different image formats in the original_images_path directory
         possible_paths = [
-            os.path.join(original_images_path, corpus_folder, f"{book_id}.jpg"),
-            os.path.join(original_images_path, corpus_folder, f"{book_id}.jp2"),
-            os.path.join(original_images_path, corpus_folder, f"{book_id}.png")
+            os.path.join(original_images_path, f"{book_id}.jpg"),
+            os.path.join(original_images_path, f"{book_id}.jp2"),
+            os.path.join(original_images_path, f"{book_id}.png"),
+            os.path.join(original_images_path, f"{book_id}.tif"),
+            os.path.join(original_images_path, f"{book_id}.tiff")
         ]
         
         full_image_path = None
@@ -165,9 +181,19 @@ def visualize_individual_data(book_id, df, original_images_path, portrait_base_f
         
         ax_portrait = fig.add_subplot(gs_middle[0, 0])
         if pd.notna(row['portrait_filename']) and row['portrait_filename'] != '':
+            # Handle multiple portraits (pipe-separated) - use the first one for visualization
+            portrait_filename = str(row['portrait_filename']).split('|')[0].strip()
+            
             # Portrait is in the imgs/ subfolder within the portrait base folder
-            portrait_path = os.path.join(portrait_base_folder, book_id, "imgs", str(row['portrait_filename']))
-            portrait_title = f"Portrait: {row['name']}\n{row['portrait_filename']}"
+            portrait_path = os.path.join(portrait_base_folder, book_id, "imgs", portrait_filename)
+            
+            # Show all portrait filenames in title if multiple exist
+            all_portraits = str(row['portrait_filename'])
+            if '|' in all_portraits:
+                portrait_count = len(all_portraits.split('|'))
+                portrait_title = f"Portrait 1 of {portrait_count}: {row['name']}\n{portrait_filename}"
+            else:
+                portrait_title = f"Portrait: {row['name']}\n{portrait_filename}"
         else:
             portrait_path = None
             portrait_title = f"No Portrait: {row['name']}"
@@ -216,15 +242,23 @@ def main():
         print(f"Error: CSV file not found: {args.csv_file}")
         sys.exit(1)
     
-    # Get unique book IDs
-    book_ids = df['book_id'].unique()
+    # Deduplicate by name - prefer entries with portraits
+    print(f"Deduplicating entries by name...")
+    df['has_portrait'] = df['portrait_filename'].notna() & (df['portrait_filename'] != '')
+    df = df.sort_values('has_portrait', ascending=False)  # Entries with portraits first
+    df_unique = df.drop_duplicates(subset=['name'], keep='first')
+    print(f"  {len(df)} total entries -> {len(df_unique)} unique persons")
+    print(f"  Persons with portraits: {df_unique['has_portrait'].sum()}")
+    
+    # Get unique book IDs from deduplicated data
+    book_ids = df_unique['book_id'].unique()
     print(f"Found {len(book_ids)} unique book IDs")
     print(f"Looking for original images in: {args.original_images_path}")
     print(f"Looking for portraits in: {args.portrait_base_folder}")
     
-    # Generate visualizations for each book
+    # Generate visualizations for each book (using deduplicated data)
     for book_id in book_ids:
-        visualize_individual_data(book_id, df, args.original_images_path, args.portrait_base_folder, args.output_folder)
+        visualize_individual_data(book_id, df_unique, args.original_images_path, args.portrait_base_folder, args.output_folder)
     
     print(f"\nVisualization complete! Images saved to: {args.output_folder}")
     

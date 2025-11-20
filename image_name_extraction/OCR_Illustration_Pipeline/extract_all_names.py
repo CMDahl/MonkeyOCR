@@ -19,8 +19,11 @@ def extract_names_to_dataframe(json_file_path):
     for book_id, book_data in content.get('books', {}).items():
         if 'biographical_entries' in book_data:
             for entry in book_data['biographical_entries']:
+                # Handle both 'person_name' (old gemini format) and 'name' (portrait association format)
+                person_name = entry.get('person_name') or entry.get('name', '')
+                
                 data.append({
-                    'name': entry.get('person_name', ''),
+                    'name': person_name,
                     'book_id': book_id,
                     'page_number': entry.get('page_number', ''),
                     'page_directory': entry.get('page_directory', ''),

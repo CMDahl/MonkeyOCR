@@ -9,6 +9,12 @@
     "original_images_path": "V:\\BDADShareData2\\HCNC\\norway\\biographies\\raw\\corpus"
   },
   
+  "azure_keyvault": {
+    "vault_url": "https://rmaocr.vault.azure.net/",
+    "gemini_api_key_name": "AMDGeminiFlashKey",
+    "description": "Azure Key Vault configuration for API keys. Requires Azure CLI authentication (az login)."
+  },
+  
   "input": {
     "mode": "mixed",
     "description": "Combine specific important files with folder scanning for additional content",

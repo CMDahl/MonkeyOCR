@@ -4,25 +4,29 @@ A comprehensive, AI-powered pipeline for extracting and structuring biographical
 
 ## 🎯 Overview
 
-This pipeline demonstrates the complete workflow for processing OCR results from PaddleOCR, extracting biographical data using Google Gemini AI, associating portraits with individuals, and generating quality inspection visualizations.
+This pipeline processes Norwegian biographical dictionary pages through OCR, AI-based text extraction, portrait association, and biographical data extraction. It transforms raw scanned biographical pages into structured datasets containing complete biographical information, portrait associations, and quality inspection visualizations.
 
 **Key Features:**
-- ✨ AI-powered portrait-to-name association
-- 📝 Structured biographical data extraction (birth/death dates, occupation, education, etc.)
+- ✨ AI-powered portrait-to-name association with validation
+- 📝 Structured biographical data extraction (birth/death dates, occupation, education, family, etc.)
 - 🖼️ Automated quality inspection visualizations
-- ⚙️ Fully configurable via JSON files
+- ⚙️ Fully configurable via JSON files (prompts externalized)
 - 🔄 Robust retry logic and error handling
+- 🎭 Support for multiple portraits per person
 - 📊 CSV output for easy data analysis
+
+---
 
 ## 📋 Table of Contents
 
-- [Quick Start](#quick-start)
-- [Pipeline Architecture](#pipeline-architecture)
-- [Configuration](#configuration)
-- [Input Requirements](#input-requirements)
-- [Output Structure](#output-structure)
-- [Python Scripts](#python-scripts)
-- [Troubleshooting](#troubleshooting)
+- [Quick Start](#-quick-start)
+- [Pipeline Architecture](#-pipeline-architecture)
+- [Configuration](#-configuration)
+- [Input Requirements](#-input-requirements)
+- [Output Structure](#-output-structure)
+- [Key Features](#-key-features)
+- [Troubleshooting](#-troubleshooting)
+- [Additional Documentation](#-additional-documentation)
 
 ---
 
@@ -30,24 +34,27 @@ This pipeline demonstrates the complete workflow for processing OCR results from
 
 ### Prerequisites
 
-1. **Python Environment**: OCR-Parser conda environment with required packages:
+1. **Python Environment**: OCR-Parser conda environment
    ```powershell
    conda activate OCR-Parser
    pip install google-genai azure-identity azure-keyvault-secrets pandas matplotlib pillow
    ```
 
-2. **Azure Key Vault**: API keys stored in Azure Key Vault (configured in parent project)
+2. **Azure Key Vault**: API keys stored securely
+   - **Vault URL**: `https://rmaocr.vault.azure.net/`
+   - **Gemini API Key Name**: `SDUGeminiAPI`
+   - **Authentication**: Requires Azure CLI login (`az login`)
 
 3. **Input Data**: PaddleOCR markdown files with extracted portrait images
 
 ### Running the Pipeline
 
-1. **Configure input** in `pipeline_config.json` (see [Input Modes](#input-modes)):
+1. **Configure input** in `pipeline_config.json`:
    ```json
    {
      "input": {
        "mode": "files",
-       "files": ["C:\\path\\to\\file1.md", "C:\\path\\to\\file2.md"]
+       "files": ["path/to/file1.md", "path/to/file2.md"]
      }
    }
    ```
@@ -57,7 +64,7 @@ This pipeline demonstrates the complete workflow for processing OCR results from
    .\run_pipeline.ps1
    ```
 
-3. **Check results** in the output directory (default: `test/`):
+3. **Check results** in the output directory:
    - `final_dataset.csv` - Complete structured biographical data
    - `test_images/` - Quality inspection visualizations
 
@@ -71,59 +78,74 @@ The pipeline executes **8 sequential steps**:
 ┌─────────────────────────────────────────────────────────────┐
 │ Step 1: Portrait Association (Gemini AI)                    │
 │ ─────────────────────────────────────────────────────────── │
-│ Input:  Individual markdown files                           │
-│ Output: JSON files mapping portraits to person names        │
-│ AI Model: Gemini 2.5 Flash                                  │
+│ Associates portraits with biographical subjects             │
+│ • Analyzes portrait placement relative to headings          │
+│ • Excludes deceased persons marked with †                   │
+│ • Handles multiple portraits per person                     │
+│ Output: JSON files with portrait-name mappings              │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Step 1b: Validate Portrait Associations (Gemini AI)         │
+│ ─────────────────────────────────────────────────────────── │
+│ Validates portrait associations to catch false positives    │
+│ • Checks if names appear as main biographical subjects      │
+│ • Detects embedded names vs. actual headings               │
+│ • Suggests corrections for misassignments                   │
+│ Output: Validated portrait associations                     │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ Step 2: Concatenate Markdown Files                          │
 │ ─────────────────────────────────────────────────────────── │
 │ Combines all markdown files into single document            │
-│ Output: all_biographies.md                                  │
+│ Output: all_text.md                                         │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 3: Extract Names (Gemini AI)                           │
+│ Step 3: Extract Names with Text Chunks                      │
 │ ─────────────────────────────────────────────────────────── │
-│ Extracts all person names from concatenated text            │
-│ Output: gemini_all_names.json                               │
+│ • Extracts biographical subject names                       │
+│ • Associates each name with surrounding text context        │
+│ • Handles cross-page biographical entries                   │
+│ Output: extracted_all_names_with_chunks.csv                 │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 4: Extract Names with Text Chunks                      │
+│ Step 4: Merge Portrait Data                                 │
 │ ─────────────────────────────────────────────────────────── │
-│ Associates each name with surrounding text context          │
-│ Output: all_names.csv (name, book_id, text_chunk)           │
+│ • Merges portrait associations from Step 1                  │
+│ • Supports multiple portraits per person (pipe-separated)   │
+│ • Deduplicates portrait filenames                          │
+│ Output: extracted_all_names_with_chunks_and_portraits.csv   │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 5: Merge Portrait Data                                 │
+│ Step 5: Extract Biographical Data (Gemini AI)               │
 │ ─────────────────────────────────────────────────────────── │
-│ Adds portrait_filename column from Step 1 JSON files        │
-│ Output: Enhanced all_names.csv                              │
+│ Extracts structured biographical information                │
+│ • Birth/death dates, places                                 │
+│ • Parents, spouses, children                                │
+│ • Education, jobs, stays abroad                            │
+│ • Retry logic with temperature adjustment                   │
+│ Output: biographies.json                                    │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 6: Extract Biographical Data (Gemini AI)               │
-│ ─────────────────────────────────────────────────────────── │
-│ Extracts structured data: birth/death, occupation, etc.     │
-│ Output: CSV with biography columns added                    │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│ Step 7: Collect Final Dataset                               │
+│ Step 6: Collect Final Dataset                               │
 │ ─────────────────────────────────────────────────────────── │
 │ Generates statistics and final CSV                          │
-│ Output: final_dataset.csv + stats summary                   │
+│ Output: final_dataset.csv + statistics summary              │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 8: Generate Visualizations (Bonus)                     │
+│ Step 7: Generate Visualizations                             │
 │ ─────────────────────────────────────────────────────────── │
 │ Creates quality inspection images                           │
+│ • Full-page scan | Portrait + Data | Text chunk            │
+│ • Uses only first portrait for visualization               │
+│ • All portraits stored in CSV                              │
 │ Output: PNG files in test_images/                           │
-│ Layout: Full page | Portrait + Data | Text chunk            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -131,37 +153,28 @@ The pipeline executes **8 sequential steps**:
 
 ## ⚙️ Configuration
 
-The pipeline uses **two JSON configuration files**:
+The pipeline uses **two JSON configuration files** with all prompts externalized:
 
 ### 📄 pipeline_config.json
 
-Controls pipeline behavior, paths, and input sources.
+Controls pipeline behavior, input sources, and step execution.
 
-### Input Modes
+**Input Modes:**
 
-The pipeline supports **three input modes** for maximum flexibility:
-
-#### 1. **Specific Files Mode** (`mode: "files"`)
-Process an explicit list of files:
-
+#### 1. Specific Files Mode
 ```json
 {
   "input": {
     "mode": "files",
     "files": [
       "C:\\path\\to\\file1.md",
-      "C:\\path\\to\\file2.md",
-      "C:\\path\\to\\file3.md"
+      "C:\\path\\to\\file2.md"
     ]
   }
 }
 ```
 
-**Use case:** Small samples, specific test cases, curated selections
-
-#### 2. **Folder Scanning Mode** (`mode: "folders"`)
-Automatically discover all markdown files in specified directories:
-
+#### 2. Folder Scanning Mode
 ```json
 {
   "input": {
@@ -170,35 +183,6 @@ Automatically discover all markdown files in specified directories:
       {
         "path": "C:\\data\\collection1",
         "pattern": "**/*.md",
-        "recursive": true,
-        "description": "Process entire collection1"
-      },
-      {
-        "path": "C:\\data\\collection2",
-        "pattern": "**/*.md",
-        "recursive": true,
-        "description": "Process entire collection2"
-      }
-    ]
-  }
-}
-```
-
-**Use case:** Production runs, processing entire collections, automated workflows
-
-#### 3. **Mixed Mode** (`mode: "mixed"`)
-Combine specific files with folder scanning:
-
-```json
-{
-  "input": {
-    "mode": "mixed",
-    "files": [
-      "C:\\important\\special_case.md"
-    ],
-    "folders": [
-      {
-        "path": "C:\\data\\collection",
         "recursive": true
       }
     ]
@@ -206,118 +190,67 @@ Combine specific files with folder scanning:
 }
 ```
 
-**Use case:** Include priority files plus bulk processing
-
-### Input Filters
-
-Apply filters to discovered files:
-
+#### 3. Mixed Mode
 ```json
 {
   "input": {
-    "filters": {
-      "exclude_patterns": [
-        "*_backup*",
-        "*_temp*",
-        "*_draft*"
-      ],
-      "min_file_size_bytes": 100,
-      "max_files": 1000,
-      "description": "Filter options"
-    }
+    "mode": "mixed",
+    "files": ["C:\\important.md"],
+    "folders": [{"path": "C:\\data\\collection"}]
   }
 }
 ```
 
-**Filter options:**
-- `exclude_patterns`: Skip files matching these glob patterns
-- `min_file_size_bytes`: Skip files smaller than this (default: no limit)
-- `max_files`: Limit total files processed (default: no limit)
-
-### Example Configurations
-
-See example files:
-- `pipeline_config.json` - Default (files mode)
-- `pipeline_config_folders_example.json` - Folder scanning mode
-- `pipeline_config_mixed_example.json` - Mixed mode with filters
-
-### Full Configuration Structure
-
-### 📄 pipeline_config.json
-
-Controls pipeline behavior, paths, and enabled steps.
-
+**Portrait Handling:**
 ```json
 {
-  "pipeline_name": "OCR Illustration Pipeline",
-  "version": "1.0",
-  
-  "paths": {
-    "output_directory": "C:\\...\\test",
-    "python_executable": "C:\\...\\python.exe",
-    "original_images_path": "V:\\...\\corpus"
-  },
-  
-  "input_files": [
-    "path/to/file1.md",
-    "path/to/file2.md"
-  ],
-  
-  "pipeline_steps": {
-    "1_portrait_association": {
-      "enabled": true,
-      "suppress_stderr": true,
-      "description": "Associate portraits with names using Gemini AI"
-    }
-    // ... more steps
+  "portrait_handling": {
+    "multiple_portraits_per_person": "all",
+    "separator": "|"
   }
 }
 ```
 
-**Key Settings:**
-- `input_files`: Array of markdown files to process
-- `output_directory`: Where results are saved
-- `original_images_path`: Corpus folder with full-page scans
-- `pipeline_steps.*.enabled`: Toggle individual steps on/off
-- `pipeline_steps.*.suppress_stderr`: Hide Azure KeyVault logging
+Options: `"all"` (store all with separator), `"first"`, `"last"`, `"primary"` (highest confidence)
 
 ### 📄 prompt_config.json
 
-Controls AI prompts, model settings, and extraction rules.
+Contains all AI prompts and model settings. Prompts are stored as arrays for readability:
 
 ```json
 {
   "gemini_settings": {
     "model": "gemini-2.5-flash",
-    "temperature": 0.05,
-    "max_retries": 3,
-    "retry_delay_seconds": 2
+    "validation_temperature": 0.01,
+    "biography_temperatures": [0.01, 0.01, 0.1, 0.2]
   },
   
   "prompts": {
     "portrait_association": {
-      "system_instruction": [...],
-      "user_prompt_template": [...]
+      "template": [
+        "You are analyzing a Norwegian biography...",
+        "",
+        "CRITICAL EXCLUSION: NEVER pair portraits with deceased persons marked with †",
+        "..."
+      ]
+    },
+    "portrait_validation": {
+      "template": [...]
+    },
+    "biography_extraction": {
+      "template": [...]
     }
-    // ... more prompts
-  },
-  
-  "extraction_rules": {
-    "min_text_chunk_length": 100,
-    "max_text_chunk_length": 3000,
-    "context_length_chars": 500
   }
 }
 ```
 
-**Key Settings:**
-- `model`: Gemini model to use
-- `temperature`: Lower = more consistent (0.0-1.0)
-- `max_retries`: Retry failed API calls
-- `prompts.*`: Customizable AI instructions
-- `extraction_rules`: Text chunking parameters
+**Key Features:**
+- **Externalized Prompts**: Modify AI behavior without touching Python code
+- **Readable Format**: Multi-line arrays for easy editing
+- **Temperature Control**: Different temperatures for different tasks
+- **Retry Logic**: Biography extraction tries multiple temperatures
 
-See **[CONFIG_GUIDE.md](CONFIG_GUIDE.md)** for detailed configuration documentation.
+See **[CONFIG_GUIDE.md](CONFIG_GUIDE.md)** for detailed documentation.
 
 ---
 
@@ -327,31 +260,31 @@ See **[CONFIG_GUIDE.md](CONFIG_GUIDE.md)** for detailed configuration documentat
 
 **Markdown files** from PaddleOCR with:
 - OCR-extracted biographical text
-- Portrait image references as HTML tags: `<img src="imgs/filename.jpg">`
+- Portrait images as HTML tags: `<div style="text-align: center;"><img src="imgs/filename.jpg" /></div>`
 - Portrait images stored in `imgs/` subfolder
 
 **Directory Structure:**
 ```
-output_paddleOCR/
-└── digibok_2007031501007/
-    ├── digibok_2007031501007_0154/
-    │   ├── digibok_2007031501007_0154.md
+paddle_output/
+└── sample/
+    ├── digibok_2011041305069_0048/
+    │   ├── digibok_2011041305069_0048.md
     │   └── imgs/
-    │       ├── img_in_image_box_173_357_600_930.jpg
-    │       └── img_in_image_box_415_1065_1072_1445.jpg
-    └── digibok_2007031501007_0155/
-        ├── digibok_2007031501007_0155.md
+    │       ├── img_in_image_box_428_449_1062_1298.jpg
+    │       └── img_in_image_box_401_2340_1042_3197.jpg
+    └── digibok_2012110706264_0094/
+        ├── digibok_2012110706264_0094.md
         └── imgs/
-            └── ...
+            ├── img_in_image_box_397_382_873_1017.jpg
+            └── img_in_image_box_938_384_1412_1020.jpg
 ```
 
-**Original Full-Page Images:**
+**Original Full-Page Images** (for visualization):
 ```
 corpus/
-└── digibok_2007031501007/
-    ├── digibok_2007031501007_0154.jpg
-    ├── digibok_2007031501007_0155.jpg
-    └── ...
+└── digibok_2011041305069/
+    ├── digibok_2011041305069_0048.jpg
+    └── digibok_2011041305069_0050.jpg
 ```
 
 ---
@@ -362,88 +295,153 @@ corpus/
 
 ```
 test/
-├── input_staging/                          # Copied & renamed input files
-│   ├── digibok_2007031501007_0154.md
-│   └── digibok_2007031501007_0155.md
+├── input_staging/                          # Copied input files
+│   ├── digibok_2011041305069_0048.md
+│   └── digibok_2012110706264_0094.md
 │
-├── all_biographies.md                      # Step 2: Concatenated markdown
+├── all_books_portrait_associations.json    # Step 1: Portrait associations
+│   {
+│     "books": {
+│       "digibok_2011041305069_0048": {
+│         "biographical_entries": [
+│           {
+│             "filename": "img_in_image_box_401_2340_1042_3197.jpg",
+│             "associated_person": "Bronn, Thorleif",
+│             "confidence": 0.95
+│           }
+│         ]
+│       }
+│     }
+│   }
 │
-├── digibok_*_portrait_associations.json    # Step 1: Portrait mappings
+├── all_text.md                             # Step 2: Concatenated text
 │
-├── gemini_all_names.json                   # Step 3: Extracted names
+├── extracted_all_names_with_chunks.csv     # Step 3: Names + text
+│   Columns: name, book_id, markdown_chunk
 │
-├── all_names.csv                           # Step 4-6: Names + biographies
-│   Columns: name, book_id, text_chunk, portrait_filename,
-│            birth_year, death_year, occupation, etc.
+├── extracted_all_names_with_chunks_and_portraits.csv  # Step 4: + portraits
+│   New column: portrait_filename
+│   Example: "img_box_382.jpg|img_box_924.jpg"  (multiple portraits)
 │
-├── final_dataset.csv                       # Step 7: Final output
-│   Complete structured biographical data
+├── biographies.json                        # Step 5: Structured data
+│   [
+│     {
+│       "name": "Bronn, Thorleif",
+│       "birth_date": "1893-01-17",
+│       "birth_place": "Drammen",
+│       "jobs": [...],
+│       "educations": [...],
+│       "spouses": [...],
+│       "children": [...]
+│     }
+│   ]
 │
-└── test_images/                            # Step 8: Visualizations
-    ├── digibok_2007031501007_0154_01_PERSON_NAME.png
-    ├── digibok_2007031501007_0154_02_PERSON_NAME.png
-    └── ...
+├── final_dataset.csv                       # Step 6: Final output
+│   All previous columns + biography_json
+│
+└── test_images/                            # Step 7: Visualizations
+    ├── digibok_2011041305069_0048_01_Bronn_Thorleif.png
+    └── digibok_2012110706264_0094_01_Bugge_Sigrun_Collett.png
 ```
 
-### Final Dataset CSV Columns
+### Final Dataset CSV Structure
 
 | Column | Description | Example |
 |--------|-------------|---------|
-| `name` | Person's full name | "FLUGE Frithjof" |
-| `book_id` | Source page identifier | "digibok_2007031501007_0154" |
-| `text_chunk` | Biographical text context | "FLUGE, Frithjof, f. 1940..." |
-| `portrait_filename` | Associated portrait image | "img_in_image_box_173.jpg" |
-| `birth_year` | Year of birth | "1940" |
-| `death_year` | Year of death | "" (if living) |
-| `birth_place` | Place of birth | "Oslo" |
-| `occupation` | Primary occupation | "Professor" |
-| `education` | Educational background | "Cand.med. 1965, Dr.med. 1972" |
-| `achievements` | Notable achievements | "Developed new surgical technique" |
-| `family` | Family information | "Married to Anne, 3 children" |
-| `summary` | 2-3 sentence summary | "Norwegian surgeon who..." |
+| `name` | Person's full name | "Bronn, Thorleif" |
+| `book_id` | Source page identifier | "digibok_2011041305069_0048" |
+| `markdown_chunk` | Biographical text | "Jeg har sido 1912..." |
+| `portrait_filename` | Portrait(s), pipe-separated | "img1.jpg\|img2.jpg" |
+| `biography_json` | Structured data (JSON string) | "{\\"birth_date\\": \\"1893-01-17\\"...}" |
+
+**Multiple Portraits**: When a person has multiple portraits, they are stored as pipe-separated values (e.g., `portrait1.jpg|portrait2.jpg`). Visualizations use only the first portrait, but all are preserved in the CSV.
 
 ---
 
-## 🐍 Python Scripts
+## 🔑 Key Features
 
-### Core Pipeline Scripts
+### 1. AI-Powered Portrait Association
 
-| Script | Purpose | Input | Output |
-|--------|---------|-------|--------|
-| `gemini_portrait_name_associator.py` | Associate portraits with names using AI | .md files | JSON files |
-| `concatenate_all_md_files.py` | Combine all markdown files | .md files | all_biographies.md |
-| `gemini_all_names.py` | Extract person names using AI | all_biographies.md | gemini_all_names.json |
-| `extract_all_names.py` | Extract names with text chunks | all_biographies.md + JSON | all_names.csv |
-| `merge_portraits.py` | Add portrait filenames to CSV | CSV + JSON files | Enhanced CSV |
-| `biography_extractor.py` | Extract structured biographical data | CSV | CSV with bio columns |
-| `collect_data.py` | Generate final dataset & stats | CSV | final_dataset.csv |
-| `visualize_results.py` | Create quality inspection images | CSV + images | PNG files |
+**Smart Portrait Matching:**
+- Analyzes portrait placement relative to biographical headings
+- Prioritizes portraits appearing BEFORE headings (confidence: 0.95-1.0)
+- **Excludes deceased persons** marked with † symbol
+- Handles portraits embedded in text vs. between headings
 
-### Utility Scripts
+**Validation Layer:**
+- Double-checks associations using context windows
+- Detects false positives (embedded names, children, spouses)
+- Suggests corrections for misassignments
+- Validates that names appear as main biographical subjects
 
-| Script | Purpose |
-|--------|---------|
-| `config_loader.py` | Load and access JSON configurations |
-| `check_keyvault.py` | Verify Azure Key Vault connection |
+### 2. Multiple Portraits Per Person
 
-### Configuration Integration
+- **Storage**: All portraits stored in CSV with pipe separator
+- **Visualization**: Only first portrait used in quality inspection images
+- **Deduplication**: Automatic removal of duplicate portrait references
+- **Configuration**: Controllable via `portrait_handling` settings
 
-Python scripts can use the `config_loader` module:
+### 3. Externalized Prompts
 
-```python
-from config_loader import load_config
+All AI prompts are stored in `prompt_config.json` for easy modification:
 
-config = load_config()
-
-# Get AI prompt
-prompt = config.get_prompt('portrait_association', 
-                          markdown_content=md_text)
-
-# Get Gemini settings
-settings = config.get_gemini_settings()
-model = settings['model']
-temperature = settings['temperature']
+```json
+{
+  "prompts": {
+    "portrait_association": {
+      "template": [
+        "Line 1 of prompt",
+        "Line 2 of prompt",
+        "..."
+      ]
+    }
+  }
+}
 ```
+
+**Benefits:**
+- Modify AI behavior without editing Python code
+- Easy A/B testing of different prompts
+- Version control for prompt changes
+- Readable multi-line format
+
+### 4. Robust Error Handling
+
+**Retry Logic:**
+- Biography extraction tries multiple temperatures: [0.01, 0.01, 0.1, 0.2]
+- Exponential backoff for API failures
+- Graceful degradation (continues processing if one entry fails)
+
+**Encoding Support:**
+- UTF-8 encoding throughout pipeline
+- ASCII replacements for problematic Unicode characters
+- Environment variable: `$env:PYTHONIOENCODING = "utf-8"`
+
+### 5. Comprehensive Name Detection
+
+**Pattern Recognition:**
+- Detects names starting with "## SURNAME, Given Names"
+- Handles single hash "#" or no hash
+- **Requires names to start their own line** (not embedded in prose)
+- Excludes names starting with em-dash "—" (embedded references)
+
+**Cross-Page Support:**
+- Biographical entries can span multiple pages
+- Text chunking preserves complete narratives
+- Portrait associations work across page boundaries
+
+### 6. Quality Inspection Visualizations
+
+**Three-Panel Layout:**
+1. **Full-page scan** (original image from corpus)
+2. **Portrait + Structured Data** (first portrait + JSON biography)
+3. **Markdown Chunk** (extracted biographical text)
+
+**Features:**
+- Automatic image scaling and centering
+- Portrait count indicator (e.g., "Portrait 1 of 2")
+- Handles missing portraits gracefully
+- Cleans up stale visualizations between runs
 
 ---
 
@@ -452,207 +450,103 @@ temperature = settings['temperature']
 ### Common Issues
 
 **❌ Azure Key Vault Connection Errors**
-```
-ERROR: Unable to connect to Azure Key Vault
-```
-**Solution:** Ensure you're logged into Azure CLI and have proper permissions:
 ```powershell
 az login
 az account show  # Verify correct subscription
 ```
+Ensure your account has "Get" permissions on secrets in `rmaocr.vault.azure.net`.
 
-**❌ Import Error: No module named 'google.genai'**
+**❌ Unicode Encoding Errors**
 ```
-ModuleNotFoundError: No module named 'google'
+UnicodeEncodeError: 'charmap' codec can't encode character
 ```
-**Solution:** Install the correct Google Gemini package:
-```powershell
-conda activate OCR-Parser
-pip install google-genai  # NOT google-generativeai
-```
+The pipeline sets `$env:PYTHONIOENCODING = "utf-8"` automatically. If issues persist, check PowerShell encoding.
 
-**❌ Images Not Showing in Visualizations**
+**❌ Wrong Portrait Associations**
 
-**Solution:** Verify paths in `pipeline_config.json`:
-- `original_images_path` should point to corpus folder
-- Portraits should be in `imgs/` subfolders within PaddleOCR output
+Check `prompt_config.json` rules:
+- Deceased persons (†) should be excluded
+- Names must start their own line
+- Portrait should appear BEFORE heading for highest confidence
 
-**❌ JSON Decode Errors from Gemini**
+**❌ Duplicate Portraits in CSV**
 
-**Solution:** 
-1. Check `prompt_config.json` - ensure prompts clearly request JSON output
-2. Increase `max_retries` in Gemini settings
-3. Lower `temperature` for more consistent responses
+Fixed in v1.0 with deduplication logic. If still occurring, check `merge_portraits.py` is using latest version.
 
-**❌ Pipeline Hangs on Specific Step**
+**❌ Missing Portraits in Visualization**
 
-**Solution:**
-1. Set `suppress_stderr: false` for that step in `pipeline_config.json`
-2. Check logs for detailed error messages
-3. Verify input files are valid and accessible
+Verify:
+1. `original_images_path` points to corpus folder in `pipeline_config.json`
+2. Portrait files exist in `imgs/` subfolders
+3. Filenames match between markdown and filesystem
 
 ### Debug Mode
 
-Enable verbose logging by setting `suppress_stderr: false` for all steps:
+Enable verbose logging:
 
 ```json
 {
   "pipeline_steps": {
     "1_portrait_association": {
-      "enabled": true,
-      "suppress_stderr": false  // Shows full Azure KeyVault logs
+      "suppress_stderr": false
     }
   }
 }
 ```
 
-### Checking Intermediate Outputs
+### Performance Notes
 
-Monitor progress by checking intermediate files:
-1. After Step 1: Check `*_portrait_associations.json` files
-2. After Step 3: Check `gemini_all_names.json`
-3. After Step 4: Check `all_names.csv` has names and chunks
-4. After Step 6: Check CSV has biography columns filled
+- **Average**: ~5-10 seconds per biography
+- **API Calls**: 3 Gemini calls per file (association, validation, biography)
+- **Retry Logic**: Automatic retries with exponential backoff
+- **Rate Limiting**: Configurable delay (default: 2 seconds)
 
 ---
 
 ## 📚 Additional Documentation
 
-- **[CONFIG_GUIDE.md](CONFIG_GUIDE.md)** - Comprehensive configuration guide with examples
-- **[prompt_config.json](prompt_config.json)** - View/edit AI prompts directly
-- **[pipeline_config.json](pipeline_config.json)** - View/edit pipeline settings
+- **[CONFIG_GUIDE.md](CONFIG_GUIDE.md)** - Comprehensive configuration guide
+- **[INPUT_MODES.md](INPUT_MODES.md)** - Detailed input mode examples
+- **[SCRIPTS.md](SCRIPTS.md)** - Individual script documentation
+- **[MULTIPLE_PORTRAITS.md](MULTIPLE_PORTRAITS.md)** - Multiple portrait handling
 
 ---
 
-## 🎓 Example Use Cases
+## 📝 Version History
 
-### Processing a Small Sample (Files Mode)
+### Version 1.0 (November 2025)
 
-Test the pipeline on specific files:
+**Major Features:**
+- ✅ Externalized all prompts to `prompt_config.json`
+- ✅ Added portrait validation step (Step 1b)
+- ✅ Support for multiple portraits per person
+- ✅ Deceased person exclusion († symbol)
+- ✅ Deduplication of portrait filenames
+- ✅ UTF-8 encoding fixes
+- ✅ Nested JSON structure support in `merge_portraits.py`
+- ✅ Configurable temperature sequences for biography extraction
 
-```json
-{
-  "input": {
-    "mode": "files",
-    "files": [
-      "C:\\test\\sample1.md",
-      "C:\\test\\sample2.md"
-    ]
-  }
-}
-```
-
-### Processing Entire Collections (Folders Mode)
-
-Process all biographies from multiple book collections:
-
-```json
-{
-  "input": {
-    "mode": "folders",
-    "folders": [
-      {
-        "path": "V:\\collections\\digibok_2007031501007",
-        "recursive": true,
-        "description": "2007 collection"
-      },
-      {
-        "path": "V:\\collections\\digibok_2011052606015",
-        "recursive": true,
-        "description": "2011 collection"
-      }
-    ],
-    "filters": {
-      "max_files": 100,
-      "description": "Limit to 100 files for initial run"
-    }
-  }
-}
-```
-
-### Production Workflow
-
-1. **Copy example config:**
-   ```powershell
-   Copy-Item pipeline_config_folders_example.json pipeline_config.json
-   ```
-
-2. **Edit paths** for your environment
-
-3. **Test with limit:**
-   ```json
-   "filters": { "max_files": 10 }
-   ```
-
-4. **Remove limit** for full production run:
-   ```json
-   "filters": { "max_files": null }
-   ```
-
-5. **Disable visualization** for large batches:
-   ```json
-   "pipeline_steps": {
-     "8_visualize": { "enabled": false }
-   }
-   ```
-
-### Experimenting with Prompts
-
-Edit `prompt_config.json` to test different AI instructions without modifying code. Lower temperature for consistency or raise it for more creative interpretations.
-
-### Skipping Steps
-
-Disable visualization if you only need CSV output:
-
-```json
-{
-  "pipeline_steps": {
-    "8_visualize": {
-      "enabled": false
-    }
-  }
-}
-```
-
-### Batch Processing Different Collections
-
-Create multiple config files:
-- `pipeline_config_collection1.json`
-- `pipeline_config_collection2.json`
-
-Then modify `run_pipeline.ps1` to load the specific config.
-
----
-
-## 📊 Performance Notes
-
-- **Average Processing Time:** ~5-10 seconds per biography (depends on Gemini API latency)
-- **API Calls:** 3 Gemini API calls per input file (portrait association, name extraction, biography extraction)
-- **Retry Logic:** Automatic retries with exponential backoff on API failures
-- **Rate Limiting:** Configurable delay between retries (default: 2 seconds)
+**Configuration Updates:**
+- `ConfigLoader` class for centralized configuration
+- Prompts stored as arrays for readability
+- Portrait handling modes: all, first, last, primary
 
 ---
 
 ## 🤝 Contributing
 
-This is an illustration pipeline. For production use:
-1. Consider adding validation checks between steps
-2. Implement more robust error handling
-3. Add unit tests for each script
-4. Consider parallel processing for large datasets
-5. Add logging to file for audit trails
-
----
-
-## 📝 License
-
-Part of the MonkeyOCR project. See main repository for license details.
+For production use, consider:
+1. Adding validation checks between steps
+2. Implementing comprehensive unit tests
+3. Adding parallel processing for large datasets
+4. Implementing file-based logging with rotation
+5. Creating monitoring dashboards for long-running jobs
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **PaddleOCR** for initial OCR processing
+- **PaddleOCR** for OCR processing
 - **Google Gemini AI** for biographical data extraction
 - **Azure Key Vault** for secure API key management
 - **Norwegian Biography Collections** for source data
@@ -661,4 +555,4 @@ Part of the MonkeyOCR project. See main repository for license details.
 
 **Version:** 1.0  
 **Last Updated:** November 2025  
-**Maintained by:** MonkeyOCR Team
+**Maintained by:** CMD Team

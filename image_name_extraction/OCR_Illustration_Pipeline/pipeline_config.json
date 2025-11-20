@@ -3,37 +3,41 @@
   "version": "1.0",
   
   "paths": {
-    "output_directory": "C:\\Users\\iu2-cmd\\GitHub\\MonkeyOCR\\image_name_extraction\\test",
+    "output_directory": "V:\\BDADShareData2\\HCNC\\norway\\biographies\\storage\\paddleocr",
     "python_executable": "C:\\Users\\iu2-cmd\\AppData\\Local\\miniconda3\\envs\\OCR-Parser\\python.exe",
-    "original_images_path": "V:\\BDADShareData2\\HCNC\\norway\\biographies\\raw\\corpus"
+    "original_images_path": "D:\\models\\LLMs\\hub\\test_data\\sample"
+  },
+  
+  "azure_keyvault": {
+    "vault_url": "https://rmaocr.vault.azure.net/",
+    "gemini_api_key_name": "SDUGeminiAPI",
+    "description": "Azure Key Vault configuration for API keys. Requires Azure CLI authentication (az login)."
   },
   
   "input": {
-    "mode": "files",
-    "description": "Input mode: 'files' for specific file list, 'folders' for scanning directories, 'mixed' for both",
+    "mode": "folders",
+    "description": "Scan entire directories for markdown files",
     
-    "files": [
-      "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0154\\digibok_2007031501007_0154.md",
-      "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007\\digibok_2007031501007_0155\\digibok_2007031501007_0155.md"
-    ],
+    "files": [],
     
     "folders": [
       {
-        "path": "C:\\Users\\iu2-cmd\\GitHub\\ocr-pipeline-paddle-deepseek\\output_paddleOCR\\digibok_2007031501007",
+        "path": "D:\\models\\LLMs\\hub\\paddle_output\\sample",
         "pattern": "**/*.md",
         "recursive": true,
-        "description": "Scan for all markdown files recursively"
+        "description": "Process all biographies from book collection sample"
       }
     ],
     
     "filters": {
       "exclude_patterns": [
         "*_backup*",
-        "*_temp*"
+        "*_temp*",
+        "*_draft*"
       ],
       "min_file_size_bytes": 100,
       "max_files": null,
-      "description": "Optional filters to apply to discovered files"
+      "description": "Process all files except backups, with minimum 100 bytes"
     }
   },
   
@@ -87,5 +91,11 @@
     "names_csv": "all_names.csv",
     "final_dataset": "final_dataset.csv",
     "visualization_folder": "test_images"
+  },
+  
+  "portrait_handling": {
+    "multiple_portraits_per_person": "all",
+    "separator": "|",
+    "description": "How to handle multiple portraits for the same person. Options: 'all' (comma-separated list), 'first' (first portrait only), 'last' (last portrait only), 'primary' (highest confidence)"
   }
 }
